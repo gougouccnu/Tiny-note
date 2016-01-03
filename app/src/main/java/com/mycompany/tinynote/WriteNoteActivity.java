@@ -60,9 +60,11 @@ public class WriteNoteActivity extends Activity {
                 int m = c.get(Calendar.MONTH);
                 int d = c.get(Calendar.DAY_OF_MONTH);
 
-                year = c.getDisplayName(Calendar.YEAR, Calendar.LONG, Locale.CHINA);
+                //year = c.getDisplayName(Calendar.YEAR, Calendar.LONG, Locale.CHINA);
+                year = "二零役五年";
                 month = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.CHINA);
-                day = c.getDisplayName(Calendar.DAY_OF_MONTH, Calendar.LONG, Locale.CHINA);
+                //day = c.getDisplayName(Calendar.DAY_OF_MONTH, Calendar.LONG, Locale.CHINA);
+                day = "三日";
                 Log.d("WriteNoteActivity","current date is year: " + year +
                 "month: " + month + "day: " + day);
                 // 保存日记到数据库

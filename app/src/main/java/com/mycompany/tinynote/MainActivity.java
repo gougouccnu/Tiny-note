@@ -60,8 +60,8 @@ public class MainActivity extends Activity {
             public void onItemClick(View view, int position) {
                 Log.d("MainActivity", "Element " + position + " set.");
                 NotesItem item = noteItemList.get(position);
-                // 启动日记查看编辑活动，同时将日记title,month传递过去
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                // 启动日记查看编辑活动，同时将日记title,month,year传递过去
+                Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
                 intent.putExtra("extra_noteYear", year);
                 intent.putExtra("extra_noteMonth", month);
                 intent.putExtra("extra_noteTitle", item.getTitle());

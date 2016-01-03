@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 
@@ -21,18 +22,14 @@ public class EditNoteActivity extends Activity {
     private Button buttonSave;
     private Button buttonDelete;
 
-    private TextViewVertical noteEditLocation;
-    private TextViewVertical noteEditContent;
-    private TextViewVertical noteEditTitle;
-
     private MyDatabaseHelper dbHelper;
     private String content;
     private String location;
 
 
-    private HorizontalListViewAdapter hlva;
-    private HorizontalListView hlv;
-
+    private RecyclerView mRecyclerView;
+    private CustomAdapter mCustomAdaptor;
+    private RecyclerView.LayoutManager mLayoutManager;
     public List<NotesItem> notesItemList = new ArrayList<NotesItem>();
 
     @Override
@@ -50,7 +47,7 @@ public class EditNoteActivity extends Activity {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         // 查询数据库得到日记其他信息
         Cursor cursor = db.query("Note", new String[] {"content","location"},
-                "title=? and month=?", new String[] {title, month}, null, null, null);
+                "title=? and month=? and year=?", new String[] {title, month, year}, null, null, null);
         if (cursor.moveToFirst()) {
             content = cursor.getString(cursor.getColumnIndex("content"));
             location = cursor.getString(cursor.getColumnIndex("location"));
@@ -60,33 +57,49 @@ public class EditNoteActivity extends Activity {
         }
         cursor.close();
 
-        Typeface customFont = Typeface.createFromAsset(this.getAssets(), "fonts/KangXi.ttf");
-        //titleYear = (TextViewVertical) findViewById(R.id.title_year);
-        //titleYear.setTypeface(customFont);
-
-        // 显示该日记
-        noteEditTitle = (TextViewVertical) findViewById(R.id.note_edit_title);
-        noteEditTitle.setTypeface(customFont);
-        //noteEditContent = (TextViewVertical) findViewById(R.id.note_edit_content);
-        noteEditLocation = (TextViewVertical) findViewById(R.id.note_edit_location);
-        noteEditLocation.setTypeface(customFont);
-        noteEditTitle.setText(title);
-        //noteEditContent.setText(content);
-        noteEditLocation.setText(location);
-
+        NotesItem itemTitle = new NotesItem(title);
+        notesItemList.add(itemTitle);
         String[] mcontentString= content.split("\\n");
-        for(int i = 0; i < mcontentString.length; i++) {
-            String mtemp = mcontentString[mcontentString.length - i - 1];
+        int mcontentLength = mcontentString.length;
+        for(int i = 0; i < mcontentLength; i++) {
+            String mtemp = mcontentString[i];
             NotesItem item = new NotesItem(mtemp);
             notesItemList.add(item);
         }
-        //显示日记内容
-        hlv = (HorizontalListView)findViewById(R.id.note_edit_content);
-        hlva = new HorizontalListViewAdapter(this, notesItemList);
-        //hlva.notifyDataSetChanged();
-        hlv.setAdapter(hlva);
+        if (mcontentLength < 10) {
+            for (int i = 0; i < (5-mcontentLength); i++) {
+                NotesItem itemBlank = new NotesItem(" ");
+                notesItemList.add(itemBlank);
+            }
+        }
+        NotesItem itemLocation = new NotesItem(location);
+        notesItemList.add(itemLocation);
+        NotesItem itemDate = new NotesItem(year + month);
+        notesItemList.add(itemDate);
 
+        mRecyclerView = (RecyclerView)findViewById(R.id.note_edit_content);
+        mCustomAdaptor = new CustomAdapter(notesItemList);
+        mRecyclerView.setAdapter(mCustomAdaptor);
+        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        int scrollPosition = 0;
+        // If a layout manager has already been set, get current scroll position.
+        if (mRecyclerView.getLayoutManager() != null) {
+            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                    .findFirstCompletelyVisibleItemPosition();
+        }
+        mRecyclerView.scrollToPosition(scrollPosition);
+        mCustomAdaptor.setOnItemClickLitener(new CustomAdapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                // toggle button display status
+            }
 
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
         // 修改按钮
         buttonModify = (Button) findViewById(R.id.edit);
         buttonModify.setOnClickListener(new View.OnClickListener() {
