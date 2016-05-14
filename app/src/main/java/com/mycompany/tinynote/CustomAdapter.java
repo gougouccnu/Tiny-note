@@ -114,6 +114,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return mItemList.size();
+        //return 3;
     }
 
     public interface OnItemClickLitener

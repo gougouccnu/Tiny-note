@@ -18,55 +18,65 @@
         android:typeface="normal"
         android:gravity="right"
         android:layout_marginRight="16dp"
-        android:layout_gravity="right" />
+        android:layout_gravity="right"
+        android:singleLine="false"
+        android:textSize="@dimen/abc_text_size_medium_material" />
 
     <Button
         android:id="@+id/button_write"
         android:text="写"
-        style="@style/textViewVertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="false"
         android:layout_alignParentTop="false"
         android:layout_below="@+id/title_year"
-        android:textColor="#ffff383b"
-        android:layout_gravity="right" />
+        android:textColor="#0b0b0b"
+        android:layout_gravity="right"
+        android:background="@drawable/roundedbutton"
+        android:textSize="@dimen/abc_text_size_medium_material" />
 
-    <com.mycompany.tinynote.TextViewVertical
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/note_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@+id/title_month" />
+
+        <com.mycompany.tinynote.TextViewVertical
+            android:id="@+id/title_month"
+            android:text="六月"
+            style="@style/textViewVertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="16dp"
+            android:layout_gravity="center_vertical|right"
+            android:gravity="center_vertical"
+            android:layout_alignParentEnd="true"
+            android:textSize="@dimen/abc_text_size_medium_material" />
+    </RelativeLayout>
+
+    <!--com.mycompany.tinynote.TextViewVertical
         android:id="@+id/title_month"
         android:text="六月"
         style="@style/textViewVertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="false"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/button_write"
         android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_gravity="right" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:layout_marginRight="16dp"
-        android:weightSum="1">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/note_item"
-            android:layout_width="308dp"
-            android:layout_height="211dp"
-            android:layout_toLeftOf="@+id/title_month"
-            android:layout_alignParentBottom="false"
-            android:layout_centerVertical="true"
-            android:layout_below="@+id/button_write"
-            android:paddingLeft="0dp"
-            android:paddingRight="0dp">
-
-        </android.support.v7.widget.RecyclerView>
-
-    </LinearLayout>
+        android:layout_gravity="center|right" /-->
 
 
 </LinearLayout>
