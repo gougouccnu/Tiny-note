@@ -2,13 +2,15 @@ package com.mycompany.tinynote;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import com.mycompany.tinynote.db.NoteDb;
+import com.mycompany.tinynote.model.Note;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +23,7 @@ public class EditNoteActivity extends Activity {
     private Button buttonModify;
     private Button buttonSave;
     private Button buttonDelete;
-
-    private MyDatabaseHelper dbHelper;
+    private NoteDb noteDb;
     private String content;
     private String location;
 
@@ -30,7 +31,8 @@ public class EditNoteActivity extends Activity {
     private RecyclerView mRecyclerView;
     private CustomAdapter mCustomAdaptor;
     private RecyclerView.LayoutManager mLayoutManager;
-    public List<NotesItem> notesItemList = new ArrayList<NotesItem>();
+    private Note note;
+    private List<String> notesItemList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,39 +45,23 @@ public class EditNoteActivity extends Activity {
         final String title = intent.getStringExtra("extra_noteTitle");
         final String month = intent.getStringExtra("extra_noteMonth");
 
-        dbHelper = new MyDatabaseHelper(this, "NoteStore.db", null, 1);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        // 查询数据库得到日记其他信息
-        Cursor cursor = db.query("Note", new String[] {"content","location"},
-                "title=? and month=? and year=?", new String[] {title, month, year}, null, null, null);
-        if (cursor.moveToFirst()) {
-            content = cursor.getString(cursor.getColumnIndex("content"));
-            location = cursor.getString(cursor.getColumnIndex("location"));
-        } else { //若表为空，则...
-            content = "null";
-            location = "null";
-        }
-        cursor.close();
-
-        NotesItem itemTitle = new NotesItem(title);
-        notesItemList.add(itemTitle);
-        String[] mcontentString= content.split("\\n");
+        noteDb = NoteDb.getInstance(this);
+        note = noteDb.QueryNoteAll(year, month, title);
+        notesItemList.add(note.getTitle());
+        String[] mcontentString= note.getContent().split("\\n");
         int mcontentLength = mcontentString.length;
         for(int i = 0; i < mcontentLength; i++) {
-            String mtemp = mcontentString[i];
-            NotesItem item = new NotesItem(mtemp);
+            String item = mcontentString[i];
             notesItemList.add(item);
         }
-        if (mcontentLength < 10) {
-            for (int i = 0; i < (5-mcontentLength); i++) {
-                NotesItem itemBlank = new NotesItem(" ");
-                notesItemList.add(itemBlank);
+        if (mcontentLength < 12) {
+            for (int i = 0; i < (12-mcontentLength); i++) {
+                String item = " ";
+                notesItemList.add(item);
             }
         }
-        NotesItem itemLocation = new NotesItem(location);
-        notesItemList.add(itemLocation);
-        NotesItem itemDate = new NotesItem(year + month);
-        notesItemList.add(itemDate);
+        notesItemList.add(note.getLoacation());
+        notesItemList.add(note.getDate());
 
         mRecyclerView = (RecyclerView)findViewById(R.id.note_edit_content);
         mCustomAdaptor = new CustomAdapter(notesItemList);
@@ -106,9 +92,12 @@ public class EditNoteActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EditNoteActivity.this, ModifyNoteActivity.class);
-                intent.putExtra("extra_modify_title", title);
-                intent.putExtra("extra_modify_content", content);
-                intent.putExtra("extra_modify_location", location);
+                intent.putExtra("extra_modify_year", note.getYear());
+                intent.putExtra("extra_modify_month", note.getMonth());
+                intent.putExtra("extra_modify_title", note.getTitle());
+                intent.putExtra("extra_modify_content", note.getContent());
+                intent.putExtra("extra_modify_location", note.getLoacation());
+                intent.putExtra("extra_modify_date", note.getDate());
                 startActivity(intent);
             }
         });
@@ -125,15 +114,21 @@ public class EditNoteActivity extends Activity {
         buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int deletRow = db.delete("Note", "title = ? and content = ?",
-                        new String[] {title,content});
-//                if (deletRow == 1) {
-                    Intent intent = new Intent(EditNoteActivity.this, MainActivity.class);
-                    startActivity(intent);
-//                }
+                //确认是否要删除 TODO
+                MyDialogFragment myDialogFragment = new MyDialogFragment();
+                myDialogFragment.show(getFragmentManager(), "dialog");
+                //noteDb.DeleteNote(note);
+                // 启动日记查看编辑活动，同时将日记title,month传递过去
+                Intent intent = new Intent(EditNoteActivity.this, MainActivity.class);
+                intent.putExtra("extra_noteYear", note.getYear());
+                intent.putExtra("extra_noteMonth", note.getMonth());
+                startActivity(intent);
             }
         });
-
-
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("EditNoteActivity", "onRestart");
     }
 }

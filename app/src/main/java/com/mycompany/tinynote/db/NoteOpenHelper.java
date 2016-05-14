@@ -16,7 +16,8 @@ public class NoteOpenHelper extends SQLiteOpenHelper {
             + "month text, "
             + "title text, "
             + "content text, "
-            + "location text)";
+            + "location text,"
+            + "date text)";
 
     private Context mContext;
 
@@ -29,11 +30,24 @@ public class NoteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_NOTE);
+        db.execSQL("insert into Note (year, month, title, content, location, date) values (?,?,?,?,?,?)",
+                new String[] {"二零一五年", "十二月", "远方", "内容", "武汉", "八日"});
+        db.execSQL("insert into Note (year, month, title, content, location, date) values (?,?,?,?,?,?)",
+                new String[] {"二零一五年", "十二月", "工作", "学习 生活的", "武汉", "十八日"});
         Log.d("MyDatabaseHelper", "mydatabase created");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        switch (oldVersion) {
+            case 1:
+                break;
+            case 4:
+                db.execSQL("alter table Note add column date text");
+                Log.d("NoteOpenHelper", "alter table Note");
+            default:
+        }
     }
+    //TODO
+
 }

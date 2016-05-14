@@ -4,19 +4,14 @@ package com.mycompany.tinynote;
  * Created by lishaowei on 15/12/6.
  */
 
-import android.content.Intent;
-
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.support.v4.app.ActivityCompat.startActivity;
 
 /**
  * Provide views to RecyclerView with data from mDataSet.
@@ -24,7 +19,7 @@ import static android.support.v4.app.ActivityCompat.startActivity;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
-    List<NotesItem> mNotesItemList = new ArrayList<NotesItem>();
+    List<String> mItemList = new ArrayList<String>();
 
     // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
     /**
@@ -62,8 +57,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     /**
      * Initialize the dataset of the Adapter.
      */
-    public CustomAdapter(List<NotesItem> notesItemList) {
-        mNotesItemList = notesItemList;
+    public CustomAdapter(List<String> itemList) {
+        mItemList = itemList;
     }
 
     // BEGIN_INCLUDE(recyclerViewOnCreateViewHolder)
@@ -86,7 +81,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
-        holder.getTextViewVertical().setText(mNotesItemList.get(position).getTitle());
+        holder.getTextViewVertical().setText(mItemList.get(position));
 
         // 如果设置了回调，则设置点击事件
         if (mOnItemClickLitener != null)
@@ -118,7 +113,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mNotesItemList.size();
+        return mItemList.size();
     }
 
     public interface OnItemClickLitener
