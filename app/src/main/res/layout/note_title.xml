@@ -12,8 +12,9 @@
         android:text="一日"
         android:textSize="18sp"
         style="@style/textViewVertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:typeface="normal"/>
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:typeface="normal"
+        android:gravity="center_vertical" />
 
 </LinearLayout>

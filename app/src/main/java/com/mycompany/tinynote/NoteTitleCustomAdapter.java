@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Provide views to RecyclerView with data from mDataSet.
  */
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
+public class NoteTitleCustomAdapter extends RecyclerView.Adapter<NoteTitleCustomAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
     List<String> mItemList = new ArrayList<String>();
@@ -42,7 +42,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     /**
      * Initialize the dataset of the Adapter.
      */
-    public CustomAdapter(List<String> itemList) {
+    public NoteTitleCustomAdapter(List<String> itemList) {
         mItemList = itemList;
     }
 
@@ -52,7 +52,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view.
         View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.note_item, viewGroup, false);
+                .inflate(R.layout.note_title, viewGroup, false);
 
         return new ViewHolder(v);
     }
@@ -105,7 +105,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public interface OnItemClickLitener
     {
         void onItemClick(View view, int position);
-        void onItemLongClick(View view , int position);
+        void onItemLongClick(View view, int position);
     }
 
     private OnItemClickLitener mOnItemClickLitener;

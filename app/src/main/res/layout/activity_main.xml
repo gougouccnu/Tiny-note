@@ -20,18 +20,19 @@
         android:layout_marginRight="16dp"
         android:layout_gravity="right"
         android:singleLine="false"
-        android:textSize="@dimen/abc_text_size_medium_material" />
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/button_write"
         android:text="写"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="false"
         android:layout_alignParentTop="false"
         android:layout_below="@+id/title_year"
-        android:textColor="#0b0b0b"
+        android:textColor="#faf6f6"
         android:layout_gravity="right"
         android:background="@drawable/roundedbutton"
         android:textSize="@dimen/abc_text_size_medium_material" />
@@ -43,10 +44,11 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/note_item"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="0dp"
-            android:paddingRight="0dp"
-            android:layout_centerInParent="true"
+            android:layout_height="match_parent"
+            android:paddingLeft="70dp"
+            android:paddingRight="48dp"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentBottom="false"
             android:layout_toLeftOf="@+id/title_month" />
 
         <com.mycompany.tinynote.TextViewVertical
@@ -60,8 +62,13 @@
             android:layout_marginRight="16dp"
             android:layout_gravity="center_vertical|right"
             android:gravity="center_vertical"
-            android:layout_alignParentEnd="true"
-            android:textSize="@dimen/abc_text_size_medium_material" />
+            android:layout_alignParentRight="true"
+            android:textSize="16sp"
+            android:textColor="#f15264"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentTop="false"
+            android:layout_alignWithParentIfMissing="false"
+            android:layout_alignParentBottom="false" />
     </RelativeLayout>
 
     <!--com.mycompany.tinynote.TextViewVertical

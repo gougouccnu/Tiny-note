@@ -52,13 +52,22 @@ public class EditNoteActivity extends Activity {
         int mcontentLength = mcontentString.length;
         for(int i = 0; i < mcontentLength; i++) {
             String item = mcontentString[i];
-            notesItemList.add(item);
+            // 笔记标题后空格
+            if (i == 0) {
+                notesItemList.add(" ");
+                notesItemList.add(item);
+            } else {
+                notesItemList.add(item);
+            }
         }
-        if (mcontentLength < 12) {
-            for (int i = 0; i < (12-mcontentLength); i++) {
+        // 笔记显示不满一屏，在内容后加空格，让笔记结尾与屏幕左边对其
+        if (mcontentLength < 7) {
+            for (int i = 0; i < (7-mcontentLength); i++) {
                 String item = " ";
                 notesItemList.add(item);
             }
+        } else {
+            notesItemList.add(" ");
         }
         notesItemList.add(note.getLoacation());
         notesItemList.add(note.getDate());
@@ -79,6 +88,21 @@ public class EditNoteActivity extends Activity {
             @Override
             public void onItemClick(View view, int position) {
                 // toggle button display status
+                if (buttonDelete.getVisibility() == View.INVISIBLE) {
+                    buttonDelete.setVisibility(View.VISIBLE);
+                } else {
+                    buttonDelete.setVisibility(View.INVISIBLE);
+                }
+                if (buttonSave.getVisibility() == View.INVISIBLE) {
+                    buttonSave.setVisibility(View.VISIBLE);
+                } else {
+                    buttonSave.setVisibility(View.INVISIBLE);
+                }
+                if (buttonModify.getVisibility() == View.INVISIBLE) {
+                    buttonModify.setVisibility(View.VISIBLE);
+                } else {
+                    buttonModify.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override

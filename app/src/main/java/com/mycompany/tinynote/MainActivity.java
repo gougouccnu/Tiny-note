@@ -25,8 +25,10 @@ public class MainActivity extends Activity {
     private String year,month,title;
 
     private RecyclerView mRecyclerView;
-    private CustomAdapter mCustomAdaptor;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private NoteTitleCustomAdapter mCustomAdaptor;
+    //private RecyclerView.LayoutManager mLayoutManager;
+    private LinearLayoutManager mLayoutManager;
+    private int scrollPosition;
 
     public List<String> noteItemList = new ArrayList<String>();
     @Override
@@ -47,18 +49,27 @@ public class MainActivity extends Activity {
         //new LongOperation().execute("");
         noteItemList = noteDb.QueryTitles(year, month);
         mRecyclerView = (RecyclerView)findViewById(R.id.note_item);
-        mCustomAdaptor = new CustomAdapter(noteItemList);
-        mRecyclerView.setAdapter(mCustomAdaptor);
+        mCustomAdaptor = new NoteTitleCustomAdapter(noteItemList);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        int scrollPosition = 0;
+        mRecyclerView.setAdapter(mCustomAdaptor);
+
         // If a layout manager has already been set, get current scroll position.
         if (mRecyclerView.getLayoutManager() != null) {
             scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
                     .findFirstCompletelyVisibleItemPosition();
         }
-        mRecyclerView.scrollToPosition(scrollPosition);
-        mCustomAdaptor.setOnItemClickLitener(new CustomAdapter.OnItemClickLitener() {
+
+        int firstItem = mLayoutManager.findFirstVisibleItemPosition();
+        int lastItem = mLayoutManager.findLastVisibleItemPosition();
+        if (noteItemList.size() > 3) {
+            scrollPosition = noteItemList.size() - 3;
+            //int right = mRecyclerView.getChildAt(scrollPosition - firstItem).getRight();
+            mRecyclerView.getChildCount();
+        }
+
+        mRecyclerView.scrollToPosition(12);
+        mCustomAdaptor.setOnItemClickLitener(new NoteTitleCustomAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
                 Log.d("MainActivity", "Element " + position + " set.");
@@ -73,7 +84,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void onItemLongClick(View view, int position) {
-
+                mRecyclerView.scrollToPosition(1);
             }
         });
 
@@ -89,6 +100,17 @@ public class MainActivity extends Activity {
         });
     }
     @Override
+    protected void onStart() {
+        super.onStart();
+        mRecyclerView.getChildCount();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mRecyclerView.getChildCount();
+    }
+
+    @Override
     protected void onRestart() {
         super.onRestart();
         Log.d("MainActivity", "onRestart");
@@ -100,7 +122,7 @@ public class MainActivity extends Activity {
         //new LongOperation().execute("");
         noteItemList = noteDb.QueryTitles(year, month);
         mRecyclerView = (RecyclerView)findViewById(R.id.note_item);
-        mCustomAdaptor = new CustomAdapter(noteItemList);
+        mCustomAdaptor = new NoteTitleCustomAdapter(noteItemList);
         mRecyclerView.setAdapter(mCustomAdaptor);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -111,7 +133,7 @@ public class MainActivity extends Activity {
                     .findFirstCompletelyVisibleItemPosition();
         }
         mRecyclerView.scrollToPosition(scrollPosition);
-        mCustomAdaptor.setOnItemClickLitener(new CustomAdapter.OnItemClickLitener() {
+        mCustomAdaptor.setOnItemClickLitener(new NoteTitleCustomAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
                 Log.d("MainActivity", "Element " + position + " set.");

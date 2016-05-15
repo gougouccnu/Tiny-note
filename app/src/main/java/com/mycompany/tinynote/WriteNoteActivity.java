@@ -43,7 +43,7 @@ public class WriteNoteActivity extends Activity {
     // note year/month/location got from system
     private String title;
     private String content;
-    private String year,month,day,location;
+    private String year,month,day;
     //地理位置查询网址
     private String address;
     //位置经纬度
@@ -63,15 +63,16 @@ public class WriteNoteActivity extends Activity {
             provider = LocationManager.NETWORK_PROVIDER;
         } else {
             Toast.makeText(this, "No location provider to use", Toast.LENGTH_LONG).show();
-            return;
         }
-        Location location = locationManager.getLastKnownLocation(provider);
-        // get note location
-        noteLocation = (TextView) findViewById(R.id.note_location);
-        if (location != null) {
-            showLocation(location);
+        if (provider != null) {
+            Location location = locationManager.getLastKnownLocation(provider);
+            locationManager.requestLocationUpdates(provider, 5000, 1, locationListener);
+            // get note location
+            noteLocation = (TextView) findViewById(R.id.note_location);
+            if (location != null) {
+                showLocation(location);
+            }
         }
-        locationManager.requestLocationUpdates(provider, 5000, 1, locationListener);
 
         noteDb = NoteDb.getInstance(this);
         buttonWriteDone = (Button) findViewById(R.id.write_done);
