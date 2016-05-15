@@ -140,8 +140,8 @@ public class EditNoteActivity extends Activity {
             public void onClick(View v) {
                 //确认是否要删除 TODO
                 MyDialogFragment myDialogFragment = new MyDialogFragment();
-                myDialogFragment.show(getFragmentManager(), "dialog");
-                //noteDb.DeleteNote(note);
+                myDialogFragment.show(getFragmentManager(), "对话框");
+                noteDb.DeleteNote(note);
                 // 启动日记查看编辑活动，同时将日记title,month传递过去
                 Intent intent = new Intent(EditNoteActivity.this, MainActivity.class);
                 intent.putExtra("extra_noteYear", note.getYear());

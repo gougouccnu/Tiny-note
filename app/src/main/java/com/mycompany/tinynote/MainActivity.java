@@ -59,16 +59,8 @@ public class MainActivity extends Activity {
             scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
                     .findFirstCompletelyVisibleItemPosition();
         }
-
-        int firstItem = mLayoutManager.findFirstVisibleItemPosition();
-        int lastItem = mLayoutManager.findLastVisibleItemPosition();
-        if (noteItemList.size() > 3) {
-            scrollPosition = noteItemList.size() - 3;
-            //int right = mRecyclerView.getChildAt(scrollPosition - firstItem).getRight();
-            mRecyclerView.getChildCount();
-        }
-
-        mRecyclerView.scrollToPosition(12);
+        // 显示最新日期的笔记
+        mRecyclerView.scrollToPosition(noteItemList.size() - 1);
         mCustomAdaptor.setOnItemClickLitener(new NoteTitleCustomAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -84,7 +76,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void onItemLongClick(View view, int position) {
-                mRecyclerView.scrollToPosition(1);
+
             }
         });
 
@@ -121,6 +113,8 @@ public class MainActivity extends Activity {
         noteDb = NoteDb.getInstance(this);
         //new LongOperation().execute("");
         noteItemList = noteDb.QueryTitles(year, month);
+//        mCustomAdaptor.notifyDataSetChanged();
+
         mRecyclerView = (RecyclerView)findViewById(R.id.note_item);
         mCustomAdaptor = new NoteTitleCustomAdapter(noteItemList);
         mRecyclerView.setAdapter(mCustomAdaptor);
@@ -132,7 +126,7 @@ public class MainActivity extends Activity {
             scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
                     .findFirstCompletelyVisibleItemPosition();
         }
-        mRecyclerView.scrollToPosition(scrollPosition);
+        mRecyclerView.scrollToPosition(noteItemList.size()-1);
         mCustomAdaptor.setOnItemClickLitener(new NoteTitleCustomAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {

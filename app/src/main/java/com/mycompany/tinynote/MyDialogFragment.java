@@ -14,13 +14,13 @@ public class MyDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Delete Note")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setMessage("要删掉吗？")
+                .setPositiveButton("是", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // FIRE ZE MISSILES!
                     }
                 })
-                .setNegativeButton("Cancer", new DialogInterface.OnClickListener() {
+                .setNegativeButton("否", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
                     }
