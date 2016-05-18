@@ -23,7 +23,7 @@ public class NoteDb {
     /**
      * 数据库版本
      */
-    public static final int VERSION = 5;
+    public static final int VERSION = 1;
 
     private static NoteDb noteDb;
 

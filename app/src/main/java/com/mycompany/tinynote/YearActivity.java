@@ -63,6 +63,8 @@ public class YearActivity extends Activity {
         });
         //如果只有当年的笔记，直接进入月视图
         if(yearItemList.size() == 1) {
+            //延时1s
+
             String selectedYear = yearItemList.get(0);
             // 启动日记查看编辑活动，同时将日记year传递过去
             Intent intent = new Intent(YearActivity.this, MonthActivity.class);

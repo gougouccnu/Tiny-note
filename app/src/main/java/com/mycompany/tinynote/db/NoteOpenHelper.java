@@ -5,6 +5,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.mycompany.tinynote.util.DateConvertor;
+
+import java.util.Calendar;
+import java.util.Locale;
+
 /**
  * Created by lishaowei on 16/1/7.
  */
@@ -20,6 +25,7 @@ public class NoteOpenHelper extends SQLiteOpenHelper {
             + "date text)";
 
     private Context mContext;
+    private String year,month,day;
 
     public NoteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory,
                             int version) {
@@ -29,11 +35,24 @@ public class NoteOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // 初始化数据库，初始化3条当年当月的3条笔记
+        Calendar c = Calendar.getInstance();
+        int y = c.get(Calendar.YEAR);
+        int m = c.get(Calendar.MONTH);
+        int d = c.get(Calendar.DAY_OF_MONTH);
+
+        //year = c.getDisplayName(Calendar.YEAR, Calendar.LONG, Locale.CHINA);
+        year = DateConvertor.formatYear(y);
+        month = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.CHINA);
+        //day = c.getDisplayName(Calendar.DAY_OF_MONTH, Calendar.LONG, Locale.CHINA);
+        day = DateConvertor.formatDay(d);
+        Log.d("NoteOpenHelper", "current date is year: " + year +
+                "month: " + month + "day: " + day);
         db.execSQL(CREATE_NOTE);
         db.execSQL("insert into Note (year, month, title, content, location, date) values (?,?,?,?,?,?)",
-                new String[] {"二零一五年", "十二月", "远方", "内容", "武汉", "八日"});
+                new String[] {year, month, "远方", "内容", "武汉", day});
         db.execSQL("insert into Note (year, month, title, content, location, date) values (?,?,?,?,?,?)",
-                new String[] {"二零一五年", "十二月", "工作", "学习 生活的", "武汉", "十八日"});
+                new String[] {year, month, "工作", "学习 生活的", "武汉", day});
         Log.d("MyDatabaseHelper", "mydatabase created");
     }
 
@@ -42,9 +61,9 @@ public class NoteOpenHelper extends SQLiteOpenHelper {
         switch (oldVersion) {
             case 1:
                 break;
-            case 4:
-                db.execSQL("alter table Note add column date text");
-                Log.d("NoteOpenHelper", "alter table Note");
+//            case 4:
+//                db.execSQL("alter table Note add column date text");
+//                Log.d("NoteOpenHelper", "alter table Note");
             default:
         }
     }

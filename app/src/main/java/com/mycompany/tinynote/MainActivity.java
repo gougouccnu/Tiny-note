@@ -132,6 +132,8 @@ public class MainActivity extends Activity {
 //            }
 //        });
         mCustomAdaptor.update((ArrayList<String>) noteItemList);
+        // 显示最新日期的笔记
+        mRecyclerView.scrollToPosition(noteItemList.size() - 1);
 //        mCustomAdaptor.notifyDataSetChanged();
     }
 }
