@@ -113,37 +113,25 @@ public class MainActivity extends Activity {
         noteDb = NoteDb.getInstance(this);
         //new LongOperation().execute("");
         noteItemList = noteDb.QueryTitles(year, month);
+//        mCustomAdaptor.setOnItemClickLitener(new NoteTitleCustomAdapter.OnItemClickLitener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                Log.d("MainActivity", "Element " + position + " set.");
+//                String selectedTitle = noteItemList.get(position);
+//                // 启动日记查看编辑活动，同时将日记title,month,year传递过去
+//                Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
+//                intent.putExtra("extra_noteYear", year);
+//                intent.putExtra("extra_noteMonth", month);
+//                intent.putExtra("extra_noteTitle", selectedTitle);
+//                startActivity(intent);
+//            }
+//
+//            @Override
+//            public void onItemLongClick(View view, int position) {
+//                mCustomAdaptor.notifyDataSetChanged();
+//            }
+//        });
+        mCustomAdaptor.update((ArrayList<String>) noteItemList);
 //        mCustomAdaptor.notifyDataSetChanged();
-
-        mRecyclerView = (RecyclerView)findViewById(R.id.note_item);
-        mCustomAdaptor = new NoteTitleCustomAdapter(noteItemList);
-        mRecyclerView.setAdapter(mCustomAdaptor);
-        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        int scrollPosition = 0;
-        // If a layout manager has already been set, get current scroll position.
-        if (mRecyclerView.getLayoutManager() != null) {
-            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
-                    .findFirstCompletelyVisibleItemPosition();
-        }
-        mRecyclerView.scrollToPosition(noteItemList.size()-1);
-        mCustomAdaptor.setOnItemClickLitener(new NoteTitleCustomAdapter.OnItemClickLitener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Log.d("MainActivity", "Element " + position + " set.");
-                String selectedTitle = noteItemList.get(position);
-                // 启动日记查看编辑活动，同时将日记title,month,year传递过去
-                Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
-                intent.putExtra("extra_noteYear", year);
-                intent.putExtra("extra_noteMonth", month);
-                intent.putExtra("extra_noteTitle", selectedTitle);
-                startActivity(intent);
-            }
-
-            @Override
-            public void onItemLongClick(View view, int position) {
-
-            }
-        });
     }
 }

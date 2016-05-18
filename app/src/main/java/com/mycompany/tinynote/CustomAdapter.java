@@ -114,4 +114,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     {
         this.mOnItemClickLitener = mOnItemClickLitener;
     }
+    public void update(ArrayList<String> itemList){
+        mItemList.clear();
+        mItemList.addAll(itemList);
+        notifyDataSetChanged();
+    }
 }

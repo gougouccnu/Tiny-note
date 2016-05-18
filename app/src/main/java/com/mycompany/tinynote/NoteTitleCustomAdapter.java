@@ -114,4 +114,9 @@ public class NoteTitleCustomAdapter extends RecyclerView.Adapter<NoteTitleCustom
     {
         this.mOnItemClickLitener = mOnItemClickLitener;
     }
+    public void update(ArrayList<String> itemList){
+        mItemList.clear();
+        mItemList.addAll(itemList);
+        notifyDataSetChanged();
+    }
 }
