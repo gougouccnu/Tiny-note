@@ -9,7 +9,7 @@ import android.os.Bundle;
 /**
  * Created by lishaowei on 16/1/10.
  */
-public class MyDialogFragment extends DialogFragment {
+public abstract class MyDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
@@ -18,6 +18,7 @@ public class MyDialogFragment extends DialogFragment {
                 .setPositiveButton("是", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // FIRE ZE MISSILES!
+                        dialogPositiveButtonClicked();
                     }
                 })
                 .setNegativeButton("否", new DialogInterface.OnClickListener() {
@@ -28,4 +29,6 @@ public class MyDialogFragment extends DialogFragment {
         // Create the AlertDialog object and return it
         return builder.create();
     }
+    abstract void dialogPositiveButtonClicked();
+    abstract void dialogNegativeButtonClicked();
 }

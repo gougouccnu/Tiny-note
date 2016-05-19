@@ -139,14 +139,24 @@ public class EditNoteActivity extends Activity {
             @Override
             public void onClick(View v) {
                 //确认是否要删除 TODO
-                MyDialogFragment myDialogFragment = new MyDialogFragment();
+                final MyDialogFragment myDialogFragment = new MyDialogFragment() {
+                    @Override
+                    void dialogPositiveButtonClicked() {
+                        Log.d("EditNoteActivity", "positive button clicked");
+                        noteDb.DeleteNote(note);
+                        // 启动日记查看编辑活动，同时将日记title,month传递过去
+                        Intent intent = new Intent(EditNoteActivity.this, MainActivity.class);
+                        intent.putExtra("extra_noteYear", note.getYear());
+                        intent.putExtra("extra_noteMonth", note.getMonth());
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    void dialogNegativeButtonClicked() {
+                        dismiss();
+                    }
+                };
                 myDialogFragment.show(getFragmentManager(), "对话框");
-                noteDb.DeleteNote(note);
-                // 启动日记查看编辑活动，同时将日记title,month传递过去
-                Intent intent = new Intent(EditNoteActivity.this, MainActivity.class);
-                intent.putExtra("extra_noteYear", note.getYear());
-                intent.putExtra("extra_noteMonth", note.getMonth());
-                startActivity(intent);
             }
         });
     }
