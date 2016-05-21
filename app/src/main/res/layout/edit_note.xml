@@ -31,8 +31,8 @@
             android:text="改"
             android:textSize="@dimen/abc_text_size_medium_material"
             android:background="@drawable/roundedbutton"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginRight="35dp"
             android:textColor="#faf6f6" />
         <Button
@@ -40,8 +40,8 @@
             android:text="存"
             android:textSize="@dimen/abc_text_size_medium_material"
             android:background="@drawable/roundedbutton"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginRight="35dp"
             android:textColor="#faf6f6" />
         <Button
@@ -49,8 +49,8 @@
             android:text="删"
             android:textSize="@dimen/abc_text_size_medium_material"
             android:background="@drawable/roundedbutton"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:textColor="#faf6f6" />
 
     </LinearLayout>

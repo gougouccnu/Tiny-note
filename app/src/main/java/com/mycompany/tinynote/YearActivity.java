@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.View;
 
 import com.mycompany.tinynote.db.NoteDb;
+import com.mycompany.tinynote.util.DateConvertor;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class YearActivity extends Activity {
@@ -31,7 +33,12 @@ public class YearActivity extends Activity {
         //new LongOperation().execute("");
         noteDb = NoteDb.getInstance(this);
         yearItemList = noteDb.QueryYears();
-
+        // 笔记为空，显示当前年
+        if (yearItemList.isEmpty()) {
+            Calendar c = Calendar.getInstance();
+            int y = c.get(Calendar.YEAR);
+            yearItemList.add(DateConvertor.formatYear(y));
+        }
         mRecyclerView = (RecyclerView) findViewById(R.id.year_list);
         mCustomAdaptor = new CustomAdapter(yearItemList);
         mRecyclerView.setAdapter(mCustomAdaptor);
