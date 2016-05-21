@@ -1,12 +1,15 @@
 package com.mycompany.tinynote;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +33,7 @@ import java.util.Locale;
  */
 public class WriteNoteActivity extends Activity {
 
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     //private MyDatabaseHelper dbHelper;
     private NoteDb noteDb;
     private Note note = new Note();
@@ -43,36 +47,21 @@ public class WriteNoteActivity extends Activity {
     // note year/month/location got from system
     private String title;
     private String content;
-    private String year,month,day;
+    private String mlocation;
+    private String year, month, day;
     //地理位置查询网址
     private String address;
     //位置经纬度
     private LocationManager locationManager;
     private String provider;
+    //位置provider list
+    private List<String> providerList;
+    private Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.write_note);
-
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        List<String> providerList = locationManager.getProviders(true);
-        if (providerList.contains(LocationManager.GPS_PROVIDER)) {
-            provider = LocationManager.GPS_PROVIDER;
-        } else if (providerList.contains(LocationManager.NETWORK_PROVIDER)) {
-            provider = LocationManager.NETWORK_PROVIDER;
-        } else {
-            Toast.makeText(this, "No location provider to use", Toast.LENGTH_LONG).show();
-        }
-        if (provider != null) {
-            Location location = locationManager.getLastKnownLocation(provider);
-            locationManager.requestLocationUpdates(provider, 5000, 1, locationListener);
-            // get note location
-            noteLocation = (TextView) findViewById(R.id.note_location);
-            if (location != null) {
-                showLocation(location);
-            }
-        }
 
         noteDb = NoteDb.getInstance(this);
         buttonWriteDone = (Button) findViewById(R.id.write_done);
@@ -82,6 +71,7 @@ public class WriteNoteActivity extends Activity {
                 // get note title/content/...
                 noteTitle = (EditText) findViewById(R.id.note_title);
                 noteContent = (EditText) findViewById(R.id.note_content);
+                mlocation =
                 title = noteTitle.getText().toString();
                 content = noteContent.getText().toString();
 
@@ -102,7 +92,7 @@ public class WriteNoteActivity extends Activity {
                 note.setMonth(month);
                 note.setTitle(title);
                 note.setContent(content);
-                note.setLoacation("湖北武汉市");
+                note.setLoacation(noteLocation.getText().toString());
                 note.setDate(year + month + day);
                 noteDb.InsertNote(note);
                 // 回到主活动
@@ -113,6 +103,35 @@ public class WriteNoteActivity extends Activity {
             }
         });
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            //return;
+        } else {
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            providerList = locationManager.getProviders(true);
+            if (providerList.contains(LocationManager.GPS_PROVIDER)) {
+                provider = LocationManager.GPS_PROVIDER;
+            } else if (providerList.contains(LocationManager.NETWORK_PROVIDER)) {
+                provider = LocationManager.NETWORK_PROVIDER;
+            } else {
+                Toast.makeText(this, "No location provider to use", Toast.LENGTH_LONG).show();
+            }
+            location = locationManager.getLastKnownLocation(provider);
+            locationManager.requestLocationUpdates(provider, 5000, 1, locationListener);
+            // get note location
+            noteLocation = (TextView) findViewById(R.id.note_location);
+            if (location != null) {
+                showLocation(location);
+            }
+        }
     }
 
     protected void onDestroy() {
@@ -163,9 +182,38 @@ public class WriteNoteActivity extends Activity {
 
             @Override
             public void onError(Exception e) {
-
+                Toast.makeText(WriteNoteActivity.this, "获取笔记位置失败", Toast.LENGTH_LONG).show();
             }
         });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Log.d("WriteNoteActivity", "PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION granted!");
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            providerList = locationManager.getProviders(true);
+            if (providerList.contains(LocationManager.GPS_PROVIDER)) {
+                provider = LocationManager.GPS_PROVIDER;
+            } else if (providerList.contains(LocationManager.NETWORK_PROVIDER)) {
+                provider = LocationManager.NETWORK_PROVIDER;
+            } else {
+                Toast.makeText(this, "No location provider to use", Toast.LENGTH_LONG).show();
+            }
+            location = locationManager.getLastKnownLocation(provider);
+            locationManager.requestLocationUpdates(provider, 5000, 1, locationListener);
+            // get note location
+            noteLocation = (TextView) findViewById(R.id.note_location);
+            if (location != null) {
+                showLocation(location);
+            }
+        } else {
+            // permission denied TODO
+            Log.d("WriteNoteActivity", "PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION denied!");
+
+        }
+        return;
+    }
 }

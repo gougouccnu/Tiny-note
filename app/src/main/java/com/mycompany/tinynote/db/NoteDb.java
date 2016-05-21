@@ -139,7 +139,8 @@ public class NoteDb {
         values.put("content", note.getContent());
         values.put("year", note.getYear());
         values.put("month", note.getMonth());
-        values.put("location", "wuhan");
+        values.put("location", note.getLoacation());
+        values.put("date", note.getDate());
         db.insert("Note", null, values);
     }
 

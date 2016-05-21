@@ -31,7 +31,9 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="22dp" />
 
     <Button
         android:id="@+id/write_done"

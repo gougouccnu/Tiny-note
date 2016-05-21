@@ -16,7 +16,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             + "month text, "
             + "title text, "
             + "content text, "
-            + "location text)";
+            + "location text, "
+            + "date text)";
 
     private Context mContext;
 
