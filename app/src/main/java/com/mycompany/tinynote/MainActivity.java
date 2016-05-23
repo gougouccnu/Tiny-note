@@ -8,29 +8,18 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
 import com.mycompany.tinynote.db.NoteDb;
-
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class MainActivity extends Activity {
 
-    private TextViewVertical titleYear;
-    private Button buttonWrite;
-    private TextViewVertical titleMonth;
-
-    private NoteDb noteDb;
-    private String year,month,title;
-
+    private NoteDb mNoteDb;
     private RecyclerView mRecyclerView;
     private NoteTitleCustomAdapter mCustomAdaptor;
-    //private RecyclerView.LayoutManager mLayoutManager;
     private LinearLayoutManager mLayoutManager;
-    private int scrollPosition;
+    public List<String> mTitleList = new ArrayList<String>();
 
-    public List<String> noteItemList = new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,34 +27,34 @@ public class MainActivity extends Activity {
 
         // 从intent中恢复笔记year，month
         Intent intent = getIntent();
-        year = intent.getStringExtra("extra_noteYear");
-        month = intent.getStringExtra("extra_noteMonth");
-        titleYear = (TextViewVertical) findViewById(R.id.title_year);
-        titleMonth = (TextViewVertical) findViewById(R.id.title_month);
-        titleYear.setText(year);
-        titleMonth.setText(month);
+        final String year = intent.getStringExtra("extra_noteYear");
+        final String month = intent.getStringExtra("extra_noteMonth");
+        TextViewVertical tvYear = (TextViewVertical) findViewById(R.id.title_year);
+        TextViewVertical tvMonth = (TextViewVertical) findViewById(R.id.title_month);
+        tvYear.setText(year);
+        tvMonth.setText(month);
 
-        noteDb = NoteDb.getInstance(this);
-        //new LongOperation().execute("");
-        noteItemList = noteDb.QueryTitles(year, month);
+        mNoteDb = NoteDb.getInstance(this);
+        mTitleList = mNoteDb.QueryTitles(year, month);
         mRecyclerView = (RecyclerView)findViewById(R.id.note_item);
-        mCustomAdaptor = new NoteTitleCustomAdapter(noteItemList);
+        mCustomAdaptor = new NoteTitleCustomAdapter(mTitleList);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mCustomAdaptor);
-
+        
+        int scrollPosition = 0;
         // If a layout manager has already been set, get current scroll position.
         if (mRecyclerView.getLayoutManager() != null) {
             scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
                     .findFirstCompletelyVisibleItemPosition();
         }
         // 显示最新日期的笔记
-        mRecyclerView.scrollToPosition(noteItemList.size() - 1);
+        mRecyclerView.scrollToPosition(mTitleList.size() - 1);
         mCustomAdaptor.setOnItemClickLitener(new NoteTitleCustomAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
                 Log.d("MainActivity", "Element " + position + " set.");
-                String selectedTitle = noteItemList.get(position);
+                String selectedTitle = mTitleList.get(position);
                 // 启动日记查看编辑活动，同时将日记title,month,year传递过去
                 Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
                 intent.putExtra("extra_noteYear", year);
@@ -80,10 +69,9 @@ public class MainActivity extends Activity {
             }
         });
 
-
         //write display
-        buttonWrite = (Button) findViewById(R.id.button_write);
-        buttonWrite.setOnClickListener(new View.OnClickListener() {
+        Button btnWrite = (Button) findViewById(R.id.button_write);
+        btnWrite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, WriteNoteActivity.class);
@@ -91,49 +79,18 @@ public class MainActivity extends Activity {
             }
         });
     }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mRecyclerView.getChildCount();
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mRecyclerView.getChildCount();
-    }
-
+    
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.d("MainActivity", "onRestart");
         // 从intent中恢复笔记year，month
         Intent intent = getIntent();
-        year = intent.getStringExtra("extra_noteYear");
-        month = intent.getStringExtra("extra_noteMonth");
-        noteDb = NoteDb.getInstance(this);
-        //new LongOperation().execute("");
-        noteItemList = noteDb.QueryTitles(year, month);
-//        mCustomAdaptor.setOnItemClickLitener(new NoteTitleCustomAdapter.OnItemClickLitener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                Log.d("MainActivity", "Element " + position + " set.");
-//                String selectedTitle = noteItemList.get(position);
-//                // 启动日记查看编辑活动，同时将日记title,month,year传递过去
-//                Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
-//                intent.putExtra("extra_noteYear", year);
-//                intent.putExtra("extra_noteMonth", month);
-//                intent.putExtra("extra_noteTitle", selectedTitle);
-//                startActivity(intent);
-//            }
-//
-//            @Override
-//            public void onItemLongClick(View view, int position) {
-//                mCustomAdaptor.notifyDataSetChanged();
-//            }
-//        });
-        mCustomAdaptor.update((ArrayList<String>) noteItemList);
+        String year = intent.getStringExtra("extra_noteYear");
+        String month = intent.getStringExtra("extra_noteMonth");
+        mNoteDb = NoteDb.getInstance(this);
+        mTitleList = mNoteDb.QueryTitles(year, month);
+        mCustomAdaptor.update((ArrayList<String>) mTitleList);
         // 显示最新日期的笔记
-        mRecyclerView.scrollToPosition(noteItemList.size() - 1);
-//        mCustomAdaptor.notifyDataSetChanged();
+        mRecyclerView.scrollToPosition(mTitleList.size() - 1);
     }
 }

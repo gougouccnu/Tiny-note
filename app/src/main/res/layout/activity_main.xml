@@ -21,7 +21,8 @@
         android:layout_gravity="right"
         android:singleLine="false"
         android:textSize="@dimen/abc_text_size_medium_material"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:lineSpacingExtra="8dp"/>
 
     <Button
         android:id="@+id/button_write"
@@ -50,7 +51,8 @@
             android:paddingRight="48dp"
             android:layout_alignParentLeft="false"
             android:layout_alignParentBottom="false"
-            android:layout_toLeftOf="@+id/title_month" />
+            android:layout_toLeftOf="@+id/title_month"
+            android:lineSpacingExtra="8dp"/>
 
         <com.mycompany.tinynote.TextViewVertical
             android:id="@+id/title_month"
