@@ -57,8 +57,8 @@ public class EditNoteActivity extends Activity {
             }
         }
         // 笔记显示不满一屏，在内容后加空格，让笔记结尾与屏幕左边对其
-        if (mcontentLength < 7) {
-            for (int i = 0; i < (7-mcontentLength); i++) {
+        if (mcontentLength < 8) {
+            for (int i = 0; i < (8-mcontentLength); i++) {
                 String item = " ";
                 mNoteContentList.add(item);
             }

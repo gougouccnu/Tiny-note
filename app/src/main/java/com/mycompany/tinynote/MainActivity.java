@@ -18,7 +18,7 @@ public class MainActivity extends Activity {
     private RecyclerView mRecyclerView;
     private NoteTitleCustomAdapter mCustomAdaptor;
     private LinearLayoutManager mLayoutManager;
-    public List<String> mTitleList = new ArrayList<String>();
+    private List<String> mTitleList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

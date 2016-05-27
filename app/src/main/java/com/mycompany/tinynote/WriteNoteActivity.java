@@ -10,6 +10,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -74,21 +75,31 @@ public class WriteNoteActivity extends Activity {
                 year = DateConvertor.formatYear(y);
                 month = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.CHINA);
                 day = DateConvertor.formatDay(d);
-                Log.d("WriteNoteActivity", "current date is year: " + year +
-                        "month: " + month + "day: " + day);
-                // 保存日记到数据库
-                mNote.setYear(year);
-                mNote.setMonth(month);
-                mNote.setTitle(title);
-                mNote.setContent(content);
-                mNote.setLoacation(noteLocation.getText().toString());
-                mNote.setDate(year + month + day);
-                mNoteDb.InsertNote(mNote);
-                // 回到主活动
-                Intent intent = new Intent(WriteNoteActivity.this, MainActivity.class);
-                intent.putExtra("extra_noteYear", year);
-                intent.putExtra("extra_noteMonth", month);
-                startActivity(intent);
+                // 笔记标题和内容为空
+                if (TextUtils.isEmpty(content.trim()) && TextUtils.isEmpty(title.trim())) {
+                    //startActivity(new Intent(WriteNoteActivity.this, MonthActivity.class));
+                    finish();
+                } else {
+                    Log.d("WriteNoteActivity", "current date is year: " + year +
+                            "month: " + month + "day: " + day);
+                    // 保存日记到数据库
+                    mNote.setYear(year);
+                    mNote.setMonth(month);
+                    if (TextUtils.isEmpty(title.trim())) {
+                        mNote.setTitle(day);
+                    } else {
+                        mNote.setTitle(title);
+                    }
+                    mNote.setContent(content);
+                    mNote.setLoacation(noteLocation.getText().toString());
+                    mNote.setDate(year + month + day);
+                    mNoteDb.InsertNote(mNote);
+                    // 回到主活动
+                    Intent intent = new Intent(WriteNoteActivity.this, MainActivity.class);
+                    intent.putExtra("extra_noteYear", year);
+                    intent.putExtra("extra_noteMonth", month);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -164,7 +175,7 @@ public class WriteNoteActivity extends Activity {
 
             @Override
             public void onError(Exception e) {
-                Toast.makeText(WriteNoteActivity.this, "获取笔记位置失败", Toast.LENGTH_LONG).show();
+                //Toast.makeText(WriteNoteActivity.this, "获取笔记位置失败", Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -22,11 +22,12 @@
         android:singleLine="false"
         android:textSize="@dimen/abc_text_size_medium_material"
         android:textStyle="bold"
-        android:lineSpacingExtra="8dp"/>
+        android:lineSpacingExtra="2dp"/>
 
-    <Button
+    <com.mycompany.tinynote.ButtonPlus
         android:id="@+id/button_write"
-        android:text="写"
+        android:text="撰"
+        style="@style/textViewVertical"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_alignParentRight="true"
@@ -51,8 +52,7 @@
             android:paddingRight="48dp"
             android:layout_alignParentLeft="false"
             android:layout_alignParentBottom="false"
-            android:layout_toLeftOf="@+id/title_month"
-            android:lineSpacingExtra="8dp"/>
+            android:layout_toLeftOf="@+id/title_month" />
 
         <com.mycompany.tinynote.TextViewVertical
             android:id="@+id/title_month"

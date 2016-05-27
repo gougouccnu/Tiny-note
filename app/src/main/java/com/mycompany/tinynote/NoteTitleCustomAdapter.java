@@ -19,7 +19,7 @@ import java.util.List;
 public class NoteTitleCustomAdapter extends RecyclerView.Adapter<NoteTitleCustomAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
-    List<String> mItemList = new ArrayList<String>();
+    private List<String> mItemList = new ArrayList<String>();
 
     // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
     /**
@@ -114,6 +114,7 @@ public class NoteTitleCustomAdapter extends RecyclerView.Adapter<NoteTitleCustom
     {
         this.mOnItemClickLitener = mOnItemClickLitener;
     }
+
     public void update(ArrayList<String> itemList){
         mItemList.clear();
         mItemList.addAll(itemList);

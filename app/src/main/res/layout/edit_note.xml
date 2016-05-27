@@ -26,27 +26,30 @@
         android:layout_weight="1"
         android:layout_gravity="center_horizontal">
 
-        <Button
+        <com.mycompany.tinynote.ButtonPlus
             android:id="@+id/edit"
             android:text="改"
+            style="@style/textViewVertical"
             android:textSize="@dimen/abc_text_size_medium_material"
             android:background="@drawable/roundedbutton"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginRight="35dp"
             android:textColor="#faf6f6" />
-        <Button
+        <com.mycompany.tinynote.ButtonPlus
             android:id="@+id/save"
             android:text="存"
+            style="@style/textViewVertical"
             android:textSize="@dimen/abc_text_size_medium_material"
             android:background="@drawable/roundedbutton"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginRight="35dp"
             android:textColor="#faf6f6" />
-        <Button
+        <com.mycompany.tinynote.ButtonPlus
             android:id="@+id/delete"
             android:text="删"
+            style="@style/textViewVertical"
             android:textSize="@dimen/abc_text_size_medium_material"
             android:background="@drawable/roundedbutton"
             android:layout_width="35dp"

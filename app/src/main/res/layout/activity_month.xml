@@ -23,9 +23,10 @@
         android:textSize="@dimen/abc_text_size_medium_material"
         android:textStyle="bold" />
 
-    <Button
+    <com.mycompany.tinynote.ButtonPlus
         android:id="@+id/button_write"
-        android:text="写"
+        android:text="撰"
+        style="@style/textViewVertical"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_alignParentRight="true"

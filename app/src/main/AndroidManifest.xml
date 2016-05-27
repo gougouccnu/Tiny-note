@@ -30,7 +30,8 @@
             android:launchMode="singleTask" >
         </activity>
 
-        <activity android:name=".MonthActivity" >
+        <activity android:name=".MonthActivity"
+            android:launchMode="singleTop">
         </activity>
     </application>
 
