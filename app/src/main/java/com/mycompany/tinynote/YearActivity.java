@@ -3,7 +3,8 @@ package com.mycompany.tinynote;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,6 +26,7 @@ public class YearActivity extends Activity {
     private RecyclerView.LayoutManager mLayoutManager;
 
     public List<String> mYearList;
+    public static final int GOTO_MONTH_ACTIVITY = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +70,38 @@ public class YearActivity extends Activity {
 
             }
         });
+        final Handler handler = new Handler() {
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case GOTO_MONTH_ACTIVITY:
+                        // 启动日记查看编辑活动，同时将日记year传递过去
+                        Intent intent = new Intent(YearActivity.this, MonthActivity.class);
+                        intent.putExtra("extra_noteYear", mYearList.get(0));
+                        startActivity(intent);
+                    default:
+                        break;
+                }
+            }
+        };
         //如果只有当年的笔记，直接进入月视图
         if(mYearList.size() == 1) {
-            //延时1s
-            SystemClock.sleep(1000);
-            // 启动日记查看编辑活动，同时将日记year传递过去
-            Intent intent = new Intent(YearActivity.this, MonthActivity.class);
-            intent.putExtra("extra_noteYear", mYearList.get(0));
-            startActivity(intent);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1500);
+                    }
+                    catch (InterruptedException e) {
+
+                    }
+                    finally {
+
+                    }
+                    Message message = new Message();
+                    message.what = GOTO_MONTH_ACTIVITY;
+                    handler.sendMessage(message);
+                }
+            }).start();
         }
 
     }
