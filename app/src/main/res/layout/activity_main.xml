@@ -44,15 +44,17 @@
         android:layout_width="match_parent"
         android:layout_height="250dp">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/note_item"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="70dp"
-            android:paddingRight="48dp"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentBottom="false"
-            android:layout_toLeftOf="@+id/title_month" />
+            android:gravity="center"
+            android:layout_toLeftOf="@+id/title_month">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_note_item"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
         <com.mycompany.tinynote.TextViewVertical
             android:id="@+id/title_month"
@@ -60,33 +62,11 @@
             style="@style/textViewVertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginTop="0dp"
-            android:layout_marginLeft="0dp"
             android:layout_marginRight="16dp"
             android:layout_gravity="center_vertical|right"
             android:gravity="center_vertical"
             android:layout_alignParentRight="true"
             android:textSize="16sp"
-            android:textColor="#f15264"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentTop="false"
-            android:layout_alignWithParentIfMissing="false"
-            android:layout_alignParentBottom="false" />
+            android:textColor="#f15264" />
     </RelativeLayout>
-
-    <!--com.mycompany.tinynote.TextViewVertical
-        android:id="@+id/title_month"
-        android:text="六月"
-        style="@style/textViewVertical"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/button_write"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="16dp"
-        android:layout_gravity="center|right" /-->
-
-
 </LinearLayout>

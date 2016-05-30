@@ -16,10 +16,10 @@ import java.util.List;
 /**
  * Provide views to RecyclerView with data from mDataSet.
  */
-public class NoteTitleCustomAdapter extends RecyclerView.Adapter<NoteTitleCustomAdapter.ViewHolder> {
+public class TitleCustomAdapter extends RecyclerView.Adapter<TitleCustomAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
-    private List<String> mItemList = new ArrayList<String>();
+    List<String> mItemList = new ArrayList<String>();
 
     // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
     /**
@@ -30,7 +30,7 @@ public class NoteTitleCustomAdapter extends RecyclerView.Adapter<NoteTitleCustom
 
         public ViewHolder(View v) {
             super(v);
-            textViewVertical = (TextViewVertical)v.findViewById(R.id.note_item);
+            textViewVertical = (TextViewVertical)v.findViewById(R.id.center_tv);
         }
 
         public TextViewVertical getTextViewVertical() {
@@ -42,7 +42,7 @@ public class NoteTitleCustomAdapter extends RecyclerView.Adapter<NoteTitleCustom
     /**
      * Initialize the dataset of the Adapter.
      */
-    public NoteTitleCustomAdapter(List<String> itemList) {
+    public TitleCustomAdapter(List<String> itemList) {
         mItemList = itemList;
     }
 
@@ -52,7 +52,7 @@ public class NoteTitleCustomAdapter extends RecyclerView.Adapter<NoteTitleCustom
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view.
         View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.note_title, viewGroup, false);
+                .inflate(R.layout.center_tv, viewGroup, false);
 
         return new ViewHolder(v);
     }
@@ -114,7 +114,6 @@ public class NoteTitleCustomAdapter extends RecyclerView.Adapter<NoteTitleCustom
     {
         this.mOnItemClickLitener = mOnItemClickLitener;
     }
-
     public void update(ArrayList<String> itemList){
         mItemList.clear();
         mItemList.addAll(itemList);

@@ -21,7 +21,7 @@ public class YearActivity extends Activity {
     private NoteDb mNoteDb;
     //private String year;
     private RecyclerView mRecyclerView;
-    private CustomAdapter mCustomAdaptor;
+    private TitleCustomAdapter mCustomAdaptor;
     private RecyclerView.LayoutManager mLayoutManager;
 
     public List<String> mYearList;
@@ -40,7 +40,7 @@ public class YearActivity extends Activity {
             mYearList.add(DateConvertor.formatYear(currentYear));
         }
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_year);
-        mCustomAdaptor = new CustomAdapter(mYearList);
+        mCustomAdaptor = new TitleCustomAdapter(mYearList);
         mRecyclerView.setAdapter(mCustomAdaptor);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -53,7 +53,7 @@ public class YearActivity extends Activity {
         }
         mRecyclerView.scrollToPosition(scrollPosition);
 
-        mCustomAdaptor.setOnItemClickLitener(new CustomAdapter.OnItemClickLitener() {
+        mCustomAdaptor.setOnItemClickLitener(new TitleCustomAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
                 Log.d("YearActivity", "Element " + position + " set.");

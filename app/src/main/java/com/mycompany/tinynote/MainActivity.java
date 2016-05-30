@@ -16,7 +16,7 @@ public class MainActivity extends Activity {
 
     private NoteDb mNoteDb;
     private RecyclerView mRecyclerView;
-    private NoteTitleCustomAdapter mCustomAdaptor;
+    private TitleCustomAdapter mCustomAdaptor;
     private LinearLayoutManager mLayoutManager;
     private List<String> mTitleList = new ArrayList<String>();
 
@@ -36,8 +36,8 @@ public class MainActivity extends Activity {
 
         mNoteDb = NoteDb.getInstance(this);
         mTitleList = mNoteDb.QueryTitles(year, month);
-        mRecyclerView = (RecyclerView)findViewById(R.id.note_item);
-        mCustomAdaptor = new NoteTitleCustomAdapter(mTitleList);
+        mRecyclerView = (RecyclerView)findViewById(R.id.rv_note_item);
+        mCustomAdaptor = new TitleCustomAdapter(mTitleList);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mCustomAdaptor);
@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
         }
         // 显示最新日期的笔记
         mRecyclerView.scrollToPosition(mTitleList.size() - 1);
-        mCustomAdaptor.setOnItemClickLitener(new NoteTitleCustomAdapter.OnItemClickLitener() {
+        mCustomAdaptor.setOnItemClickLitener(new TitleCustomAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
                 Log.d("MainActivity", "Element " + position + " set.");

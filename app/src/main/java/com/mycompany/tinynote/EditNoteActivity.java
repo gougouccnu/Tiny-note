@@ -68,7 +68,7 @@ public class EditNoteActivity extends Activity {
         mNoteContentList.add(mNote.getLoacation());
         mNoteContentList.add(mNote.getDate());
 
-        mRecyclerView = (RecyclerView)findViewById(R.id.note_edit_content);
+        mRecyclerView = (RecyclerView)findViewById(R.id.rv_note_edit_content);
         mCustomAdaptor = new CustomAdapter(mNoteContentList);
         mRecyclerView.setAdapter(mCustomAdaptor);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);

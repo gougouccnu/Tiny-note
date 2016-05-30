@@ -18,7 +18,7 @@ public class MonthActivity extends Activity {
 
     private NoteDb mNoteDb;
     private RecyclerView mRecyclerView;
-    private NoteTitleCustomAdapter mCustomAdaptor;
+    private TitleCustomAdapter mCustomAdaptor;
     private RecyclerView.LayoutManager mLayoutManager;
     public List<String> mMonthList;
     @Override
@@ -32,8 +32,8 @@ public class MonthActivity extends Activity {
         final String year = intent.getStringExtra("extra_noteYear");
         mNoteDb = NoteDb.getInstance(this);
         mMonthList = mNoteDb.QueryMonths(year);
-        mRecyclerView = (RecyclerView)findViewById(R.id.month_list);
-        mCustomAdaptor = new NoteTitleCustomAdapter(mMonthList);
+        mRecyclerView = (RecyclerView)findViewById(R.id.rv_month_list);
+        mCustomAdaptor = new TitleCustomAdapter(mMonthList);
         mRecyclerView.setAdapter(mCustomAdaptor);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -45,7 +45,7 @@ public class MonthActivity extends Activity {
                     .findFirstCompletelyVisibleItemPosition();
         }
         mRecyclerView.scrollToPosition(scrollPosition);
-        mCustomAdaptor.setOnItemClickLitener(new NoteTitleCustomAdapter.OnItemClickLitener() {
+        mCustomAdaptor.setOnItemClickLitener(new TitleCustomAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
                 Log.d("monthActivity", "Element " + position + " set.");
