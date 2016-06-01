@@ -9,7 +9,7 @@
     tools:context=".MainActivity"
     android:orientation="vertical">
 
-    <com.mycompany.tinynote.TextViewVertical
+    <com.ggccnu.tinynote.TextViewVertical
         android:id="@+id/title_year"
         android:text="二零一五年"
         style="@style/textViewVertical"
@@ -24,7 +24,7 @@
         android:textStyle="bold"
         android:lineSpacingExtra="2dp"/>
 
-    <com.mycompany.tinynote.ButtonPlus
+    <com.ggccnu.tinynote.ButtonPlus
         android:id="@+id/button_write"
         android:text="撰"
         style="@style/textViewVertical"
@@ -56,7 +56,7 @@
                 android:layout_height="match_parent" />
         </LinearLayout>
 
-        <com.mycompany.tinynote.TextViewVertical
+        <com.ggccnu.tinynote.TextViewVertical
             android:id="@+id/title_month"
             android:text="六月"
             style="@style/textViewVertical"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mycompany.tinynote" >
+    package="com.ggccnu.tinynote" >
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <application
@@ -9,7 +9,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".YearActivity"
+            android:name="com.ggccnu.tinynote.YearActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,20 +17,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WriteNoteActivity" >
+        <activity android:name="com.ggccnu.tinynote.WriteNoteActivity" >
         </activity>
         <activity
-            android:name=".EditNoteActivity" >
+            android:name="com.ggccnu.tinynote.EditNoteActivity" >
         </activity>
         <activity
-            android:name=".ModifyNoteActivity" >
+            android:name="com.ggccnu.tinynote.ModifyNoteActivity" >
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.ggccnu.tinynote.MainActivity"
             android:launchMode="singleTask" >
         </activity>
 
-        <activity android:name=".MonthActivity"
+        <activity android:name="com.ggccnu.tinynote.MonthActivity"
             android:launchMode="singleTop">
         </activity>
     </application>

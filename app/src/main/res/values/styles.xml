@@ -6,8 +6,8 @@
     </style>
 
     <style name="textViewVertical" parent="@android:style/Widget.TextView">
-        <item name="com.mycompany.tinynote:font">fonts/KangXi.ttf</item>
-        <!-- item name="com.mycompany.tinynote:font">fonts/WenyueType.otf</item-->
+        <item name="com.ggccnu.tinynote:font">fonts/KangXi.ttf</item>
+        <!-- item name="ggccnunynote:font">fonts/WenyueType.otf</item-->
     </style>
 
 </resources>
