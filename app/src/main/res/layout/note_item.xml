@@ -10,7 +10,7 @@
     <com.ggccnu.tinynote.TextViewVertical
         android:id="@+id/note_item"
         android:text="一日"
-        android:textSize="18sp"
+        android:textSize="@dimen/abc_text_size_title_medium"
         style="@style/textViewVertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

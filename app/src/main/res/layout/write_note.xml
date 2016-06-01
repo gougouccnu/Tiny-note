@@ -39,7 +39,7 @@
         android:id="@+id/write_done"
         android:text="完"
         style="@style/textViewVertical"
-        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textSize="@dimen/abc_text_size_title_medium"
         android:background="@drawable/roundedbutton"
         android:layout_width="35dp"
         android:layout_height="35dp"

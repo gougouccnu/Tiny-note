@@ -20,7 +20,7 @@
         android:layout_marginRight="16dp"
         android:layout_gravity="right"
         android:singleLine="false"
-        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textSize="@dimen/abc_text_size_title_medium"
         android:textStyle="bold" />
 
     <com.ggccnu.tinynote.ButtonPlus
@@ -36,7 +36,7 @@
         android:textColor="#faf6f6"
         android:layout_gravity="right"
         android:background="@drawable/roundedbutton"
-        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textSize="@dimen/abc_text_size_title_medium"
         android:layout_marginRight="7dp" />
 
     <LinearLayout
