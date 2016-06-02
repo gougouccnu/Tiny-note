@@ -3,6 +3,10 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         config {
+            keyAlias 'tinyNoteAlias'
+            keyPassword '78006456'
+            storeFile file('/Users/lishaowei/tinyNote.jks')
+            storePassword '78006456'
         }
     }
     compileSdkVersion 23
