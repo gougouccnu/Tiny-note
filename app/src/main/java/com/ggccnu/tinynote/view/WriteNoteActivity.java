@@ -1,4 +1,4 @@
-package com.ggccnu.tinynote;
+package com.ggccnu.tinynote.view;
 
 import android.Manifest;
 import android.app.Activity;
@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ggccnu.tinynote.R;
 import com.ggccnu.tinynote.db.NoteDb;
 import com.ggccnu.tinynote.model.Note;
 import com.ggccnu.tinynote.util.DateConvertor;

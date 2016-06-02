@@ -1,10 +1,12 @@
-package com.ggccnu.tinynote;
+package com.ggccnu.tinynote.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
+
+import com.ggccnu.tinynote.R;
 
 /**
  * Created by lishaowei on 15/10/27.

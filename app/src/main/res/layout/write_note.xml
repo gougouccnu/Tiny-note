@@ -35,7 +35,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginBottom="22dp" />
 
-    <com.ggccnu.tinynote.ButtonPlus
+    <com.ggccnu.tinynote.widget.ButtonPlus
         android:id="@+id/write_done"
         android:text="完"
         style="@style/textViewVertical"

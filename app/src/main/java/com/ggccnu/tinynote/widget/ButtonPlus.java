@@ -1,4 +1,4 @@
-package com.ggccnu.tinynote;
+package com.ggccnu.tinynote.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;

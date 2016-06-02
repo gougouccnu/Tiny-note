@@ -1,4 +1,4 @@
-package com.ggccnu.tinynote;
+package com.ggccnu.tinynote.view;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.ggccnu.tinynote.R;
+import com.ggccnu.tinynote.adapter.TitleCustomAdapter;
 import com.ggccnu.tinynote.db.NoteDb;
 import com.ggccnu.tinynote.util.DateConvertor;
 

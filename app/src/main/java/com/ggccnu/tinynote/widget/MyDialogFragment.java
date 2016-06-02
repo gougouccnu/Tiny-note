@@ -1,4 +1,4 @@
-package com.ggccnu.tinynote;
+package com.ggccnu.tinynote.widget;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -29,6 +29,6 @@ public abstract class MyDialogFragment extends DialogFragment {
         // Create the AlertDialog object and return it
         return builder.create();
     }
-    abstract void dialogPositiveButtonClicked();
-    abstract void dialogNegativeButtonClicked();
+    public abstract void dialogPositiveButtonClicked();
+    public abstract void dialogNegativeButtonClicked();
 }

@@ -1,4 +1,4 @@
-package com.ggccnu.tinynote;
+package com.ggccnu.tinynote.view;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.ggccnu.tinynote.adapter.CustomAdapter;
+import com.ggccnu.tinynote.widget.MyDialogFragment;
+import com.ggccnu.tinynote.R;
 import com.ggccnu.tinynote.db.NoteDb;
 import com.ggccnu.tinynote.model.Note;
 
@@ -139,7 +142,7 @@ public class EditNoteActivity extends Activity {
             public void onClick(View v) {
                 final MyDialogFragment myDialogFragment = new MyDialogFragment() {
                     @Override
-                    void dialogPositiveButtonClicked() {
+                    public void dialogPositiveButtonClicked() {
                         Log.d("EditNoteActivity", "positive button clicked");
                         mNoteDb.DeleteNote(mNote);
                         // 启动日记查看编辑活动，同时将日记title,month传递过去
@@ -150,7 +153,7 @@ public class EditNoteActivity extends Activity {
                     }
 
                     @Override
-                    void dialogNegativeButtonClicked() {
+                    public void dialogNegativeButtonClicked() {
                         dismiss();
                     }
                 };

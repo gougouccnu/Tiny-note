@@ -1,4 +1,4 @@
-package com.ggccnu.tinynote;
+package com.ggccnu.tinynote.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

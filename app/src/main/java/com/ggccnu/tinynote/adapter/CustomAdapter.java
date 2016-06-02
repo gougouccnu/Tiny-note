@@ -1,4 +1,4 @@
-package com.ggccnu.tinynote;
+package com.ggccnu.tinynote.adapter;
 
 /**
  * Created by lishaowei on 15/12/6.
@@ -10,13 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ggccnu.tinynote.R;
+import com.ggccnu.tinynote.widget.TextViewVertical;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Provide views to RecyclerView with data from mDataSet.
  */
-public class TitleCustomAdapter extends RecyclerView.Adapter<TitleCustomAdapter.ViewHolder> {
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
     List<String> mItemList = new ArrayList<String>();
@@ -30,7 +33,7 @@ public class TitleCustomAdapter extends RecyclerView.Adapter<TitleCustomAdapter.
 
         public ViewHolder(View v) {
             super(v);
-            textViewVertical = (TextViewVertical)v.findViewById(R.id.center_tv);
+            textViewVertical = (TextViewVertical)v.findViewById(R.id.note_item);
         }
 
         public TextViewVertical getTextViewVertical() {
@@ -42,7 +45,7 @@ public class TitleCustomAdapter extends RecyclerView.Adapter<TitleCustomAdapter.
     /**
      * Initialize the dataset of the Adapter.
      */
-    public TitleCustomAdapter(List<String> itemList) {
+    public CustomAdapter(List<String> itemList) {
         mItemList = itemList;
     }
 
@@ -52,7 +55,7 @@ public class TitleCustomAdapter extends RecyclerView.Adapter<TitleCustomAdapter.
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view.
         View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.center_tv, viewGroup, false);
+                .inflate(R.layout.note_item, viewGroup, false);
 
         return new ViewHolder(v);
     }
@@ -105,7 +108,7 @@ public class TitleCustomAdapter extends RecyclerView.Adapter<TitleCustomAdapter.
     public interface OnItemClickLitener
     {
         void onItemClick(View view, int position);
-        void onItemLongClick(View view, int position);
+        void onItemLongClick(View view , int position);
     }
 
     private OnItemClickLitener mOnItemClickLitener;

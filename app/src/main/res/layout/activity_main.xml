@@ -6,10 +6,10 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity"
+    tools:context=".view.MainActivity"
     android:orientation="vertical">
 
-    <com.ggccnu.tinynote.TextViewVertical
+    <com.ggccnu.tinynote.widget.TextViewVertical
         android:id="@+id/title_year"
         android:text="二零一五年"
         style="@style/textViewVertical"
@@ -24,7 +24,7 @@
         android:textStyle="bold"
         android:lineSpacingExtra="2dp"/>
 
-    <com.ggccnu.tinynote.ButtonPlus
+    <com.ggccnu.tinynote.widget.ButtonPlus
         android:id="@+id/button_write"
         android:text="撰"
         style="@style/textViewVertical"
@@ -56,7 +56,7 @@
                 android:layout_height="match_parent" />
         </LinearLayout>
 
-        <com.ggccnu.tinynote.TextViewVertical
+        <com.ggccnu.tinynote.widget.TextViewVertical
             android:id="@+id/title_month"
             android:text="六月"
             style="@style/textViewVertical"

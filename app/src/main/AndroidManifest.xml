@@ -9,7 +9,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.ggccnu.tinynote.YearActivity"
+            android:name=".view.YearActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,20 +17,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.ggccnu.tinynote.WriteNoteActivity" >
+        <activity android:name=".view.WriteNoteActivity" >
         </activity>
         <activity
-            android:name="com.ggccnu.tinynote.EditNoteActivity" >
+            android:name=".view.EditNoteActivity" >
         </activity>
         <activity
-            android:name="com.ggccnu.tinynote.ModifyNoteActivity" >
+            android:name=".view.ModifyNoteActivity" >
         </activity>
         <activity
-            android:name="com.ggccnu.tinynote.MainActivity"
+            android:name=".view.MainActivity"
             android:launchMode="singleTask" >
         </activity>
 
-        <activity android:name="com.ggccnu.tinynote.MonthActivity"
+        <activity android:name=".view.MonthActivity"
             android:launchMode="singleTop">
         </activity>
     </application>

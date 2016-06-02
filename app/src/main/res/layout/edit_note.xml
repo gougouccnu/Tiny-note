@@ -26,7 +26,7 @@
         android:layout_weight="1"
         android:layout_gravity="center_horizontal">
 
-        <com.ggccnu.tinynote.ButtonPlus
+        <com.ggccnu.tinynote.widget.ButtonPlus
             android:id="@+id/edit"
             android:text="改"
             style="@style/textViewVertical"
@@ -36,7 +36,7 @@
             android:layout_height="35dp"
             android:layout_marginRight="35dp"
             android:textColor="#faf6f6" />
-        <com.ggccnu.tinynote.ButtonPlus
+        <com.ggccnu.tinynote.widget.ButtonPlus
             android:id="@+id/save"
             android:text="存"
             style="@style/textViewVertical"
@@ -46,7 +46,7 @@
             android:layout_height="35dp"
             android:layout_marginRight="35dp"
             android:textColor="#faf6f6" />
-        <com.ggccnu.tinynote.ButtonPlus
+        <com.ggccnu.tinynote.widget.ButtonPlus
             android:id="@+id/delete"
             android:text="删"
             style="@style/textViewVertical"

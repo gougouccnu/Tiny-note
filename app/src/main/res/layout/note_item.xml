@@ -7,7 +7,7 @@
     android:paddingRight="5dp"
     android:gravity="center_horizontal">
 
-    <com.ggccnu.tinynote.TextViewVertical
+    <com.ggccnu.tinynote.widget.TextViewVertical
         android:id="@+id/note_item"
         android:text="一日"
         android:textSize="@dimen/abc_text_size_title_medium"

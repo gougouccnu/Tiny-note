@@ -1,4 +1,4 @@
-package com.ggccnu.tinynote;
+package com.ggccnu.tinynote.model;
 
 /**
  * Created by lishaowei on 15/10/2.
