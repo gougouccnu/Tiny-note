@@ -24,7 +24,7 @@ import com.ggccnu.tinynote.model.Note;
 import com.ggccnu.tinynote.util.DateConvertor;
 import com.ggccnu.tinynote.util.HttpCallbackListener;
 import com.ggccnu.tinynote.util.HttpUtil;
-import com.ggccnu.tinynote.util.Utility;
+import com.ggccnu.tinynote.util.BaiduLocationDecode;
 
 import java.util.Calendar;
 import java.util.List;
@@ -39,9 +39,9 @@ public class WriteNoteActivity extends Activity {
     private NoteDb mNoteDb;
     private Note mNote = new Note();
     private Button buttonWriteDone;
-    private EditText noteTitle;
-    private EditText noteContent;
-    private TextView noteLocation;
+    private EditText etTitle;
+    private EditText etContent;
+    private TextView tvLocation;
     // Note year/month/location got from system
     private String title;
     private String content;
@@ -65,10 +65,10 @@ public class WriteNoteActivity extends Activity {
             @Override
             public void onClick(View v) {
                 // get mNote title/content/...
-                noteTitle = (EditText) findViewById(R.id.note_title);
-                noteContent = (EditText) findViewById(R.id.note_content);
-                title = noteTitle.getText().toString();
-                content = noteContent.getText().toString();
+                etTitle = (EditText) findViewById(R.id.note_title);
+                etContent = (EditText) findViewById(R.id.note_content);
+                title = etTitle.getText().toString();
+                content = etContent.getText().toString();
 
                 Calendar c = Calendar.getInstance();
                 int y = c.get(Calendar.YEAR);
@@ -91,8 +91,16 @@ public class WriteNoteActivity extends Activity {
                     } else {
                         mNote.setTitle(title);
                     }
-                    mNote.setContent(content);
-                    mNote.setLoacation(noteLocation.getText().toString());
+                    if (TextUtils.isEmpty(content.trim())) {
+                        mNote.setContent(" ");
+                    } else {
+                        mNote.setContent(content);
+                    }
+                    if (TextUtils.isEmpty(tvLocation.getText().toString().trim())) {
+                        mNote.setLoacation(" ");
+                    } else {
+                        mNote.setLoacation(tvLocation.getText().toString());
+                    }
                     mNote.setDate(year + month + day);
                     mNoteDb.InsertNote(mNote);
                     // 回到主活动
@@ -120,7 +128,7 @@ public class WriteNoteActivity extends Activity {
             mLocation = mLocationManager.getLastKnownLocation(provider);
             mLocationManager.requestLocationUpdates(provider, 5000, 1, locationListener);
             // get mNote location
-            noteLocation = (TextView) findViewById(R.id.note_location);
+            tvLocation = (TextView) findViewById(R.id.note_location);
             if (mLocation != null) {
                 showLocation(mLocation);
             }
@@ -165,11 +173,15 @@ public class WriteNoteActivity extends Activity {
         HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
             @Override
             public void onFinish(final String response) {
-                final String mlocation = Utility.handleLocationResponse(response);
+                final String mlocation = BaiduLocationDecode.locationFromResponse(response);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        noteLocation.setText(mlocation);
+                        if (!"".equals(mlocation)) {
+                            tvLocation.setText(mlocation);
+                        } else {
+                            tvLocation.setVisibility(View.INVISIBLE);
+                        }
                     }
                 });
             }
@@ -177,6 +189,12 @@ public class WriteNoteActivity extends Activity {
             @Override
             public void onError(Exception e) {
                 //Toast.makeText(WriteNoteActivity.this, "获取笔记位置失败", Toast.LENGTH_LONG).show();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tvLocation.setVisibility(View.INVISIBLE);
+                    }
+                });
             }
         });
     }
@@ -199,7 +217,7 @@ public class WriteNoteActivity extends Activity {
             mLocation = mLocationManager.getLastKnownLocation(provider);
             mLocationManager.requestLocationUpdates(provider, 5000, 1, locationListener);
             // get mNote location
-            noteLocation = (TextView) findViewById(R.id.note_location);
+            tvLocation = (TextView) findViewById(R.id.note_location);
             if (mLocation != null) {
                 showLocation(mLocation);
             }

@@ -2,5 +2,5 @@
     <string name="app_name">TinyNote</string>
     <string name="action_settings">action_settings</string>
     <string name="note_title_value">Day 2</string>
-    <string name="note_location_value">武汉市 </string>
+    <string name="note_location_value"> </string>
 </resources>

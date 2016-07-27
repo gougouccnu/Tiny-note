@@ -73,6 +73,7 @@ public class MonthActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MonthActivity.this, WriteNoteActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }
         });
@@ -86,5 +87,11 @@ public class MonthActivity extends Activity {
 //            intent.putExtra("extra_noteMonth", mMonthList.get(0));
 //            startActivity(mIntent);
 //        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        //TODO 增加笔记按月显示刷新
     }
 }
