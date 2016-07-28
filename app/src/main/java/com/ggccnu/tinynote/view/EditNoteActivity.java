@@ -2,19 +2,26 @@ package com.ggccnu.tinynote.view;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.ggccnu.tinynote.adapter.CustomAdapter;
-import com.ggccnu.tinynote.widget.MyDialogFragment;
 import com.ggccnu.tinynote.R;
+import com.ggccnu.tinynote.adapter.CustomAdapter;
 import com.ggccnu.tinynote.db.NoteDb;
 import com.ggccnu.tinynote.model.Note;
+import com.ggccnu.tinynote.widget.MyDialogFragment;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,7 +139,10 @@ public class EditNoteActivity extends Activity {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // v为保存按钮，这里需要整个界面
+                // 下面这个无法保存完成界面，原因未知
+                // saveScreenShot(findViewById(android.R.id.content));
+                saveScreenShot(getWindow().getDecorView().getRootView());
             }
         });
         // 删除日记按钮
@@ -160,5 +170,45 @@ public class EditNoteActivity extends Activity {
                 myDialogFragment.show(getFragmentManager(), "对话框");
             }
         });
+    }
+
+    /**
+     * 读取bitmap来截屏,必须保存到SD卡，因为其他程序无法访问tinyNote内的数据
+     * @param view
+     */
+    private void saveScreenShot(View view) {
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();
+        Bitmap bitmap = view.getDrawingCache();
+        if (bitmap != null) {
+            String filePath = Environment.getExternalStorageDirectory() + File.separator + "tinynoteshare.png";
+            File imagePath = new File(filePath);
+            try {
+                FileOutputStream fos = new FileOutputStream(imagePath);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                fos.flush();
+                fos.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            shareCapture(filePath);
+        }
+    }
+
+    /**
+     * 使用Intent共享截图
+     * @param filePath
+     */
+    private void shareCapture(String filePath) {
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+        //Uri uri = Uri.fromFile(getFileStreamPath(Environment.getExternalStorageDirectory() + File.separator + "screenshot.png"));
+        //Uri uri = Uri.fromFile(getFileStreamPath("lswscreenshot.png"));
+        Uri uri = Uri.parse("file://" + filePath);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(shareIntent);
     }
 }
