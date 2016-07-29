@@ -123,7 +123,7 @@ public class WriteNoteActivity extends Activity {
             } else if (mProviderList.contains(LocationManager.NETWORK_PROVIDER)) {
                 provider = LocationManager.NETWORK_PROVIDER;
             } else {
-                Toast.makeText(this, "No mLocation provider to use", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "No mLocation provider to use", Toast.LENGTH_SHORT).show();
             }
             mLocation = mLocationManager.getLastKnownLocation(provider);
             mLocationManager.requestLocationUpdates(provider, 5000, 1, locationListener);
@@ -167,7 +167,7 @@ public class WriteNoteActivity extends Activity {
 
     private void showLocation(Location location) {
 
-        address = "http://api.map.baidu.com/geocoder/v2/?ak=61f8bd72d68aef3a7b66537761d29d82&callback=renderReverse&location="
+        address = "http://api.map.baidu.com/geocoder/v2/?ak=a3U3IGBFNBRL48WszyW1WvFdw8Og7ilk&callback=renderReverse&location="
                 + location.getLatitude() + "," + location.getLongitude() + "&output=json&pois=0";
         // 静态方法，可不用new对象，直接引用
         HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
@@ -188,7 +188,7 @@ public class WriteNoteActivity extends Activity {
 
             @Override
             public void onError(Exception e) {
-                //Toast.makeText(WriteNoteActivity.this, "获取笔记位置失败", Toast.LENGTH_LONG).show();
+                Toast.makeText(WriteNoteActivity.this, "获取笔记位置失败", Toast.LENGTH_LONG).show();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

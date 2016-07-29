@@ -12,8 +12,11 @@ public class BaiduLocationDecode {
 	public static String locationFromResponse(String response) {
 		try {
 			// 转换为jsonObj数据
-			String jsonObj = response.split("\\(")[1].split("\\)")[0];
-			JSONObject jsonObject = new JSONObject(jsonObj);
+			// JSON数据中有分隔符，所以split加上了limit参数，2表示分割后的数组个数
+			String jsonObj = response.split("\\(", 2)[1];
+			// JSON数据中有分隔符，所以用substring方法
+			String subJsonObj = jsonObj.substring(0, jsonObj.length() - 1);
+			JSONObject jsonObject = new JSONObject(subJsonObj);
 			JSONObject result = jsonObject.getJSONObject("result");
 			JSONObject addressComponent = result.getJSONObject("addressComponent");
 			String city = addressComponent.getString("city");
