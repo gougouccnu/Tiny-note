@@ -46,8 +46,6 @@ public class WriteNoteActivity extends Activity {
     private String title;
     private String content;
     private String year, month, day;
-    //地理位置查询网址
-    private String address;
     //位置经纬度
     private LocationManager mLocationManager;
     private String provider;
@@ -166,19 +164,17 @@ public class WriteNoteActivity extends Activity {
     };
 
     private void showLocation(Location location) {
-
-        address = "http://api.map.baidu.com/geocoder/v2/?ak=a3U3IGBFNBRL48WszyW1WvFdw8Og7ilk&callback=renderReverse&location="
+        String url = "http://api.map.baidu.com/geocoder/v2/?ak=a3U3IGBFNBRL48WszyW1WvFdw8Og7ilk&callback=renderReverse&location="
                 + location.getLatitude() + "," + location.getLongitude() + "&output=json&pois=0";
-        // 静态方法，可不用new对象，直接引用
-        HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
+        HttpUtil.sendHttpRequest(url, new HttpCallbackListener() {
             @Override
             public void onFinish(final String response) {
-                final String mlocation = BaiduLocationDecode.locationFromResponse(response);
+                final String mLocation = BaiduLocationDecode.locationFromResponse(response);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (!"".equals(mlocation)) {
-                            tvLocation.setText(mlocation);
+                        if (!"".equals(mLocation)) {
+                            tvLocation.setText(mLocation);
                         } else {
                             tvLocation.setVisibility(View.INVISIBLE);
                         }
