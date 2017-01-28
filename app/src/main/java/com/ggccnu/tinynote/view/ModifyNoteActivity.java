@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.blankj.utilcode.utils.LogUtils;
 import com.ggccnu.tinynote.R;
 import com.ggccnu.tinynote.db.NoteDb;
 import com.ggccnu.tinynote.model.Note;
@@ -21,6 +21,7 @@ import java.util.Locale;
  */
 public class ModifyNoteActivity extends Activity {
 
+    private static final String TAG = "WriteNoteActivity";
     private NoteDb noteDb;
     // 要更新的笔记
     private Note note = new Note();
@@ -87,7 +88,9 @@ public class ModifyNoteActivity extends Activity {
                 year = "二零而五年";
                 month = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.CHINA);
                 day = "七日";
-                Log.d("WriteNoteActivity", "current date is year: " + year +
+                // Log.d("WriteNoteActivity", "current date is year: " + year +
+                //        "month: " + month + "day: " + day);
+                LogUtils.d(TAG, "current date is year: " + year +
                         "month: " + month + "day: " + day);
                 // 保存日记到数据库
                 ContentValues values = new ContentValues();

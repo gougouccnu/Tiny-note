@@ -5,11 +5,11 @@ package com.ggccnu.tinynote.adapter;
  */
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.blankj.utilcode.utils.LogUtils;
 import com.ggccnu.tinynote.R;
 import com.ggccnu.tinynote.widget.TextViewVertical;
 
@@ -65,7 +65,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        Log.d(TAG, "Element " + position + " set.");
+        LogUtils.d(TAG, "Element " + position + " set.");
 
         // Get element from your dataset at this position and replace the contents of the view
         // with that element

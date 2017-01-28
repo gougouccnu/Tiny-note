@@ -4,8 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
+import com.blankj.utilcode.utils.LogUtils;
 import com.ggccnu.tinynote.model.Note;
 
 import java.util.ArrayList;
@@ -81,7 +81,8 @@ public class NoteDb {
             do {
                 //遍历cursor对象，取出数据
                 String month = cursor.getString(cursor.getColumnIndex("month"));
-                Log.d("QueryMonths", month);
+                // Log.d("QueryMonths", month);
+                LogUtils.d("QueryMonths", month);
                 list.add(month);
             } while (cursor.moveToNext());
         }
@@ -100,7 +101,7 @@ public class NoteDb {
             do {
                 //遍历cursor对象，取出数据
                 String title = cursor.getString(cursor.getColumnIndex("title"));
-                Log.d("QueryTitles", title);
+                LogUtils.d("QueryTitles", title);
                 list.add(title);
             } while (cursor.moveToNext());
         }

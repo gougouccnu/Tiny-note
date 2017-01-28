@@ -5,14 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.blankj.utilcode.utils.LogUtils;
 import com.ggccnu.tinynote.R;
-import com.ggccnu.tinynote.widget.TextViewVertical;
 import com.ggccnu.tinynote.adapter.TitleCustomAdapter;
 import com.ggccnu.tinynote.db.NoteDb;
+import com.ggccnu.tinynote.widget.TextViewVertical;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
         mCustomAdaptor.setOnItemClickLitener(new TitleCustomAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
-                Log.d("MainActivity", "Element " + position + " set.");
+                LogUtils.d("MainActivity", "Element " + position + " set.");
                 String selectedTitle = mTitleList.get(position);
                 // 启动日记查看编辑活动，同时将日记title,month,year传递过去
                 Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
