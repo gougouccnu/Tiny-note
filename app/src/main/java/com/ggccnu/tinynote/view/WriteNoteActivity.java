@@ -209,14 +209,17 @@ public class WriteNoteActivity extends Activity {
                 provider = LocationManager.NETWORK_PROVIDER;
             } else {
                 Toast.makeText(this, "No location provider to use", Toast.LENGTH_LONG).show();
+                provider = null;
             }
-            mLocation = mLocationManager.getLastKnownLocation(provider);
-            mLocationManager.requestLocationUpdates(provider, 5000, 1, locationListener);
-            // get mNote location
-            tvLocation = (TextView) findViewById(R.id.note_location);
-            if (mLocation != null) {
-                showLocation(mLocation);
-            }
+            if (provider != null) {
+                mLocation = mLocationManager.getLastKnownLocation(provider);
+                mLocationManager.requestLocationUpdates(provider, 5000, 1, locationListener);
+                // get mNote location
+                tvLocation = (TextView) findViewById(R.id.note_location);
+                if (mLocation != null) {
+                    showLocation(mLocation);
+                }
+            } // TODO: colletct gps failed
         } else {
             // permission denied TODO
             Log.d("WriteNoteActivity", "PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION denied!");
