@@ -114,22 +114,7 @@ public class WriteNoteActivity extends Activity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         } else {
-            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            mProviderList = mLocationManager.getProviders(true);
-            if (mProviderList.contains(LocationManager.GPS_PROVIDER)) {
-                provider = LocationManager.GPS_PROVIDER;
-            } else if (mProviderList.contains(LocationManager.NETWORK_PROVIDER)) {
-                provider = LocationManager.NETWORK_PROVIDER;
-            } else {
-                Toast.makeText(this, "No mLocation provider to use", Toast.LENGTH_SHORT).show();
-            }
-            mLocation = mLocationManager.getLastKnownLocation(provider);
-            mLocationManager.requestLocationUpdates(provider, 5000, 1, locationListener);
-            // get mNote location
-            tvLocation = (TextView) findViewById(R.id.note_location);
-            if (mLocation != null) {
-                showLocation(mLocation);
-            }
+            setLocationFromLocationManager();
         }
     }
 
@@ -201,29 +186,33 @@ public class WriteNoteActivity extends Activity {
         if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d("WriteNoteActivity", "PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION granted!");
-            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            mProviderList = mLocationManager.getProviders(true);
-            if (mProviderList.contains(LocationManager.GPS_PROVIDER)) {
-                provider = LocationManager.GPS_PROVIDER;
-            } else if (mProviderList.contains(LocationManager.NETWORK_PROVIDER)) {
-                provider = LocationManager.NETWORK_PROVIDER;
-            } else {
-                Toast.makeText(this, "No location provider to use", Toast.LENGTH_LONG).show();
-                provider = null;
-            }
-            if (provider != null) {
-                mLocation = mLocationManager.getLastKnownLocation(provider);
-                mLocationManager.requestLocationUpdates(provider, 5000, 1, locationListener);
-                // get mNote location
-                tvLocation = (TextView) findViewById(R.id.note_location);
-                if (mLocation != null) {
-                    showLocation(mLocation);
-                }
-            } // TODO: colletct gps failed
+            setLocationFromLocationManager();
         } else {
             // permission denied TODO
             Log.d("WriteNoteActivity", "PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION denied!");
         }
         return;
+    }
+
+    private void setLocationFromLocationManager() {
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        mProviderList = mLocationManager.getProviders(true);
+        if (mProviderList.contains(LocationManager.GPS_PROVIDER)) {
+            provider = LocationManager.GPS_PROVIDER;
+        } else if (mProviderList.contains(LocationManager.NETWORK_PROVIDER)) {
+            provider = LocationManager.NETWORK_PROVIDER;
+        } else {
+            Toast.makeText(this, "No location provider to use", Toast.LENGTH_LONG).show();
+            provider = null;
+        }
+        if (provider != null) {
+            mLocation = mLocationManager.getLastKnownLocation(provider);
+            mLocationManager.requestLocationUpdates(provider, 5000, 1, locationListener);
+            // get mNote location
+            tvLocation = (TextView) findViewById(R.id.note_location);
+            if (mLocation != null) {
+                showLocation(mLocation);
+            }
+        } // TODO: colletct gps failed
     }
 }
