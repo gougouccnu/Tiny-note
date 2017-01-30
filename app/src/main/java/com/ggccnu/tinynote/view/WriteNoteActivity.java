@@ -38,7 +38,6 @@ public class WriteNoteActivity extends Activity {
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     private NoteDb mNoteDb;
     private Note mNote = new Note();
-    private Button buttonWriteDone;
     private EditText etTitle;
     private EditText etContent;
     private TextView tvLocation;
@@ -48,9 +47,6 @@ public class WriteNoteActivity extends Activity {
     private String year, month, day;
     //位置经纬度
     private LocationManager mLocationManager;
-    private String provider;
-    private List<String> mProviderList;
-    private Location mLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +54,8 @@ public class WriteNoteActivity extends Activity {
         setContentView(R.layout.write_note);
 
         mNoteDb = NoteDb.getInstance(this);
-        buttonWriteDone = (Button) findViewById(R.id.write_done);
+        tvLocation = (TextView) findViewById(R.id.note_location);
+        Button buttonWriteDone = (Button) findViewById(R.id.write_done);
         buttonWriteDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,9 +71,9 @@ public class WriteNoteActivity extends Activity {
                 year = DateConvertor.formatYear(y);
                 month = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.CHINA);
                 day = DateConvertor.formatDay(d);
+
                 // 笔记标题和内容为空
                 if (TextUtils.isEmpty(content.trim()) && TextUtils.isEmpty(title.trim())) {
-                    //startActivity(new Intent(WriteNoteActivity.this, MonthActivity.class));
                     finish();
                 } else {
                     Log.d("WriteNoteActivity", "current date is year: " + year +
@@ -110,11 +107,13 @@ public class WriteNoteActivity extends Activity {
             }
         });
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         } else {
-            setLocationFromLocationManager();
+            getLocationFromLocationManager();
         }
     }
 
@@ -129,7 +128,7 @@ public class WriteNoteActivity extends Activity {
     LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-            showLocation(location);
+            setLocationFromHttp(location);
         }
 
         @Override
@@ -148,7 +147,7 @@ public class WriteNoteActivity extends Activity {
         }
     };
 
-    private void showLocation(Location location) {
+    private void setLocationFromHttp(Location location) {
         String url = "http://api.map.baidu.com/geocoder/v2/?ak=a3U3IGBFNBRL48WszyW1WvFdw8Og7ilk&callback=renderReverse&location="
                 + location.getLatitude() + "," + location.getLongitude() + "&output=json&pois=0";
         HttpUtil.sendHttpRequest(url, new HttpCallbackListener() {
@@ -186,33 +185,38 @@ public class WriteNoteActivity extends Activity {
         if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d("WriteNoteActivity", "PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION granted!");
-            setLocationFromLocationManager();
+
+            Location location = getLocationFromLocationManager();
+            if (location != null) {
+                setLocationFromHttp(location);
+            }
         } else {
             // permission denied TODO
             Log.d("WriteNoteActivity", "PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION denied!");
         }
-        return;
     }
 
-    private void setLocationFromLocationManager() {
+    private Location getLocationFromLocationManager() {
+        Location location;
+        String locationProvider;
+
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        mProviderList = mLocationManager.getProviders(true);
+        List<String> mProviderList = mLocationManager.getProviders(true);
+
         if (mProviderList.contains(LocationManager.GPS_PROVIDER)) {
-            provider = LocationManager.GPS_PROVIDER;
+            locationProvider = LocationManager.GPS_PROVIDER;
         } else if (mProviderList.contains(LocationManager.NETWORK_PROVIDER)) {
-            provider = LocationManager.NETWORK_PROVIDER;
+            locationProvider = LocationManager.NETWORK_PROVIDER;
         } else {
             Toast.makeText(this, "No location provider to use", Toast.LENGTH_LONG).show();
-            provider = null;
+            locationProvider = null;
         }
-        if (provider != null) {
-            mLocation = mLocationManager.getLastKnownLocation(provider);
-            mLocationManager.requestLocationUpdates(provider, 5000, 1, locationListener);
-            // get mNote location
-            tvLocation = (TextView) findViewById(R.id.note_location);
-            if (mLocation != null) {
-                showLocation(mLocation);
-            }
+        if (locationProvider != null) {
+            location = mLocationManager.getLastKnownLocation(locationProvider);
+            mLocationManager.requestLocationUpdates(locationProvider, 5000, 1, locationListener);
+
+            return location;
         } // TODO: colletct gps failed
+        return null;
     }
 }

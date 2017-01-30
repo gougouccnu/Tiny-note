@@ -85,7 +85,7 @@ public class ModifyNoteActivity extends Activity {
                 int m = c.get(Calendar.MONTH);
                 int d = c.get(Calendar.DAY_OF_MONTH);
 
-                year = "二零而五年";
+                year = "二零一五年";
                 month = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.CHINA);
                 day = "七日";
                 // Log.d("WriteNoteActivity", "current date is year: " + year +
