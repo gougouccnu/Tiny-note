@@ -31,11 +31,12 @@ public class DateConvertor {
      */
     public static String formatDay(int day) {
         StringBuffer str = new StringBuffer();
-        int currentDay = day + 1;
+        int currentDay = day;
         if (currentDay == 10 || currentDay == 20 || currentDay == 30) {
             str.append(formatDigit(currentDay / 10));
             str.append('拾');
             str.append('日');
+            return str.toString();
         }
         if (currentDay < 10) {
             str.append(formatDigit(currentDay));
