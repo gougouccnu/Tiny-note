@@ -11,20 +11,20 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.utils.LogUtils;
 import com.ggccnu.tinynote.R;
 import com.ggccnu.tinynote.db.NoteDb;
 import com.ggccnu.tinynote.model.Note;
+import com.ggccnu.tinynote.util.BaiduLocationDecode;
 import com.ggccnu.tinynote.util.DateConvertor;
 import com.ggccnu.tinynote.util.HttpCallbackListener;
 import com.ggccnu.tinynote.util.HttpUtil;
-import com.ggccnu.tinynote.util.BaiduLocationDecode;
 
 import java.util.Calendar;
 import java.util.List;
@@ -76,7 +76,7 @@ public class WriteNoteActivity extends Activity {
                 if (TextUtils.isEmpty(content.trim()) && TextUtils.isEmpty(title.trim())) {
                     finish();
                 } else {
-                    Log.d("WriteNoteActivity", "current date is year: " + year +
+                    LogUtils.d("WriteNoteActivity", "current date is year: " + year +
                             "month: " + month + "day: " + day);
                     // 保存日记到数据库
                     mNote.setYear(year);
@@ -184,7 +184,7 @@ public class WriteNoteActivity extends Activity {
                                            int[] grantResults) {
         if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Log.d("WriteNoteActivity", "PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION granted!");
+            LogUtils.d("WriteNoteActivity", "PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION granted!");
 
             Location location = getLocationFromLocationManager();
             if (location != null) {
@@ -192,7 +192,7 @@ public class WriteNoteActivity extends Activity {
             }
         } else {
             // permission denied TODO
-            Log.d("WriteNoteActivity", "PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION denied!");
+            LogUtils.d("WriteNoteActivity", "PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION denied!");
         }
     }
 

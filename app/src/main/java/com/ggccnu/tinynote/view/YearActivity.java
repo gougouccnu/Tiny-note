@@ -7,9 +7,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
+import com.blankj.utilcode.utils.LogUtils;
 import com.ggccnu.tinynote.R;
 import com.ggccnu.tinynote.adapter.TitleCustomAdapter;
 import com.ggccnu.tinynote.db.NoteDb;
@@ -60,7 +60,7 @@ public class YearActivity extends Activity {
         mCustomAdaptor.setOnItemClickLitener(new TitleCustomAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
-                Log.d("YearActivity", "Element " + position + " set.");
+                LogUtils.d("YearActivity", "Element " + position + " set.");
                 // 启动日记查看编辑活动，同时将日记year传递过去
                 Intent intent = new Intent(YearActivity.this, MonthActivity.class);
                 intent.putExtra("extra_noteYear", mYearList.get(position));

@@ -61,7 +61,7 @@ public class NoteDb {
             do {
                 //遍历cursor对象，取出数据
                 String year = cursor.getString(cursor.getColumnIndex("year"));
-//                Log.d("QueryYears",year);
+//                LogUtils.d("QueryYears",year);
                 list.add(year);
             } while (cursor.moveToNext());
         }
@@ -81,7 +81,7 @@ public class NoteDb {
             do {
                 //遍历cursor对象，取出数据
                 String month = cursor.getString(cursor.getColumnIndex("month"));
-                // Log.d("QueryMonths", month);
+                // LogUtils.d("QueryMonths", month);
                 LogUtils.d("QueryMonths", month);
                 list.add(month);
             } while (cursor.moveToNext());

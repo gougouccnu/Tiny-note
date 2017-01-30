@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 3);
+        assertEquals(4, 2 + 2);
     }
 
     @Test
@@ -20,6 +20,6 @@ public class ExampleUnitTest {
         assertEquals(DateConvertor.formatDay(0), "零日");
         assertEquals(DateConvertor.formatDay(10), "一拾日");
         assertEquals(DateConvertor.formatDay(30), "三拾日");
-        assertEquals(DateConvertor.formatDay(31), "三拾日");
+        assertEquals(DateConvertor.formatDay(31), "三拾一日");
     }
 }
