@@ -9,9 +9,12 @@ import android.view.View;
 import android.widget.Button;
 
 import com.blankj.utilcode.utils.LogUtils;
+import com.blankj.utilcode.utils.NetworkUtils;
+import com.blankj.utilcode.utils.Utils;
 import com.ggccnu.tinynote.R;
 import com.ggccnu.tinynote.adapter.TitleCustomAdapter;
 import com.ggccnu.tinynote.db.NoteDb;
+import com.ggccnu.tinynote.update.UpdateChecker;
 import com.ggccnu.tinynote.widget.TextViewVertical;
 
 import java.util.ArrayList;
@@ -29,6 +32,12 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // 要初始化，否则得不到context
+        Utils.init(this);
+        if (NetworkUtils.getWifiEnabled()) {
+            UpdateChecker.checkForDialog(this);
+        }
 
         // 从intent中恢复笔记year，month
         Intent intent = getIntent();
