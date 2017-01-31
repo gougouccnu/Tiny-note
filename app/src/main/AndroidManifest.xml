@@ -34,7 +34,7 @@
             android:name=".view.ModifyNoteActivity" >
         </activity>
         <activity
-            android:name=".view.MainActivity"
+            android:name=".view.NoteTitleActivity"
             android:launchMode="singleTask" >
         </activity>
 

@@ -18,7 +18,7 @@ import com.xiaomi.mistatistic.sdk.MiStatInterface;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class NoteTitleActivity extends Activity {
 
     private NoteDbInstance mNoteDbInstance;
     private RecyclerView mRecyclerView;
@@ -60,11 +60,11 @@ public class MainActivity extends Activity {
         mTitleAdaptor.setOnItemClickLitener(new TitleAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
-                LogUtils.d("MainActivity", "Element " + position + " set.");
+                LogUtils.d("NoteTitleActivity", "Element " + position + " set.");
                 String selectedTitle = mTitleList.get(position);
 
                 // 启动日记查看编辑活动，同时将日记title,month,year传递过去
-                Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
+                Intent intent = new Intent(NoteTitleActivity.this, EditNoteActivity.class);
                 intent.putExtra("extra_noteYear", year);
                 intent.putExtra("extra_noteMonth", month);
                 intent.putExtra("extra_noteTitle", selectedTitle);
@@ -82,7 +82,7 @@ public class MainActivity extends Activity {
         btnWrite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, WriteNoteActivity.class));
+                startActivity(new Intent(NoteTitleActivity.this, WriteNoteActivity.class));
             }
         });
     }

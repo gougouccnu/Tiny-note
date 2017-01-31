@@ -67,7 +67,7 @@ public class ModifyNoteActivity extends Activity {
                 mNoteDbInstance.UpdateNote(note, values);
 
                 // 回到主活动
-                Intent intent = new Intent(ModifyNoteActivity.this, MainActivity.class);
+                Intent intent = new Intent(ModifyNoteActivity.this, NoteTitleActivity.class);
                 intent.putExtra("extra_noteYear", note.getYear());
                 intent.putExtra("extra_noteMonth", note.getMonth());
                 startActivity(intent);

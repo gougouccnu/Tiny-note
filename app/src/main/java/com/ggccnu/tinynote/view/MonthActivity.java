@@ -56,7 +56,7 @@ public class MonthActivity extends Activity {
                 String selectedMonth = mMonthList.get(position);
 
                 // 启动日记查看编辑活动，同时将日记year,month传递过去
-                Intent intent = new Intent(MonthActivity.this, MainActivity.class);
+                Intent intent = new Intent(MonthActivity.this, NoteTitleActivity.class);
                 intent.putExtra("extra_noteYear", year);
                 intent.putExtra("extra_noteMonth", selectedMonth);
                 startActivity(intent);
@@ -85,7 +85,7 @@ public class MonthActivity extends Activity {
 //            SystemClock.sleep(100);
 //            String selectedYear = mMonthList.get(0);
 //            // 启动日记查看编辑活动，同时将日记year传递过去
-//            Intent mIntent = new Intent(MonthActivity.this, MainActivity.class);
+//            Intent mIntent = new Intent(MonthActivity.this, NoteTitleActivity.class);
 //            intent.putExtra("extra_noteMonth", mMonthList.get(0));
 //            startActivity(mIntent);
 //        }

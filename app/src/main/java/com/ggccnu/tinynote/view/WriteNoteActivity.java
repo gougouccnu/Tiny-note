@@ -79,7 +79,7 @@ public class WriteNoteActivity extends Activity {
                     saveNoteToDB();
 
                     // 回到主活动
-                    Intent intent = new Intent(WriteNoteActivity.this, MainActivity.class);
+                    Intent intent = new Intent(WriteNoteActivity.this, NoteTitleActivity.class);
                     intent.putExtra("extra_noteYear", year);
                     intent.putExtra("extra_noteMonth", month);
                     startActivity(intent);
