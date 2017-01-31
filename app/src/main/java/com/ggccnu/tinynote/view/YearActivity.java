@@ -3,16 +3,17 @@ package com.ggccnu.tinynote.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.blankj.utilcode.utils.LogUtils;
+import com.blankj.utilcode.utils.NetworkUtils;
+import com.blankj.utilcode.utils.Utils;
 import com.ggccnu.tinynote.R;
 import com.ggccnu.tinynote.adapter.TitleCustomAdapter;
 import com.ggccnu.tinynote.db.NoteDb;
+import com.ggccnu.tinynote.update.UpdateChecker;
 import com.ggccnu.tinynote.util.DateConvertor;
 
 import java.util.Calendar;
@@ -34,6 +35,13 @@ public class YearActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_year);
+
+
+        // 检查是否要更新APP。要初始化，否则得不到context
+        Utils.init(this);
+        if (NetworkUtils.getWifiEnabled()) {
+            UpdateChecker.checkForDialog(this);
+        }
 
         mNoteDb = NoteDb.getInstance(this);
         mYearList = mNoteDb.QueryYears();
@@ -72,6 +80,8 @@ public class YearActivity extends Activity {
 
             }
         });
+
+    /*  还是让用户点击进入月视图吧
         final Handler handler = new Handler() {
             public void handleMessage(Message msg) {
                 switch (msg.what) {
@@ -105,6 +115,7 @@ public class YearActivity extends Activity {
                 }
             }).start();
         }
+    */
 
     }
 }
