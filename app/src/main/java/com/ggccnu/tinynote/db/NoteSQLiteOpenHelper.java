@@ -13,9 +13,9 @@ import java.util.Locale;
 /**
  * Created by lishaowei on 16/1/7.
  */
-public class NoteOpenHelper extends SQLiteOpenHelper {
+public class NoteSQLiteOpenHelper extends SQLiteOpenHelper {
 
-    private final String TAG = "NoteOpenHelper";
+    private final String TAG = "NoteSQLiteOpenHelper";
 
     public static final String CREATE_NOTE = "create table Note ("
             + "id integer primary key autoincrement, "
@@ -26,8 +26,8 @@ public class NoteOpenHelper extends SQLiteOpenHelper {
             + "location text,"
             + "date text)";
 
-    public NoteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory,
-                            int version) {
+    public NoteSQLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory,
+                                int version) {
         super(context, name, factory, version);
     }
 
@@ -44,7 +44,7 @@ public class NoteOpenHelper extends SQLiteOpenHelper {
         String month = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.CHINA);
         //day = c.getDisplayName(Calendar.DAY_OF_MONTH, Calendar.LONG, Locale.CHINA);
         String day = DateConvertor.formatDay(d);
-        LogUtils.d("NoteOpenHelper", "current date is year: " + year +
+        LogUtils.d("NoteSQLiteOpenHelper", "current date is year: " + year +
                 "month: " + month + "day: " + day);
         db.execSQL(CREATE_NOTE);
         db.execSQL("insert into Note (year, month, title, content, location, date) values (?,?,?,?,?,?)",
@@ -61,7 +61,7 @@ public class NoteOpenHelper extends SQLiteOpenHelper {
                 break;
 //            case 4:
 //                db.execSQL("alter table Note add column date text");
-//                LogUtils.d("NoteOpenHelper", "alter table Note");
+//                LogUtils.d("NoteSQLiteOpenHelper", "alter table Note");
             default:
         }
     }

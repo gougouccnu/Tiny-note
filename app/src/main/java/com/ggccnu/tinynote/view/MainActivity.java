@@ -10,8 +10,8 @@ import android.widget.Button;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.ggccnu.tinynote.R;
-import com.ggccnu.tinynote.adapter.TitleCustomAdapter;
-import com.ggccnu.tinynote.db.NoteDb;
+import com.ggccnu.tinynote.adapter.TitleAdapter;
+import com.ggccnu.tinynote.db.NoteDbInstance;
 import com.ggccnu.tinynote.widget.TextViewVertical;
 import com.xiaomi.mistatistic.sdk.MiStatInterface;
 
@@ -20,9 +20,9 @@ import java.util.List;
 
 public class MainActivity extends Activity {
 
-    private NoteDb mNoteDb;
+    private NoteDbInstance mNoteDbInstance;
     private RecyclerView mRecyclerView;
-    private TitleCustomAdapter mCustomAdaptor;
+    private TitleAdapter mTitleAdaptor;
     private LinearLayoutManager mLayoutManager;
     private List<String> mTitleList = new ArrayList<String>();
 
@@ -35,18 +35,19 @@ public class MainActivity extends Activity {
         Intent intent = getIntent();
         final String year = intent.getStringExtra("extra_noteYear");
         final String month = intent.getStringExtra("extra_noteMonth");
+
         TextViewVertical tvYear = (TextViewVertical) findViewById(R.id.title_year);
         TextViewVertical tvMonth = (TextViewVertical) findViewById(R.id.title_month);
         tvYear.setText(year);
         tvMonth.setText(month);
 
-        mNoteDb = NoteDb.getInstance(this);
-        mTitleList = mNoteDb.QueryTitles(year, month);
+        mNoteDbInstance = NoteDbInstance.getInstance(this);
+        mTitleList = mNoteDbInstance.QueryTitles(year, month);
         mRecyclerView = (RecyclerView)findViewById(R.id.rv_note_item);
-        mCustomAdaptor = new TitleCustomAdapter(mTitleList);
+        mTitleAdaptor = new TitleAdapter(mTitleList);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mCustomAdaptor);
+        mRecyclerView.setAdapter(mTitleAdaptor);
         
         int scrollPosition = 0;
         // If a layout manager has already been set, get current scroll position.
@@ -56,11 +57,12 @@ public class MainActivity extends Activity {
         }
         // 显示最新日期的笔记
         mRecyclerView.scrollToPosition(mTitleList.size() - 1);
-        mCustomAdaptor.setOnItemClickLitener(new TitleCustomAdapter.OnItemClickLitener() {
+        mTitleAdaptor.setOnItemClickLitener(new TitleAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
                 LogUtils.d("MainActivity", "Element " + position + " set.");
                 String selectedTitle = mTitleList.get(position);
+
                 // 启动日记查看编辑活动，同时将日记title,month,year传递过去
                 Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
                 intent.putExtra("extra_noteYear", year);
@@ -80,8 +82,7 @@ public class MainActivity extends Activity {
         btnWrite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, WriteNoteActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(MainActivity.this, WriteNoteActivity.class));
             }
         });
     }
@@ -93,9 +94,10 @@ public class MainActivity extends Activity {
         Intent intent = getIntent();
         String year = intent.getStringExtra("extra_noteYear");
         String month = intent.getStringExtra("extra_noteMonth");
-        mNoteDb = NoteDb.getInstance(this);
-        mTitleList = mNoteDb.QueryTitles(year, month);
-        mCustomAdaptor.update((ArrayList<String>) mTitleList);
+
+        mNoteDbInstance = NoteDbInstance.getInstance(this);
+        mTitleList = mNoteDbInstance.QueryTitles(year, month);
+        mTitleAdaptor.update((ArrayList<String>) mTitleList);
         // 显示最新日期的笔记
         mRecyclerView.scrollToPosition(mTitleList.size() - 1);
     }
@@ -111,5 +113,4 @@ public class MainActivity extends Activity {
         super.onPause();
         MiStatInterface.recordPageEnd();
     }
-
 }

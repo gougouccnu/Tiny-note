@@ -11,8 +11,8 @@ import com.blankj.utilcode.utils.LogUtils;
 import com.blankj.utilcode.utils.NetworkUtils;
 import com.blankj.utilcode.utils.Utils;
 import com.ggccnu.tinynote.R;
-import com.ggccnu.tinynote.adapter.TitleCustomAdapter;
-import com.ggccnu.tinynote.db.NoteDb;
+import com.ggccnu.tinynote.adapter.TitleAdapter;
+import com.ggccnu.tinynote.db.NoteDbInstance;
 import com.ggccnu.tinynote.update.UpdateChecker;
 import com.ggccnu.tinynote.util.DateConvertor;
 
@@ -21,21 +21,18 @@ import java.util.List;
 
 public class YearActivity extends Activity {
 
-    //private MyDatabaseHelper dbHelper;
-    private NoteDb mNoteDb;
-    //private String year;
+    private NoteDbInstance mNoteDbInstance;
+
     private RecyclerView mRecyclerView;
-    private TitleCustomAdapter mCustomAdaptor;
+    private TitleAdapter mTitleAdaptor;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    public List<String> mYearList;
-    public static final int GOTO_MONTH_ACTIVITY = 1;
+    private List<String> mYearList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_year);
-
 
         // 检查是否要更新APP。要初始化，否则得不到context
         Utils.init(this);
@@ -43,17 +40,18 @@ public class YearActivity extends Activity {
             UpdateChecker.checkForDialog(this);
         }
 
-        mNoteDb = NoteDb.getInstance(this);
-        mYearList = mNoteDb.QueryYears();
+        mNoteDbInstance = NoteDbInstance.getInstance(this);
+        mYearList = mNoteDbInstance.QueryYears();
         // 笔记为空，显示当前年
         if (mYearList.isEmpty()) {
             Calendar c = Calendar.getInstance();
             int currentYear = c.get(Calendar.YEAR);
             mYearList.add(DateConvertor.formatYear(currentYear));
         }
+
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_year);
-        mCustomAdaptor = new TitleCustomAdapter(mYearList);
-        mRecyclerView.setAdapter(mCustomAdaptor);
+        mTitleAdaptor = new TitleAdapter(mYearList);
+        mRecyclerView.setAdapter(mTitleAdaptor);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
@@ -65,7 +63,7 @@ public class YearActivity extends Activity {
         }
         mRecyclerView.scrollToPosition(scrollPosition);
 
-        mCustomAdaptor.setOnItemClickLitener(new TitleCustomAdapter.OnItemClickLitener() {
+        mTitleAdaptor.setOnItemClickLitener(new TitleAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
                 LogUtils.d("YearActivity", "Element " + position + " set.");

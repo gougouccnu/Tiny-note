@@ -19,8 +19,8 @@ import java.util.List;
 /**
  * Provide views to RecyclerView with data from mDataSet.
  */
-public class TitleCustomAdapter extends RecyclerView.Adapter<TitleCustomAdapter.ViewHolder> {
-    private static final String TAG = "CustomAdapter";
+public class TitleAdapter extends RecyclerView.Adapter<TitleAdapter.ViewHolder> {
+    private static final String TAG = "TitleAdapter";
 
     List<String> mItemList = new ArrayList<String>();
 
@@ -45,7 +45,7 @@ public class TitleCustomAdapter extends RecyclerView.Adapter<TitleCustomAdapter.
     /**
      * Initialize the dataset of the Adapter.
      */
-    public TitleCustomAdapter(List<String> itemList) {
+    public TitleAdapter(List<String> itemList) {
         mItemList = itemList;
     }
 

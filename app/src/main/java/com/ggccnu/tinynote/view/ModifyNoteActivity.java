@@ -8,13 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.blankj.utilcode.utils.LogUtils;
 import com.ggccnu.tinynote.R;
-import com.ggccnu.tinynote.db.NoteDb;
+import com.ggccnu.tinynote.db.NoteDbInstance;
 import com.ggccnu.tinynote.model.Note;
-
-import java.util.Calendar;
-import java.util.Locale;
 
 /**
  * Created by lishaowei on 15/10/7.
@@ -22,31 +18,22 @@ import java.util.Locale;
 public class ModifyNoteActivity extends Activity {
 
     private static final String TAG = "WriteNoteActivity";
-    private NoteDb noteDb;
+    private NoteDbInstance mNoteDbInstance;
     // 要更新的笔记
     private Note note = new Note();
 
-    private Button buttonWriteDone;
-    // 笔记title
-    private EditText noteTitle;
-    // note content
-    private EditText noteContent;
-    // note year/month/location got from system
-
-
-    private String title;
-    private String content;
-    private String year,month,day,location;
-
-    //int mYear = c.get(Calendar.YEAR);
-    //int mMonth = c.get(Calendar.MONTH);
-    //int mDay = c.get(Calendar.DAY_OF_MONTH);
-
+    private Button btWriteDone;
+    private EditText etTitle, etContent;
+    private String title, content, year, month, day;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.write_note);
+
+        etTitle = (EditText) findViewById(R.id.note_title);
+        etContent = (EditText) findViewById(R.id.note_content);
+        btWriteDone = (Button) findViewById(R.id.write_done);
 
         Intent intent = getIntent();
         final String oldYear = intent.getStringExtra("extra_modify_year");
@@ -61,42 +48,24 @@ public class ModifyNoteActivity extends Activity {
         note.setContent(oldContent);
         note.setLoacation(oldLocation);
         note.setDate(oldDate);
-        if (oldTitle == null || oldTitle.equals("")) {
-            // DO Nothing
-        } else { // 日记修改活动
-            noteTitle = (EditText) findViewById(R.id.note_title);
-            noteContent = (EditText) findViewById(R.id.note_content);
-            noteTitle.setText(oldTitle);
-            noteContent.setText(oldContent);
+
+        if (oldTitle != null && !oldTitle.equals("")) {
+            etTitle.setText(oldTitle);
+            etContent.setText(oldContent);
         }
-        noteDb = NoteDb.getInstance(this);
-        buttonWriteDone = (Button) findViewById(R.id.write_done);
-        buttonWriteDone.setOnClickListener(new View.OnClickListener() {
+        mNoteDbInstance = NoteDbInstance.getInstance(this);
+        btWriteDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // get note title/content/...
-                noteTitle = (EditText) findViewById(R.id.note_title);
-                noteContent = (EditText) findViewById(R.id.note_content);
-                title = noteTitle.getText().toString();
-                content = noteContent.getText().toString();
+                title = etTitle.getText().toString();
+                content = etContent.getText().toString();
 
-                Calendar c = Calendar.getInstance();
-                int y = c.get(Calendar.YEAR);
-                int m = c.get(Calendar.MONTH);
-                int d = c.get(Calendar.DAY_OF_MONTH);
-
-                year = "二零一五年";
-                month = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.CHINA);
-                day = "七日";
-                // LogUtils.d("WriteNoteActivity", "current date is year: " + year +
-                //        "month: " + month + "day: " + day);
-                LogUtils.d(TAG, "current date is year: " + year +
-                        "month: " + month + "day: " + day);
                 // 保存日记到数据库
                 ContentValues values = new ContentValues();
                 values.put("title", title);
                 values.put("content", content);
-                noteDb.UpdateNote(note, values);
+                mNoteDbInstance.UpdateNote(note, values);
+
                 // 回到主活动
                 Intent intent = new Intent(ModifyNoteActivity.this, MainActivity.class);
                 intent.putExtra("extra_noteYear", note.getYear());

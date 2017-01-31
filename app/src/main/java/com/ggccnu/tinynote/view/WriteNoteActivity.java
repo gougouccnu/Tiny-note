@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.ggccnu.tinynote.R;
-import com.ggccnu.tinynote.db.NoteDb;
+import com.ggccnu.tinynote.db.NoteDbInstance;
 import com.ggccnu.tinynote.model.Note;
 import com.ggccnu.tinynote.util.BaiduLocationDecode;
 import com.ggccnu.tinynote.util.DateConvertor;
@@ -37,15 +37,14 @@ import java.util.Locale;
 public class WriteNoteActivity extends Activity {
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
-    private NoteDb mNoteDb;
+    private NoteDbInstance mNoteDbInstance;
     private Note mNote = new Note();
     private EditText etTitle;
     private EditText etContent;
     private TextView tvLocation;
     // Note year/month/location got from system
-    private String title;
-    private String content;
     private String year, month, day;
+    private String title, content;
     //位置经纬度
     private LocationManager mLocationManager;
 
@@ -54,7 +53,7 @@ public class WriteNoteActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.write_note);
 
-        mNoteDb = NoteDb.getInstance(this);
+        mNoteDbInstance = NoteDbInstance.getInstance(this);
         tvLocation = (TextView) findViewById(R.id.note_location);
         Button buttonWriteDone = (Button) findViewById(R.id.write_done);
         buttonWriteDone.setOnClickListener(new View.OnClickListener() {
@@ -77,28 +76,8 @@ public class WriteNoteActivity extends Activity {
                 if (TextUtils.isEmpty(content.trim()) && TextUtils.isEmpty(title.trim())) {
                     finish();
                 } else {
-                    LogUtils.d("WriteNoteActivity", "current date is year: " + year +
-                            "month: " + month + "day: " + day);
-                    // 保存日记到数据库
-                    mNote.setYear(year);
-                    mNote.setMonth(month);
-                    if (TextUtils.isEmpty(title.trim())) {
-                        mNote.setTitle(day);
-                    } else {
-                        mNote.setTitle(title);
-                    }
-                    if (TextUtils.isEmpty(content.trim())) {
-                        mNote.setContent(" ");
-                    } else {
-                        mNote.setContent(content);
-                    }
-                    if (TextUtils.isEmpty(tvLocation.getText().toString().trim())) {
-                        mNote.setLoacation(" ");
-                    } else {
-                        mNote.setLoacation(tvLocation.getText().toString());
-                    }
-                    mNote.setDate(year + month + day);
-                    mNoteDb.InsertNote(mNote);
+                    saveNoteToDB();
+
                     // 回到主活动
                     Intent intent = new Intent(WriteNoteActivity.this, MainActivity.class);
                     intent.putExtra("extra_noteYear", year);
@@ -116,6 +95,31 @@ public class WriteNoteActivity extends Activity {
         } else {
             getLocationFromLocationManager();
         }
+    }
+
+    private void saveNoteToDB() {
+        LogUtils.d("WriteNoteActivity", "current date is year: " + year +
+                "month: " + month + "day: " + day);
+        // 保存日记到数据库
+        mNote.setYear(year);
+        mNote.setMonth(month);
+        if (TextUtils.isEmpty(title.trim())) {
+            mNote.setTitle(day);
+        } else {
+            mNote.setTitle(title);
+        }
+        if (TextUtils.isEmpty(content.trim())) {
+            mNote.setContent(" ");
+        } else {
+            mNote.setContent(content);
+        }
+        if (TextUtils.isEmpty(tvLocation.getText().toString().trim())) {
+            mNote.setLoacation(" ");
+        } else {
+            mNote.setLoacation(tvLocation.getText().toString());
+        }
+        mNote.setDate(year + month + day);
+        mNoteDbInstance.InsertNote(mNote);
     }
 
     @Override

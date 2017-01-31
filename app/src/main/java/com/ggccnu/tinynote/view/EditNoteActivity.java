@@ -13,8 +13,8 @@ import android.widget.Button;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.ggccnu.tinynote.R;
-import com.ggccnu.tinynote.adapter.CustomAdapter;
-import com.ggccnu.tinynote.db.NoteDb;
+import com.ggccnu.tinynote.adapter.NoteDisplayAdapter;
+import com.ggccnu.tinynote.db.NoteDbInstance;
 import com.ggccnu.tinynote.model.Note;
 import com.ggccnu.tinynote.widget.MyDialogFragment;
 import com.xiaomi.mistatistic.sdk.MiStatInterface;
@@ -31,13 +31,14 @@ import java.util.List;
  */
 public class EditNoteActivity extends Activity {
 
-    private Button buttonModify;
-    private Button buttonSave;
-    private Button buttonDelete;
-    private NoteDb mNoteDb;
+    private Button btModify, btSave, btDelete;
+
+    private NoteDbInstance mNoteDbInstance;
+
     private RecyclerView mRecyclerView;
-    private CustomAdapter mCustomAdaptor;
+    private NoteDisplayAdapter mNoteDisplayAdaptor;
     private RecyclerView.LayoutManager mLayoutManager;
+
     private Note mNote;
     private List<String> mNoteContentList = new ArrayList<String>();
 
@@ -52,9 +53,94 @@ public class EditNoteActivity extends Activity {
         final String title = intent.getStringExtra("extra_noteTitle");
         final String month = intent.getStringExtra("extra_noteMonth");
 
-        mNoteDb = NoteDb.getInstance(this);
-        mNote = mNoteDb.QueryNoteAll(year, month, title);
+        getNoteContentListFromDB(year, title, month);
+
+        mRecyclerView = (RecyclerView)findViewById(R.id.rv_note_edit_content);
+        mNoteDisplayAdaptor = new NoteDisplayAdapter(mNoteContentList);
+        mRecyclerView.setAdapter(mNoteDisplayAdaptor);
+        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        int scrollPosition = 0;
+        // If a layout manager has already been set, get current scroll position.
+        if (mRecyclerView.getLayoutManager() != null) {
+            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                    .findFirstCompletelyVisibleItemPosition();
+        }
+        mRecyclerView.scrollToPosition(scrollPosition);
+        mNoteDisplayAdaptor.setOnItemClickLitener(new NoteDisplayAdapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                // toggle button display status
+                btDelete.setVisibility(btDelete.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
+                btModify.setVisibility(btModify.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
+                btSave.setVisibility(btSave.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
+        // 修改按钮
+        btModify = (Button) findViewById(R.id.edit);
+        btModify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditNoteActivity.this, ModifyNoteActivity.class);
+                intent.putExtra("extra_modify_year", mNote.getYear());
+                intent.putExtra("extra_modify_month", mNote.getMonth());
+                intent.putExtra("extra_modify_title", mNote.getTitle());
+                intent.putExtra("extra_modify_content", mNote.getContent());
+                intent.putExtra("extra_modify_location", mNote.getLoacation());
+                intent.putExtra("extra_modify_date", mNote.getDate());
+                startActivity(intent);
+            }
+        });
+        // 保持日记按钮
+        btSave = (Button) findViewById(R.id.save);
+        btSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // v为保存按钮，这里需要整个界面
+                // 下面这个无法保存完成界面，原因未知
+                // saveScreenShot(findViewById(android.R.id.content));
+                MiStatInterface.recordCountEvent(null, "shareNote");
+                saveScreenShot(getWindow().getDecorView().getRootView());
+            }
+        });
+        // 删除日记按钮
+        btDelete = (Button) findViewById(R.id.delete);
+        btDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final MyDialogFragment myDialogFragment = new MyDialogFragment() {
+                    @Override
+                    public void dialogPositiveButtonClicked() {
+                        LogUtils.d("EditNoteActivity", "positive button clicked");
+                        mNoteDbInstance.DeleteNote(mNote);
+                        // 启动日记查看编辑活动，同时将日记title,month传递过去
+                        Intent intent = new Intent(EditNoteActivity.this, MainActivity.class);
+                        intent.putExtra("extra_noteYear", mNote.getYear());
+                        intent.putExtra("extra_noteMonth", mNote.getMonth());
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void dialogNegativeButtonClicked() {
+                        dismiss();
+                    }
+                };
+                myDialogFragment.show(getFragmentManager(), "对话框");
+            }
+        });
+    }
+
+    private void getNoteContentListFromDB(String year, String title, String month) {
+        mNoteDbInstance = NoteDbInstance.getInstance(this);
+        mNote = mNoteDbInstance.QueryNoteAll(year, month, title);
         mNoteContentList.add(mNote.getTitle());
+
         String[] mcontentString= mNote.getContent().split("\\n");
         int mcontentLength = mcontentString.length;
         for(int i = 0; i < mcontentLength; i++) {
@@ -81,97 +167,6 @@ public class EditNoteActivity extends Activity {
         }
         mNoteContentList.add(mNote.getLoacation());
         mNoteContentList.add(mNote.getDate());
-
-        mRecyclerView = (RecyclerView)findViewById(R.id.rv_note_edit_content);
-        mCustomAdaptor = new CustomAdapter(mNoteContentList);
-        mRecyclerView.setAdapter(mCustomAdaptor);
-        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        int scrollPosition = 0;
-        // If a layout manager has already been set, get current scroll position.
-        if (mRecyclerView.getLayoutManager() != null) {
-            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
-                    .findFirstCompletelyVisibleItemPosition();
-        }
-        mRecyclerView.scrollToPosition(scrollPosition);
-        mCustomAdaptor.setOnItemClickLitener(new CustomAdapter.OnItemClickLitener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                // toggle button display status
-                if (buttonDelete.getVisibility() == View.INVISIBLE) {
-                    buttonDelete.setVisibility(View.VISIBLE);
-                } else {
-                    buttonDelete.setVisibility(View.INVISIBLE);
-                }
-                if (buttonSave.getVisibility() == View.INVISIBLE) {
-                    buttonSave.setVisibility(View.VISIBLE);
-                } else {
-                    buttonSave.setVisibility(View.INVISIBLE);
-                }
-                if (buttonModify.getVisibility() == View.INVISIBLE) {
-                    buttonModify.setVisibility(View.VISIBLE);
-                } else {
-                    buttonModify.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onItemLongClick(View view, int position) {
-
-            }
-        });
-        // 修改按钮
-        buttonModify = (Button) findViewById(R.id.edit);
-        buttonModify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EditNoteActivity.this, ModifyNoteActivity.class);
-                intent.putExtra("extra_modify_year", mNote.getYear());
-                intent.putExtra("extra_modify_month", mNote.getMonth());
-                intent.putExtra("extra_modify_title", mNote.getTitle());
-                intent.putExtra("extra_modify_content", mNote.getContent());
-                intent.putExtra("extra_modify_location", mNote.getLoacation());
-                intent.putExtra("extra_modify_date", mNote.getDate());
-                startActivity(intent);
-            }
-        });
-        // 保持日记按钮
-        buttonSave = (Button) findViewById(R.id.save);
-        buttonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // v为保存按钮，这里需要整个界面
-                // 下面这个无法保存完成界面，原因未知
-                // saveScreenShot(findViewById(android.R.id.content));
-                MiStatInterface.recordCountEvent(null, "shareNote");
-                saveScreenShot(getWindow().getDecorView().getRootView());
-            }
-        });
-        // 删除日记按钮
-        buttonDelete = (Button) findViewById(R.id.delete);
-        buttonDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final MyDialogFragment myDialogFragment = new MyDialogFragment() {
-                    @Override
-                    public void dialogPositiveButtonClicked() {
-                        LogUtils.d("EditNoteActivity", "positive button clicked");
-                        mNoteDb.DeleteNote(mNote);
-                        // 启动日记查看编辑活动，同时将日记title,month传递过去
-                        Intent intent = new Intent(EditNoteActivity.this, MainActivity.class);
-                        intent.putExtra("extra_noteYear", mNote.getYear());
-                        intent.putExtra("extra_noteMonth", mNote.getMonth());
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void dialogNegativeButtonClicked() {
-                        dismiss();
-                    }
-                };
-                myDialogFragment.show(getFragmentManager(), "对话框");
-            }
-        });
     }
 
     /**

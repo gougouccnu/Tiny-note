@@ -14,38 +14,29 @@ import java.util.List;
 /**
  * Created by lishaowei on 16/1/7.
  */
-public class NoteDb {
-    /**
-     * 数据库名
-     */
-    public static final String DB_NAME = "NoteStore.db";
-
-    /**
-     * 数据库版本
-     */
-    public static final int VERSION = 1;
-
-    private static NoteDb noteDb;
-
-    private SQLiteDatabase db;
+public class NoteDbInstance {
+    private static final String DB_NAME = "NoteStore.db";
+    private static final int VERSION = 1;
+    private static NoteDbInstance mNoteDbInstance;
+    private SQLiteDatabase mSQLiteDatabase;
 
     /**
      * 将构造方法私有化
      */
-    private NoteDb(Context context) {
-        NoteOpenHelper dbHelper = new NoteOpenHelper(context,
+    private NoteDbInstance(Context context) {
+        NoteSQLiteOpenHelper dbHelper = new NoteSQLiteOpenHelper(context,
                 DB_NAME, null, VERSION);
-        db = dbHelper.getWritableDatabase();
+        mSQLiteDatabase = dbHelper.getWritableDatabase();
     }
 
     /**
      * 获取NoteDB的实例。
      */
-    public synchronized static NoteDb getInstance(Context context) {
-        if (noteDb == null) {
-            noteDb = new NoteDb(context);
+    public synchronized static NoteDbInstance getInstance(Context context) {
+        if (mNoteDbInstance == null) {
+            mNoteDbInstance = new NoteDbInstance(context);
         }
-        return noteDb;
+        return mNoteDbInstance;
     }
 
     /**
@@ -53,15 +44,12 @@ public class NoteDb {
      */
     public List<String> QueryYears() {
         List<String> list = new ArrayList<String>();
-        //查询笔记的年份
-        //db.rawQuery("select id,year,month from Note where id = 1", null);
-        Cursor cursor = db.rawQuery("SELECT DISTINCT year FROM Note ORDER BY " +
+        Cursor cursor = mSQLiteDatabase.rawQuery("SELECT DISTINCT year FROM Note ORDER BY " +
                 "year ASC", null);
         if (cursor.moveToFirst()) {
             do {
                 //遍历cursor对象，取出数据
                 String year = cursor.getString(cursor.getColumnIndex("year"));
-//                LogUtils.d("QueryYears",year);
                 list.add(year);
             } while (cursor.moveToNext());
         }
@@ -74,14 +62,13 @@ public class NoteDb {
     public List<String> QueryMonths(String year) {
         List<String> list = new ArrayList<String>();
         // 查询给定year的所有笔记的月份
-        //db.rawQuery("select id,year,month from Note where id = 1", null);
-        Cursor cursor = db.rawQuery("SELECT DISTINCT month FROM Note WHERE year = ? ORDER BY " +
+        //mSQLiteDatabase.rawQuery("select id,year,month from Note where id = 1", null);
+        Cursor cursor = mSQLiteDatabase.rawQuery("SELECT DISTINCT month FROM Note WHERE year = ? ORDER BY " +
                 "month ASC", new String[] { year });
         if (cursor.moveToFirst()) {
             do {
                 //遍历cursor对象，取出数据
                 String month = cursor.getString(cursor.getColumnIndex("month"));
-                // LogUtils.d("QueryMonths", month);
                 LogUtils.d("QueryMonths", month);
                 list.add(month);
             } while (cursor.moveToNext());
@@ -95,7 +82,7 @@ public class NoteDb {
     public List<String> QueryTitles(String year, String month) {
         List<String> list = new ArrayList<String>();
         //查询NOTE表中最近月份的笔记并显示出来，
-        Cursor cursor = db.query("Note", new String[]{"title"}, "month=? and year=?", new String[]{month, year},
+        Cursor cursor = mSQLiteDatabase.query("Note", new String[]{"title"}, "month=? and year=?", new String[]{month, year},
                 null, null, null);
         if (cursor.moveToFirst()) {
             do {
@@ -114,7 +101,7 @@ public class NoteDb {
     public Note QueryNoteAll(String year, String month, String title) {
         Note note = new Note();
         // 查询数据库得到日记其他信息
-        Cursor cursor = db.query("Note", new String[] {"content","location", "date"},
+        Cursor cursor = mSQLiteDatabase.query("Note", new String[] {"content","location", "date"},
                 "title=? and month=? and year=?", new String[] {title, month, year}, null, null, null);
         if (cursor.moveToFirst()) {
             String content = cursor.getString(cursor.getColumnIndex("content"));
@@ -142,7 +129,7 @@ public class NoteDb {
         values.put("month", note.getMonth());
         values.put("location", note.getLoacation());
         values.put("date", note.getDate());
-        db.insert("Note", null, values);
+        mSQLiteDatabase.insert("Note", null, values);
     }
 
     /**
@@ -150,14 +137,14 @@ public class NoteDb {
      */
     public void UpdateNote(Note oldNote, ContentValues values) {
         // 保存日记到数据库
-        db.update("Note", values, "year = ? and month = ? and title = ? and content = ?",
+        mSQLiteDatabase.update("Note", values, "year = ? and month = ? and title = ? and content = ?",
                 new String[]{oldNote.getYear(), oldNote.getMonth(), oldNote.getTitle(), oldNote.getContent()});
     }
     /**
      * 删除笔记
      */
     public void DeleteNote(Note note) {
-        db.delete("Note","year = ? and month = ? and title = ? and content = ?",
+        mSQLiteDatabase.delete("Note","year = ? and month = ? and title = ? and content = ?",
                 new String[]{note.getYear(), note.getMonth(), note.getTitle(), note.getContent()});
     }
 }

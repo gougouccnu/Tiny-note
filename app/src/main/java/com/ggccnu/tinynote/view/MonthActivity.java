@@ -10,8 +10,8 @@ import android.widget.Button;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.ggccnu.tinynote.R;
-import com.ggccnu.tinynote.adapter.TitleCustomAdapter;
-import com.ggccnu.tinynote.db.NoteDb;
+import com.ggccnu.tinynote.adapter.TitleAdapter;
+import com.ggccnu.tinynote.db.NoteDbInstance;
 import com.ggccnu.tinynote.widget.TextViewVertical;
 
 import java.util.List;
@@ -19,9 +19,9 @@ import java.util.List;
 
 public class MonthActivity extends Activity {
 
-    private NoteDb mNoteDb;
+    private NoteDbInstance mNoteDbInstance;
     private RecyclerView mRecyclerView;
-    private TitleCustomAdapter mCustomAdaptor;
+    private TitleAdapter mTitleAdaptor;
     private RecyclerView.LayoutManager mLayoutManager;
     public List<String> mMonthList;
     @Override
@@ -33,11 +33,12 @@ public class MonthActivity extends Activity {
         // 从intent中恢复笔记year，
         Intent intent = getIntent();
         final String year = intent.getStringExtra("extra_noteYear");
-        mNoteDb = NoteDb.getInstance(this);
-        mMonthList = mNoteDb.QueryMonths(year);
+        mNoteDbInstance = NoteDbInstance.getInstance(this);
+        mMonthList = mNoteDbInstance.QueryMonths(year);
+
         mRecyclerView = (RecyclerView)findViewById(R.id.rv_month_list);
-        mCustomAdaptor = new TitleCustomAdapter(mMonthList);
-        mRecyclerView.setAdapter(mCustomAdaptor);
+        mTitleAdaptor = new TitleAdapter(mMonthList);
+        mRecyclerView.setAdapter(mTitleAdaptor);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         mRecyclerView.setLayoutManager(mLayoutManager);
         
@@ -48,11 +49,12 @@ public class MonthActivity extends Activity {
                     .findFirstCompletelyVisibleItemPosition();
         }
         mRecyclerView.scrollToPosition(scrollPosition);
-        mCustomAdaptor.setOnItemClickLitener(new TitleCustomAdapter.OnItemClickLitener() {
+        mTitleAdaptor.setOnItemClickLitener(new TitleAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
                 LogUtils.d("monthActivity", "Element " + position + " set.");
                 String selectedMonth = mMonthList.get(position);
+
                 // 启动日记查看编辑活动，同时将日记year,month传递过去
                 Intent intent = new Intent(MonthActivity.this, MainActivity.class);
                 intent.putExtra("extra_noteYear", year);
