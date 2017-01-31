@@ -13,6 +13,7 @@ import com.ggccnu.tinynote.R;
 import com.ggccnu.tinynote.adapter.TitleCustomAdapter;
 import com.ggccnu.tinynote.db.NoteDb;
 import com.ggccnu.tinynote.widget.TextViewVertical;
+import com.xiaomi.mistatistic.sdk.MiStatInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,4 +99,17 @@ public class MainActivity extends Activity {
         // 显示最新日期的笔记
         mRecyclerView.scrollToPosition(mTitleList.size() - 1);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MiStatInterface.recordPageStart(this, "main page");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MiStatInterface.recordPageEnd();
+    }
+
 }

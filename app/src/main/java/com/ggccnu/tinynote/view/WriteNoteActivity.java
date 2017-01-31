@@ -25,6 +25,7 @@ import com.ggccnu.tinynote.util.BaiduLocationDecode;
 import com.ggccnu.tinynote.util.DateConvertor;
 import com.ggccnu.tinynote.util.HttpCallbackListener;
 import com.ggccnu.tinynote.util.HttpUtil;
+import com.xiaomi.mistatistic.sdk.MiStatInterface;
 
 import java.util.Calendar;
 import java.util.List;
@@ -219,4 +220,17 @@ public class WriteNoteActivity extends Activity {
         } // TODO: colletct gps failed
         return null;
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MiStatInterface.recordPageStart(this, "write note page");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MiStatInterface.recordPageEnd();
+    }
+
 }

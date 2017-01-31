@@ -17,6 +17,7 @@ import com.ggccnu.tinynote.adapter.CustomAdapter;
 import com.ggccnu.tinynote.db.NoteDb;
 import com.ggccnu.tinynote.model.Note;
 import com.ggccnu.tinynote.widget.MyDialogFragment;
+import com.xiaomi.mistatistic.sdk.MiStatInterface;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -142,6 +143,7 @@ public class EditNoteActivity extends Activity {
                 // v为保存按钮，这里需要整个界面
                 // 下面这个无法保存完成界面，原因未知
                 // saveScreenShot(findViewById(android.R.id.content));
+                MiStatInterface.recordCountEvent(null, "shareNote");
                 saveScreenShot(getWindow().getDecorView().getRootView());
             }
         });
