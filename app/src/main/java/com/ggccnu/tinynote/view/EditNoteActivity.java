@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.blankj.utilcode.utils.LogUtils;
+import com.blankj.utilcode.utils.ScreenUtils;
 import com.ggccnu.tinynote.R;
 import com.ggccnu.tinynote.adapter.NoteDisplayAdapter;
 import com.ggccnu.tinynote.db.NoteDbInstance;
@@ -31,7 +32,7 @@ import java.util.List;
  */
 public class EditNoteActivity extends Activity {
 
-    private Button btModify, btSave, btDelete;
+    private Button btnModify, btnSave, btnDelete;
 
     private NoteDbInstance mNoteDbInstance;
 
@@ -72,9 +73,9 @@ public class EditNoteActivity extends Activity {
             @Override
             public void onItemClick(View view, int position) {
                 // toggle button display status
-                btDelete.setVisibility(btDelete.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
-                btModify.setVisibility(btModify.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
-                btSave.setVisibility(btSave.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
+                btnDelete.setVisibility(btnDelete.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
+                btnModify.setVisibility(btnModify.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
+                btnSave.setVisibility(btnSave.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
             }
 
             @Override
@@ -83,8 +84,8 @@ public class EditNoteActivity extends Activity {
             }
         });
         // 修改按钮
-        btModify = (Button) findViewById(R.id.edit);
-        btModify.setOnClickListener(new View.OnClickListener() {
+        btnModify = (Button) findViewById(R.id.edit);
+        btnModify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EditNoteActivity.this, ModifyNoteActivity.class);
@@ -97,21 +98,22 @@ public class EditNoteActivity extends Activity {
                 startActivity(intent);
             }
         });
-        // 保持日记按钮
-        btSave = (Button) findViewById(R.id.save);
-        btSave.setOnClickListener(new View.OnClickListener() {
+        // 分享日记按钮
+        btnSave = (Button) findViewById(R.id.save);
+        btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // v为保存按钮，这里需要整个界面
-                // 下面这个无法保存完成界面，原因未知
-                // saveScreenShot(findViewById(android.R.id.content));
+                // 下面这个无法保存完整界面，原因未知
+                // shareBitmap(findViewById(android.R.id.content));
                 MiStatInterface.recordCountEvent(null, "shareNote");
-                saveScreenShot(getWindow().getDecorView().getRootView());
+
+                shareBitmap(ScreenUtils.captureWithStatusBar(EditNoteActivity.this));
             }
         });
         // 删除日记按钮
-        btDelete = (Button) findViewById(R.id.delete);
-        btDelete.setOnClickListener(new View.OnClickListener() {
+        btnDelete = (Button) findViewById(R.id.delete);
+        btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final MyDialogFragment myDialogFragment = new MyDialogFragment() {
@@ -173,10 +175,7 @@ public class EditNoteActivity extends Activity {
      * 读取bitmap来截屏,必须保存到SD卡，因为其他程序无法访问tinyNote内的数据
      * @param view
      */
-    private void saveScreenShot(View view) {
-        view.setDrawingCacheEnabled(true);
-        view.buildDrawingCache();
-        Bitmap bitmap = view.getDrawingCache();
+    private void shareBitmap(Bitmap bitmap) {
         if (bitmap != null) {
             String filePath = Environment.getExternalStorageDirectory() + File.separator + "tinynoteshare.png";
             File imagePath = new File(filePath);
@@ -190,7 +189,15 @@ public class EditNoteActivity extends Activity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            shareCapture(filePath);
+
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.setType("image/*");
+            //Uri uri = Uri.fromFile(getFileStreamPath(Environment.getExternalStorageDirectory() + File.separator + "screenshot.png"));
+            //Uri uri = Uri.fromFile(getFileStreamPath("lswscreenshot.png"));
+            Uri uri = Uri.parse("file://" + filePath);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            startActivity(shareIntent);
         }
     }
 

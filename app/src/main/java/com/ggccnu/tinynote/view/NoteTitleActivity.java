@@ -48,13 +48,7 @@ public class NoteTitleActivity extends Activity {
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mTitleAdaptor);
-        
-        int scrollPosition = 0;
-        // If a layout manager has already been set, get current scroll position.
-        if (mRecyclerView.getLayoutManager() != null) {
-            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
-                    .findFirstCompletelyVisibleItemPosition();
-        }
+
         // 显示最新日期的笔记
         mRecyclerView.scrollToPosition(mTitleList.size() - 1);
         mTitleAdaptor.setOnItemClickLitener(new TitleAdapter.OnItemClickLitener() {

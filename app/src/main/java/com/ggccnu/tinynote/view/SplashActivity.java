@@ -24,6 +24,10 @@ public class SplashActivity extends Application {
     public void onCreate() {
         super.onCreate();
 
+        MistatInit();
+    }
+
+    private void MistatInit() {
         // regular stats.
         MiStatInterface.initialize(this.getApplicationContext(), appID, appKey,
                 "default channel");

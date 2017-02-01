@@ -55,8 +55,8 @@ public class WriteNoteActivity extends Activity {
 
         mNoteDbInstance = NoteDbInstance.getInstance(this);
         tvLocation = (TextView) findViewById(R.id.note_location);
-        Button buttonWriteDone = (Button) findViewById(R.id.write_done);
-        buttonWriteDone.setOnClickListener(new View.OnClickListener() {
+        Button btnWriteDone = (Button) findViewById(R.id.write_done);
+        btnWriteDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // get mNote title/content/...
