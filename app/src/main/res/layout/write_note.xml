@@ -27,6 +27,7 @@
     <TextView
         android:id="@+id/note_location"
         android:text="@string/note_location_value"
+        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"

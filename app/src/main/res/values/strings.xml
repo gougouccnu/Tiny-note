@@ -2,7 +2,7 @@
     <string name="app_name">小笔记</string>
     <string name="action_settings">action_settings</string>
     <string name="note_title_value">Day 2</string>
-    <string name="note_location_value">地球村</string>
+    <string name="note_location_value">于未知地点</string>
 
     <string name="android_auto_update_dialog_title">发现新版本</string>
 

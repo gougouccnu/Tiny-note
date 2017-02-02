@@ -164,6 +164,7 @@ public class WriteNoteActivity extends Activity {
                     public void run() {
                         if (!"".equals(mLocation)) {
                             tvLocation.setText(mLocation);
+                            tvLocation.setVisibility(View.VISIBLE);
                         } else {
                             tvLocation.setVisibility(View.INVISIBLE);
                         }
@@ -187,17 +188,20 @@ public class WriteNoteActivity extends Activity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
-        if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            LogUtils.d("WriteNoteActivity", "PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION granted!");
+        // grantResults长度可能为0
+        if (grantResults.length != 0) {
+            if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                LogUtils.d("WriteNoteActivity", "PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION granted!");
 
-            Location location = getLocationFromLocationManager();
-            if (location != null) {
-                setLocationFromHttp(location);
+                Location location = getLocationFromLocationManager();
+                if (location != null) {
+                    setLocationFromHttp(location);
+                }
+            } else {
+                // permission denied TODO
+                LogUtils.d("WriteNoteActivity", "PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION denied!");
             }
-        } else {
-            // permission denied TODO
-            LogUtils.d("WriteNoteActivity", "PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION denied!");
         }
     }
 
