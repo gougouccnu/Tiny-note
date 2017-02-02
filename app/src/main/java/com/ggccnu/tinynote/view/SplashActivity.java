@@ -30,7 +30,7 @@ public class SplashActivity extends Application {
     private void MistatInit() {
         // regular stats.
         MiStatInterface.initialize(this.getApplicationContext(), appID, appKey,
-                "coolapk");
+                "mi");
         MiStatInterface.setUploadPolicy(
                 MiStatInterface.UPLOAD_POLICY_REALTIME, 0);
         MiStatInterface.enableLog();
