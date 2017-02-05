@@ -23,8 +23,8 @@ public class ModifyNoteActivity extends Activity {
     private Note note = new Note();
 
     private Button btWriteDone;
-    private EditText etTitle, etContent;
-    private String title, content, year, month, day;
+    private EditText etTitle, etContent, etLocation;
+    private String title, content, location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +34,7 @@ public class ModifyNoteActivity extends Activity {
         etTitle = (EditText) findViewById(R.id.note_title);
         etContent = (EditText) findViewById(R.id.note_content);
         btWriteDone = (Button) findViewById(R.id.write_done);
+        etLocation = (EditText) findViewById(R.id.note_location);
 
         Intent intent = getIntent();
         final String oldYear = intent.getStringExtra("extra_modify_year");
@@ -52,6 +53,7 @@ public class ModifyNoteActivity extends Activity {
         if (oldTitle != null && !oldTitle.equals("")) {
             etTitle.setText(oldTitle);
             etContent.setText(oldContent);
+            etLocation.setText(oldLocation);
         }
         mNoteDbInstance = NoteDbInstance.getInstance(this);
         btWriteDone.setOnClickListener(new View.OnClickListener() {
@@ -59,11 +61,12 @@ public class ModifyNoteActivity extends Activity {
             public void onClick(View v) {
                 title = etTitle.getText().toString();
                 content = etContent.getText().toString();
-
+                location = etLocation.getText().toString();
                 // 保存日记到数据库
                 ContentValues values = new ContentValues();
                 values.put("title", title);
                 values.put("content", content);
+                values.put("location", location);
                 mNoteDbInstance.UpdateNote(note, values);
 
                 // 回到主活动

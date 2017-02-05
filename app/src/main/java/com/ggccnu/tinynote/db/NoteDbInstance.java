@@ -137,8 +137,8 @@ public class NoteDbInstance {
      */
     public void UpdateNote(Note oldNote, ContentValues values) {
         // 保存日记到数据库
-        mSQLiteDatabase.update("Note", values, "year = ? and month = ? and title = ? and content = ?",
-                new String[]{oldNote.getYear(), oldNote.getMonth(), oldNote.getTitle(), oldNote.getContent()});
+        mSQLiteDatabase.update("Note", values, "year = ? and month = ? and title = ? and content = ? and location = ?",
+                new String[]{oldNote.getYear(), oldNote.getMonth(), oldNote.getTitle(), oldNote.getContent(), oldNote.getLoacation()});
     }
     /**
      * 删除笔记

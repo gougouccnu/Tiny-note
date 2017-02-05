@@ -24,17 +24,15 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp" />
 
-    <TextView
+    <EditText
         android:id="@+id/note_location"
         android:text="@string/note_location_value"
-        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="16dp"
-        android:layout_marginBottom="22dp" />
+        android:layout_marginBottom="12dp" />
 
     <com.ggccnu.tinynote.widget.ButtonPlus
         android:id="@+id/write_done"

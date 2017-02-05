@@ -108,7 +108,7 @@ public class EditNoteActivity extends Activity {
                 // shareBitmap(findViewById(android.R.id.content));
                 MiStatInterface.recordCountEvent(null, "shareNote");
 
-                shareBitmap(ScreenUtils.captureWithStatusBar(EditNoteActivity.this));
+                shareBitmap(ScreenUtils.captureWithoutStatusBar(EditNoteActivity.this));
             }
         });
         // 删除日记按钮

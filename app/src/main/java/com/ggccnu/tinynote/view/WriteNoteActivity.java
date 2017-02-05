@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -37,11 +38,12 @@ import java.util.Locale;
 public class WriteNoteActivity extends Activity {
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
+    private static final String LAST_UNSAVED_NOTE = "lastUnsavedNote";
     private NoteDbInstance mNoteDbInstance;
     private Note mNote = new Note();
     private EditText etTitle;
     private EditText etContent;
-    private TextView tvLocation;
+    private EditText etLocation;
     // Note year/month/location got from system
     private String year, month, day;
     private String title, content;
@@ -53,15 +55,17 @@ public class WriteNoteActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.write_note);
 
+        etTitle = (EditText) findViewById(R.id.note_title);
+        etContent = (EditText) findViewById(R.id.note_content);
+        restoreLastUnsavedNote();
+
         mNoteDbInstance = NoteDbInstance.getInstance(this);
-        tvLocation = (TextView) findViewById(R.id.note_location);
+        etLocation = (EditText) findViewById(R.id.note_location);
         Button btnWriteDone = (Button) findViewById(R.id.write_done);
         btnWriteDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // get mNote title/content/...
-                etTitle = (EditText) findViewById(R.id.note_title);
-                etContent = (EditText) findViewById(R.id.note_content);
                 title = etTitle.getText().toString();
                 content = etContent.getText().toString();
 
@@ -77,7 +81,7 @@ public class WriteNoteActivity extends Activity {
                     finish();
                 } else {
                     saveNoteToDB();
-
+                    saveLastUnsavedNoteToSharedPreferences("", "");
                     // 回到主活动
                     Intent intent = new Intent(WriteNoteActivity.this, NoteTitleActivity.class);
                     intent.putExtra("extra_noteYear", year);
@@ -97,6 +101,22 @@ public class WriteNoteActivity extends Activity {
         }
     }
 
+    private void restoreLastUnsavedNote() {
+        title = restoreStringFromSharedPreferences("title");
+        content = restoreStringFromSharedPreferences("content");
+        if (!title.equals("") || !content.equals("")) {
+            etTitle.setText(title);
+            etTitle.setSelection(title.length());
+            etContent.setText(content);
+            etContent.setSelection(content.length());
+        }
+    }
+
+    private String restoreStringFromSharedPreferences(String key) {
+        SharedPreferences pref = getSharedPreferences(LAST_UNSAVED_NOTE, MODE_PRIVATE);
+        return pref.getString(key, "");
+    }
+
     private void saveNoteToDB() {
         LogUtils.d("WriteNoteActivity", "current date is year: " + year +
                 "month: " + month + "day: " + day);
@@ -113,11 +133,7 @@ public class WriteNoteActivity extends Activity {
         } else {
             mNote.setContent(content);
         }
-        if (TextUtils.isEmpty(tvLocation.getText().toString().trim())) {
-            mNote.setLoacation(" ");
-        } else {
-            mNote.setLoacation(tvLocation.getText().toString());
-        }
+        mNote.setLoacation(etLocation.getText().toString());
         mNote.setDate(year + month + day);
         mNoteDbInstance.InsertNote(mNote);
     }
@@ -163,10 +179,7 @@ public class WriteNoteActivity extends Activity {
                     @Override
                     public void run() {
                         if (!"".equals(mLocation)) {
-                            tvLocation.setText(mLocation);
-                            tvLocation.setVisibility(View.VISIBLE);
-                        } else {
-                            tvLocation.setVisibility(View.INVISIBLE);
+                            etLocation.setText(mLocation);
                         }
                     }
                 });
@@ -174,13 +187,7 @@ public class WriteNoteActivity extends Activity {
 
             @Override
             public void onError(Exception e) {
-                Toast.makeText(WriteNoteActivity.this, "获取笔记位置失败", Toast.LENGTH_LONG).show();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tvLocation.setVisibility(View.INVISIBLE);
-                    }
-                });
+                MiStatInterface.recordCountEvent("http request GPS error", "");
             }
         });
     }
@@ -241,4 +248,27 @@ public class WriteNoteActivity extends Activity {
         MiStatInterface.recordPageEnd();
     }
 
+    /**
+     * Called when the activity has detected the user's press of the back
+     * key.  The default implementation simply finishes the current activity,
+     * but you can override this to do whatever you want.
+     */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        String title = etTitle.getText().toString();
+        String content = etContent.getText().toString();
+
+        if (!TextUtils.isEmpty(content.trim()) || !TextUtils.isEmpty(title.trim())) {
+            saveLastUnsavedNoteToSharedPreferences(title, content);
+        }
+    }
+
+    private void saveLastUnsavedNoteToSharedPreferences(String title, String content) {
+        SharedPreferences.Editor editor = getSharedPreferences(LAST_UNSAVED_NOTE, MODE_PRIVATE).edit();
+        editor.putString("title", title);
+        editor.putString("content", content);
+        editor.apply();
+    }
 }
