@@ -1,0 +1,8 @@
+version code:3
+version name:1.2
+
+version code:4
+version name:1.2.1
+change desc:
+    增加未保存的笔记恢复功能
+    笔记位置可以修改
