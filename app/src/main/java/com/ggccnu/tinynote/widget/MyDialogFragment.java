@@ -10,6 +10,10 @@ import android.os.Bundle;
  * Created by lishaowei on 16/1/10.
  */
 public abstract class MyDialogFragment extends DialogFragment {
+
+    public MyDialogFragment() {
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
@@ -24,11 +28,13 @@ public abstract class MyDialogFragment extends DialogFragment {
                 .setNegativeButton("否", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
+                        dialogNegativeButtonClicked();
                     }
                 });
         // Create the AlertDialog object and return it
         return builder.create();
     }
+
     public abstract void dialogPositiveButtonClicked();
     public abstract void dialogNegativeButtonClicked();
 }
