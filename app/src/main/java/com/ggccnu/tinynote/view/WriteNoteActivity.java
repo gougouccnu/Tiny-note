@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.blankj.utilcode.utils.LogUtils;
 import com.ggccnu.tinynote.R;
 import com.ggccnu.tinynote.db.NoteDbInstance;
+import com.ggccnu.tinynote.model.BmobNote;
 import com.ggccnu.tinynote.model.Note;
 import com.ggccnu.tinynote.util.BaiduLocationDecode;
 import com.ggccnu.tinynote.util.DateConvertor;
@@ -28,9 +29,13 @@ import com.ggccnu.tinynote.util.HttpCallbackListener;
 import com.ggccnu.tinynote.util.HttpUtil;
 import com.xiaomi.mistatistic.sdk.MiStatInterface;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.listener.SaveListener;
 
 /**
  * Created by lishaowei on 15/10/4.
@@ -81,6 +86,7 @@ public class WriteNoteActivity extends Activity {
                     finish();
                 } else {
                     saveNoteToDB();
+                    uploadNote2Bmob(mNote);
                     saveLastUnsavedNoteToSharedPreferences("", "");
                     // 回到主活动
                     Intent intent = new Intent(WriteNoteActivity.this, NoteTitleActivity.class);
@@ -270,5 +276,34 @@ public class WriteNoteActivity extends Activity {
         editor.putString("title", title);
         editor.putString("content", content);
         editor.apply();
+    }
+
+    private void uploadNote2Bmob(Note note) {
+        BmobNote bmobNote = localNote2BmobNote(note);
+        bmobNote.save(this, new SaveListener() {
+            @Override
+            public void onSuccess() {
+                LogUtils.i("new note uploaded to bmob success");
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                LogUtils.e("new note uploaded to bmob failure: \n" + s);
+            }
+        });
+
+    }
+
+    private BmobNote localNote2BmobNote(Note note) {
+        BmobNote bmobNote = new BmobNote();
+        bmobNote.setYear(note.getYear());
+        bmobNote.setMonth(note.getMonth());
+        bmobNote.setDate(note.getDate());
+        bmobNote.setLoacation(note.getLoacation());
+        bmobNote.setTitle(note.getTitle());
+        bmobNote.setContent(note.getContent());
+        bmobNote.setHasUpload(1);
+        bmobNote.setNoteId(note.getId());
+        return bmobNote;
     }
 }

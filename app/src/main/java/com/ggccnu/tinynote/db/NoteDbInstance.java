@@ -16,7 +16,8 @@ import java.util.List;
  */
 public class NoteDbInstance {
     private static final String DB_NAME = "NoteStore.db";
-    private static final int VERSION = 1;
+    // modifed on 17/2/12
+    private static final int VERSION = 2;
     private static NoteDbInstance mNoteDbInstance;
     private SQLiteDatabase mSQLiteDatabase;
 
@@ -115,6 +116,36 @@ public class NoteDbInstance {
             note.setDate(date);
         }
         return note;
+    }
+
+
+    public List<Note> QueryAllNote() {
+        List<Note> noteList = new ArrayList<>();
+
+        try (Cursor cursor = mSQLiteDatabase.rawQuery("SELECT * FROM Note", null)) {
+            if (cursor.moveToFirst()) {
+                do {
+                    //遍历cursor对象，取出数据
+                    String content = cursor.getString(cursor.getColumnIndex("content"));
+                    String location = cursor.getString(cursor.getColumnIndex("location"));
+                    String date = cursor.getString(cursor.getColumnIndex("date"));
+                    Note note = new Note();
+                    note.setYear(cursor.getString(cursor.getColumnIndex("year")));
+                    note.setMonth(cursor.getString(cursor.getColumnIndex("month")));
+                    note.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+                    note.setContent(content);
+                    note.setLoacation(location);
+                    note.setDate(date);
+                    int hasUpload = cursor.getInt(cursor.getColumnIndex("hasUpload"));
+                    note.setHasUpload(hasUpload);
+                    note.setId(cursor.getInt(cursor.getColumnIndex("id")));
+
+                    noteList.add(note);
+
+                } while (cursor.moveToNext());
+            }
+        }
+        return noteList;
     }
 
     /**

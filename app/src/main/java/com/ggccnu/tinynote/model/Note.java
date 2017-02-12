@@ -6,6 +6,10 @@ package com.ggccnu.tinynote.model;
 public class Note {
     private String year,month,title,content,loacation,date;
 
+    // added in v1.4
+    private Integer noteId;
+    private int hasUpload;
+
     public String getYear() {
         return year;
     }
@@ -54,4 +58,21 @@ public class Note {
         this.date = date;
     }
     //TODO
+
+
+    public int getHasUpload() {
+        return hasUpload;
+    }
+
+    public Integer getId() {
+        return noteId;
+    }
+
+    public void setHasUpload(int hasUpload) {
+        this.hasUpload = hasUpload;
+    }
+
+    public void setId(Integer id) {
+        this.noteId = id;
+    }
 }

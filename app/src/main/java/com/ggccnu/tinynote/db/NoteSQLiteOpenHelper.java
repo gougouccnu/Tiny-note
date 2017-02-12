@@ -58,10 +58,8 @@ public class NoteSQLiteOpenHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         switch (oldVersion) {
             case 1:
-                break;
-//            case 4:
-//                db.execSQL("alter table Note add column date text");
-//                LogUtils.d("NoteSQLiteOpenHelper", "alter table Note");
+                db.execSQL("alter table Note add column hasUpload boolean");
+                LogUtils.d("NoteSQLiteOpenHelper", "alter table Note");
             default:
         }
     }
