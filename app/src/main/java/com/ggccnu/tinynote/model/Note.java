@@ -7,7 +7,7 @@ public class Note {
     private String year,month,title,content,loacation,date;
 
     // added in v1.4
-    private Integer noteId;
+    private int cmpId;
     private int hasUpload;
 
     public String getYear() {
@@ -64,15 +64,15 @@ public class Note {
         return hasUpload;
     }
 
-    public Integer getId() {
-        return noteId;
+    public Integer getCmpId() {
+        return cmpId;
     }
 
     public void setHasUpload(int hasUpload) {
         this.hasUpload = hasUpload;
     }
 
-    public void setId(Integer id) {
-        this.noteId = id;
+    public void setCmpId(Integer id) {
+        this.cmpId = id;
     }
 }

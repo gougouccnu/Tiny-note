@@ -19,6 +19,7 @@ import java.util.List;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.DeleteListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.update.BmobUpdateAgent;
@@ -61,13 +62,13 @@ public class SplashActivity extends Application {
                     uploadNote2Bmob(localNoteList);
                 }
                 if (localNoteCnt == 0 && bmobNoteCnt > 0) {
-                    saveNote2Local(list);
+                    saveBmobNote2Local(list);
                 }
                 if (localNoteCnt != 0 && bmobNoteCnt != 0) {
                     if (localNoteCnt > bmobNoteCnt) {
                         uploadSomeNote2Bmob(localNoteList, list);
                     }else if (localNoteCnt < bmobNoteCnt) {
-                        saveSomeNote2Local(list, localNoteList);
+                        deleteBmobNote(list, localNoteList);
                     } else {
                         LogUtils.i("local and bmob note are same");
                     }
@@ -92,10 +93,10 @@ public class SplashActivity extends Application {
 
         // 遍历云上的笔记，看是否能在本地找到
         for (int bmobNoteIndex = 0; bmobNoteIndex < bmobNoteList.size(); bmobNoteIndex++) {
-            int bmobNoteId = bmobNoteList.get(bmobNoteIndex).getNoteId();
+            int bmobNoteId = bmobNoteList.get(bmobNoteIndex).getCmpId();
             Boolean hasLocalSaved = false;
             for (int localNoteIndex = 0; localNoteIndex < localNoteList.size(); localNoteIndex++) {
-                if (bmobNoteId == localNoteList.get(localNoteIndex).getId()) {
+                if (bmobNoteId == localNoteList.get(localNoteIndex).getCmpId()) {
                     hasLocalSaved = true;
                     break;
                 }
@@ -105,13 +106,48 @@ public class SplashActivity extends Application {
                 needSave2LocalBmobNoteList.add(bmobNoteList.get(bmobNoteIndex));
             }
         }
-        saveNote2Local(needSave2LocalBmobNoteList);
+        saveBmobNote2Local(needSave2LocalBmobNoteList);
+    }
+
+    /**
+     *
+     * @param bmobNoteList 云上笔记多
+     * @param localNoteList 本地笔记少
+     */
+    private void deleteBmobNote(List<BmobNote> bmobNoteList, List<Note> localNoteList) {
+        List<BmobObject> needDeleteBmobNoteList = new ArrayList<>();
+
+        // 遍历云上的笔记，看是否能在本地找到
+        for (int bmobNoteIndex = 0; bmobNoteIndex < bmobNoteList.size(); bmobNoteIndex++) {
+            int bmobNoteId = bmobNoteList.get(bmobNoteIndex).getCmpId();
+            Boolean hasLocalSaved = false;
+            for (int localNoteIndex = 0; localNoteIndex < localNoteList.size(); localNoteIndex++) {
+                if (bmobNoteId == localNoteList.get(localNoteIndex).getCmpId()) {
+                    hasLocalSaved = true;
+                    break;
+                }
+            }
+            // 本地没有发现这条笔记
+            if (!hasLocalSaved) {
+                needDeleteBmobNoteList.add(bmobNoteList.get(bmobNoteIndex));
+            }
+        }
+        new BmobObject().deleteBatch(getApplicationContext(), needDeleteBmobNoteList, new DeleteListener() {
+            @Override
+            public void onSuccess() {
+                LogUtils.i("sync note,delete bmob note success");
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                LogUtils.e("sync note,delete bmob note failed:\n" + s);
+            }
+        });
     }
 
     private void uploadSomeNote2Bmob(List<Note> localNoteList, List<BmobNote> bmobNoteList) {
         // find diff id of note
-        List<Note> needUploadLocalNoteList = new ArrayList<>();
-        needUploadLocalNoteList = searchNeedUploadLocalNote(localNoteList, bmobNoteList);
+        List<Note> needUploadLocalNoteList = searchNeedUploadLocalNote(localNoteList, bmobNoteList);
         uploadNote2Bmob(needUploadLocalNoteList);
     }
 
@@ -125,12 +161,12 @@ public class SplashActivity extends Application {
         List<Note> needUploadLocalNoteList = new ArrayList<>();
         // 遍历本地的所有笔记，看是否能在云上找到
         for (int localNoteIndex = 0; localNoteIndex < localNoteList.size(); localNoteIndex++) {
-            int localNoteId = localNoteList.get(localNoteIndex).getId();
+            int localNoteId = localNoteList.get(localNoteIndex).getCmpId();
             Boolean hasUploaded = false;
 
             for (int bmobNoteIndex = 0; bmobNoteIndex < bmobNoteList.size(); bmobNoteIndex++) {
                 // 本地的笔记在云上找到了
-                if (localNoteId == bmobNoteList.get(bmobNoteIndex).getNoteId()) {
+                if (localNoteId == bmobNoteList.get(bmobNoteIndex).getCmpId()) {
                     hasUploaded = true;
                     break;
                 }
@@ -143,11 +179,11 @@ public class SplashActivity extends Application {
         return needUploadLocalNoteList;
     }
 
-    private void saveNote2Local(List<BmobNote> list) {
+    private void saveBmobNote2Local(List<BmobNote> list) {
         for (int i = 0; i < list.size(); i++) {
             BmobNote bmobNote = list.get(i);
             Note note = new Note();
-            note.setId(bmobNote.getNoteId());
+            note.setCmpId(bmobNote.getCmpId());
             note.setYear(bmobNote.getYear());
             note.setMonth(bmobNote.getMonth());
             note.setDate(bmobNote.getDate());
@@ -164,7 +200,7 @@ public class SplashActivity extends Application {
         for (int i = 0; i < localNoteList.size() ; i++) {
             Note note = localNoteList.get(i);
             bmobNoteList.add(new BmobNote(note.getContent(), note.getDate(),
-                    note.getHasUpload(), note.getId(), note.getLoacation(),
+                    note.getHasUpload(), note.getCmpId(), note.getLoacation(),
                     note.getMonth(), note.getTitle(), note.getYear()));
         }
         new BmobObject().insertBatch(getApplicationContext(), bmobNoteList, new SaveListener() {
@@ -182,7 +218,7 @@ public class SplashActivity extends Application {
 
     private void SqlDatabaseUpgrade() {
         mNoteDbInstance = NoteDbInstance.getInstance(this);
-
+        //mNoteDbInstance.addCmpId2NoteDb();
     }
 
     private void MistatInit() {

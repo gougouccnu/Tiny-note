@@ -15,7 +15,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blankj.utilcode.utils.LogUtils;
@@ -29,12 +28,10 @@ import com.ggccnu.tinynote.util.HttpCallbackListener;
 import com.ggccnu.tinynote.util.HttpUtil;
 import com.xiaomi.mistatistic.sdk.MiStatInterface;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.listener.SaveListener;
 
 /**
@@ -86,6 +83,9 @@ public class WriteNoteActivity extends Activity {
                     finish();
                 } else {
                     saveNoteToDB();
+                    // 刷新新笔记的用于比较的ID
+                    mNoteDbInstance.AddCmpId2NewestNote();
+                    mNote.setCmpId(mNoteDbInstance.getCmpIdOfNewestNote());
                     uploadNote2Bmob(mNote);
                     saveLastUnsavedNoteToSharedPreferences("", "");
                     // 回到主活动
@@ -303,7 +303,7 @@ public class WriteNoteActivity extends Activity {
         bmobNote.setTitle(note.getTitle());
         bmobNote.setContent(note.getContent());
         bmobNote.setHasUpload(1);
-        bmobNote.setNoteId(note.getId());
+        bmobNote.setCmpId(note.getCmpId());
         return bmobNote;
     }
 }

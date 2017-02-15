@@ -16,6 +16,7 @@ import com.blankj.utilcode.utils.ScreenUtils;
 import com.ggccnu.tinynote.R;
 import com.ggccnu.tinynote.adapter.NoteDisplayAdapter;
 import com.ggccnu.tinynote.db.NoteDbInstance;
+import com.ggccnu.tinynote.model.BmobNote;
 import com.ggccnu.tinynote.model.Note;
 import com.ggccnu.tinynote.widget.MyDialogFragment;
 import com.xiaomi.mistatistic.sdk.MiStatInterface;
@@ -26,6 +27,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.DeleteListener;
+import cn.bmob.v3.listener.FindListener;
 
 /**
  * Created by lishaowei on 15/10/5.
@@ -121,6 +127,9 @@ public class EditNoteActivity extends Activity {
                     public void dialogPositiveButtonClicked() {
                         LogUtils.d("EditNoteActivity", "positive button clicked");
                         mNoteDbInstance.DeleteNote(mNote);
+
+                        DeleteBmobNote(mNote);
+
                         // 启动日记查看编辑活动，同时将日记title,month传递过去
                         Intent intent = new Intent(EditNoteActivity.this, NoteTitleActivity.class);
                         intent.putExtra("extra_noteYear", mNote.getYear());
@@ -138,9 +147,40 @@ public class EditNoteActivity extends Activity {
         });
     }
 
+    private void DeleteBmobNote(Note mNote) {
+        //final BmobNote bmobNote = new BmobNote();
+        BmobQuery<BmobNote> query = new BmobQuery<>();
+        query.addWhereEqualTo("cmpId", mNote.getCmpId());
+        query.findObjects(EditNoteActivity.this, new FindListener<BmobNote>() {
+            @Override
+            public void onSuccess(List<BmobNote> list) {
+                if (list.size() > 0) {
+                    BmobNote bmobNote = new BmobNote();
+                    bmobNote.setObjectId(list.get(0).getObjectId());
+                    bmobNote.delete(EditNoteActivity.this, new DeleteListener() {
+                        @Override
+                        public void onSuccess() {
+                            LogUtils.i("delete bmob note success");
+                        }
+
+                        @Override
+                        public void onFailure(int i, String s) {
+                            LogUtils.e("delete bmob note failed:\n" + s);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                LogUtils.e("query bmob note cmpId failed:\n" + s);
+            }
+        });
+    }
+
     private void getNoteContentListFromDB(String year, String title, String month) {
         mNoteDbInstance = NoteDbInstance.getInstance(this);
-        mNote = mNoteDbInstance.QueryNoteAll(year, month, title);
+        mNote = mNoteDbInstance.QueryNoteDetails(year, month, title);
         mNoteContentList.add(mNote.getTitle());
 
         String[] mcontentString= mNote.getContent().split("\\n");

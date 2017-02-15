@@ -99,10 +99,10 @@ public class NoteDbInstance {
     /**
      * 从数据库中读取笔记所有信息
      */
-    public Note QueryNoteAll(String year, String month, String title) {
+    public Note QueryNoteDetails(String year, String month, String title) {
         Note note = new Note();
         // 查询数据库得到日记其他信息
-        Cursor cursor = mSQLiteDatabase.query("Note", new String[] {"content","location", "date"},
+        Cursor cursor = mSQLiteDatabase.query("Note", new String[] {"content","location", "date", "hasUpload", "cmpId"},
                 "title=? and month=? and year=?", new String[] {title, month, year}, null, null, null);
         if (cursor.moveToFirst()) {
             String content = cursor.getString(cursor.getColumnIndex("content"));
@@ -114,6 +114,9 @@ public class NoteDbInstance {
             note.setContent(content);
             note.setLoacation(location);
             note.setDate(date);
+            int hasUpload = cursor.getInt(cursor.getColumnIndex("hasUpload"));
+            note.setHasUpload(hasUpload);
+            note.setCmpId(cursor.getInt(cursor.getColumnIndex("cmpId")));
         }
         return note;
     }
@@ -138,7 +141,7 @@ public class NoteDbInstance {
                     note.setDate(date);
                     int hasUpload = cursor.getInt(cursor.getColumnIndex("hasUpload"));
                     note.setHasUpload(hasUpload);
-                    note.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                    note.setCmpId(cursor.getInt(cursor.getColumnIndex("cmpId")));
 
                     noteList.add(note);
 
@@ -147,6 +150,21 @@ public class NoteDbInstance {
         }
         return noteList;
     }
+
+    public void addCmpId2NoteDb() {
+        try (Cursor cursor = mSQLiteDatabase.rawQuery("SELECT * FROM Note", null)) {
+            if (cursor.moveToFirst()) {
+                do {
+                    int id = cursor.getInt(cursor.getColumnIndex("id"));
+                    ContentValues values = new ContentValues();
+                    values.put("cmpId", id);
+                    mSQLiteDatabase.update("Note", values, "id = " + id, null);
+                } while (cursor.moveToNext());
+            }
+        }
+    }
+
+
 
     /**
      * 往数据库中插入笔记
@@ -160,7 +178,28 @@ public class NoteDbInstance {
         values.put("month", note.getMonth());
         values.put("location", note.getLoacation());
         values.put("date", note.getDate());
+        //values.put("cmpId", note.getCmpId());
         mSQLiteDatabase.insert("Note", null, values);
+    }
+
+    public void AddCmpId2NewestNote() {
+        try (Cursor cursor = mSQLiteDatabase.rawQuery("SELECT * FROM Note ORDER BY id DESC", null)) {
+            if (cursor.moveToFirst()) {
+                int id = cursor.getInt(cursor.getColumnIndex("id"));
+                ContentValues values = new ContentValues();
+                values.put("cmpId", id);
+                mSQLiteDatabase.update("Note", values, "id = " + id, null);
+            }
+        }
+    }
+
+    public int getCmpIdOfNewestNote() {
+        try (Cursor cursor = mSQLiteDatabase.rawQuery("SELECT * FROM Note ORDER BY id DESC", null)) {
+            if (cursor.moveToFirst()) {
+                return cursor.getInt(cursor.getColumnIndex("id"));
+            }
+        }
+        return 0;
     }
 
     /**
