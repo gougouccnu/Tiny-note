@@ -101,6 +101,7 @@ public class EditNoteActivity extends Activity {
                 intent.putExtra("extra_modify_content", mNote.getContent());
                 intent.putExtra("extra_modify_location", mNote.getLoacation());
                 intent.putExtra("extra_modify_date", mNote.getDate());
+                intent.putExtra("extra_cmpId", mNote.getCmpId());
                 startActivity(intent);
             }
         });

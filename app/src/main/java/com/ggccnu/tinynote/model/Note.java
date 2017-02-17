@@ -8,7 +8,7 @@ public class Note {
 
     // added in v1.4
     private int cmpId;
-    private int hasUpload;
+    private int hasModified;
 
     public String getYear() {
         return year;
@@ -60,16 +60,16 @@ public class Note {
     //TODO
 
 
-    public int getHasUpload() {
-        return hasUpload;
+    public int getHasModified() {
+        return hasModified;
     }
 
     public Integer getCmpId() {
         return cmpId;
     }
 
-    public void setHasUpload(int hasUpload) {
-        this.hasUpload = hasUpload;
+    public void setHasModified(int hasModified) {
+        this.hasModified = hasModified;
     }
 
     public void setCmpId(Integer id) {

@@ -102,7 +102,7 @@ public class NoteDbInstance {
     public Note QueryNoteDetails(String year, String month, String title) {
         Note note = new Note();
         // 查询数据库得到日记其他信息
-        Cursor cursor = mSQLiteDatabase.query("Note", new String[] {"content","location", "date", "hasUpload", "cmpId"},
+        Cursor cursor = mSQLiteDatabase.query("Note", new String[] {"content","location", "date", "hasModified", "cmpId"},
                 "title=? and month=? and year=?", new String[] {title, month, year}, null, null, null);
         if (cursor.moveToFirst()) {
             String content = cursor.getString(cursor.getColumnIndex("content"));
@@ -114,8 +114,8 @@ public class NoteDbInstance {
             note.setContent(content);
             note.setLoacation(location);
             note.setDate(date);
-            int hasUpload = cursor.getInt(cursor.getColumnIndex("hasUpload"));
-            note.setHasUpload(hasUpload);
+            int hasModified = cursor.getInt(cursor.getColumnIndex("hasModified"));
+            note.setHasModified(hasModified);
             note.setCmpId(cursor.getInt(cursor.getColumnIndex("cmpId")));
         }
         return note;
@@ -139,8 +139,8 @@ public class NoteDbInstance {
                     note.setContent(content);
                     note.setLoacation(location);
                     note.setDate(date);
-                    int hasUpload = cursor.getInt(cursor.getColumnIndex("hasUpload"));
-                    note.setHasUpload(hasUpload);
+                    int hasModified = cursor.getInt(cursor.getColumnIndex("hasModified"));
+                    note.setHasModified(hasModified);
                     note.setCmpId(cursor.getInt(cursor.getColumnIndex("cmpId")));
 
                     noteList.add(note);
@@ -205,10 +205,13 @@ public class NoteDbInstance {
     /**
      * 修改笔记
      */
-    public void UpdateNote(Note oldNote, ContentValues values) {
-        // 保存日记到数据库
-        mSQLiteDatabase.update("Note", values, "year = ? and month = ? and title = ? and content = ? and location = ?",
-                new String[]{oldNote.getYear(), oldNote.getMonth(), oldNote.getTitle(), oldNote.getContent(), oldNote.getLoacation()});
+    public void UpdateNote(Note oldNote, Note newNote) {
+        ContentValues values = new ContentValues();
+        values.put("title", newNote.getTitle());
+        values.put("content", newNote.getContent());
+        values.put("location", newNote.getLoacation());
+        values.put("hasModified", newNote.getHasModified());
+        mSQLiteDatabase.update("Note", values, "cmpId = " + oldNote.getCmpId(), null);
     }
     /**
      * 删除笔记

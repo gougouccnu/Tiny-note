@@ -162,17 +162,17 @@ public class SplashActivity extends Application {
         // 遍历本地的所有笔记，看是否能在云上找到
         for (int localNoteIndex = 0; localNoteIndex < localNoteList.size(); localNoteIndex++) {
             int localNoteId = localNoteList.get(localNoteIndex).getCmpId();
-            Boolean hasUploaded = false;
+            Boolean hasModifieded = false;
 
             for (int bmobNoteIndex = 0; bmobNoteIndex < bmobNoteList.size(); bmobNoteIndex++) {
                 // 本地的笔记在云上找到了
                 if (localNoteId == bmobNoteList.get(bmobNoteIndex).getCmpId()) {
-                    hasUploaded = true;
+                    hasModifieded = true;
                     break;
                 }
             }
             // 遍历云上的所有笔记，都没有发现本地的这条笔记
-            if (!hasUploaded) {
+            if (!hasModifieded) {
                 needUploadLocalNoteList.add(localNoteList.get(localNoteIndex));
             }
         }
@@ -190,7 +190,7 @@ public class SplashActivity extends Application {
             note.setTitle(bmobNote.getTitle());
             note.setContent(bmobNote.getContent());
             note.setLoacation(bmobNote.getLoacation());
-            note.setHasUpload(1);
+            note.setHasModified(1);
             mNoteDbInstance.InsertNote(note);
         }
     }
@@ -200,7 +200,7 @@ public class SplashActivity extends Application {
         for (int i = 0; i < localNoteList.size() ; i++) {
             Note note = localNoteList.get(i);
             bmobNoteList.add(new BmobNote(note.getContent(), note.getDate(),
-                    note.getHasUpload(), note.getCmpId(), note.getLoacation(),
+                    note.getHasModified(), note.getCmpId(), note.getLoacation(),
                     note.getMonth(), note.getTitle(), note.getYear()));
         }
         new BmobObject().insertBatch(getApplicationContext(), bmobNoteList, new SaveListener() {

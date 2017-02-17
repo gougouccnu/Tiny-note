@@ -11,15 +11,15 @@ public class BmobNote extends BmobObject{
 
     // added in v1.4
     private int cmpId;
-    private int hasUpload;
+    private int hasModified;
 
     public BmobNote() {
     }
 
-    public BmobNote(String content, String date, Integer hasUpload, Integer cmpId, String loacation, String month, String title, String year) {
+    public BmobNote(String content, String date, Integer hasModified, Integer cmpId, String loacation, String month, String title, String year) {
         this.content = content;
         this.date = date;
-        this.hasUpload = hasUpload;
+        this.hasModified = hasModified;
         this.cmpId = cmpId;
         this.loacation = loacation;
         this.month = month;
@@ -35,8 +35,8 @@ public class BmobNote extends BmobObject{
         this.date = date;
     }
 
-    public void setHasUpload(Integer hasUpload) {
-        this.hasUpload = hasUpload;
+    public void setHasModified(Integer hasModified) {
+        this.hasModified = hasModified;
     }
 
     public void setCmpId(Integer id) {
@@ -67,8 +67,8 @@ public class BmobNote extends BmobObject{
         return date;
     }
 
-    public Integer getHasUpload() {
-        return hasUpload;
+    public Integer getModified() {
+        return hasModified;
     }
 
     public Integer getCmpId() {

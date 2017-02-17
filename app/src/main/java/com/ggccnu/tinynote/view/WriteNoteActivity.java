@@ -302,7 +302,7 @@ public class WriteNoteActivity extends Activity {
         bmobNote.setLoacation(note.getLoacation());
         bmobNote.setTitle(note.getTitle());
         bmobNote.setContent(note.getContent());
-        bmobNote.setHasUpload(1);
+        bmobNote.setHasModified(0);
         bmobNote.setCmpId(note.getCmpId());
         return bmobNote;
     }
