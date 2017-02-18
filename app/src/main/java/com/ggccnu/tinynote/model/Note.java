@@ -64,7 +64,7 @@ public class Note {
         return hasModified;
     }
 
-    public Integer getCmpId() {
+    public int getCmpId() {
         return cmpId;
     }
 
@@ -72,7 +72,7 @@ public class Note {
         this.hasModified = hasModified;
     }
 
-    public void setCmpId(Integer id) {
+    public void setCmpId(int id) {
         this.cmpId = id;
     }
 }

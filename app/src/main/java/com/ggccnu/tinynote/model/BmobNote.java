@@ -35,11 +35,11 @@ public class BmobNote extends BmobObject{
         this.date = date;
     }
 
-    public void setHasModified(Integer hasModified) {
+    public void setHasModified(int hasModified) {
         this.hasModified = hasModified;
     }
 
-    public void setCmpId(Integer id) {
+    public void setCmpId(int id) {
         this.cmpId = id;
     }
 
@@ -67,11 +67,11 @@ public class BmobNote extends BmobObject{
         return date;
     }
 
-    public Integer getModified() {
+    public int getModified() {
         return hasModified;
     }
 
-    public Integer getCmpId() {
+    public int getCmpId() {
         return cmpId;
     }
 

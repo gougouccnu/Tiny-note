@@ -98,9 +98,13 @@ public class ModifyNoteActivity extends Activity {
             public void onSuccess(List<BmobNote> list) {
                 if (list.size() > 0) {
                     BmobNote bmobNote = new BmobNote();
-                    bmobNote.setTitle(note.getTitle());
-                    bmobNote.setContent(note.getContent());
-                    bmobNote.setLoacation(note.getLoacation());
+//                    bmobNote.setTitle(note.getTitle());
+//                    bmobNote.setContent(note.getContent());
+//                    bmobNote.setLoacation(note.getLoacation());
+                    bmobNote.setValue("title", note.getTitle());
+                    bmobNote.setValue("content", note.getContent());
+                    bmobNote.setValue("location", note.getLoacation());
+                    bmobNote.setValue("cmpId", note.getCmpId());
                     bmobNote.update(ModifyNoteActivity.this, list.get(0).getObjectId(), new UpdateListener() {
                         @Override
                         public void onSuccess() {
