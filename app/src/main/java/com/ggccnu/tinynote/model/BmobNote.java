@@ -1,6 +1,7 @@
 package com.ggccnu.tinynote.model;
 
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobUser;
 
 /**
  * Created by lishaowei on 2017/2/11.
@@ -8,6 +9,7 @@ import cn.bmob.v3.BmobObject;
 
 public class BmobNote extends BmobObject{
     private String year,month,title,content, location,date;
+    private BmobUser user;
 
     // added in v1.4
     private int cmpId;
@@ -16,7 +18,8 @@ public class BmobNote extends BmobObject{
     public BmobNote() {
     }
 
-    public BmobNote(String content, String date, Integer hasModified, Integer cmpId, String location, String month, String title, String year) {
+    public BmobNote(BmobUser user, String content, String date, Integer hasModified, Integer cmpId, String location, String month, String title, String year) {
+        this.user = user;
         this.content = content;
         this.date = date;
         this.hasModified = hasModified;
@@ -25,6 +28,14 @@ public class BmobNote extends BmobObject{
         this.month = month;
         this.title = title;
         this.year = year;
+    }
+
+    public void setUser(BmobUser user) {
+        this.user = user;
+    }
+
+    public BmobUser getUser() {
+        return user;
     }
 
     public void setContent(String content) {

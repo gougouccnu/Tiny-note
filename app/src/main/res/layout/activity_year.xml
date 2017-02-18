@@ -1,13 +1,115 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.NoteTitleActivity"
-    android:gravity="center">
+    tools:context=".view.YearActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_year"
-        android:layout_width="wrap_content"
+    <com.ggccnu.tinynote.widget.DragViewGroup
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollIndicators="bottom" />
-</LinearLayout>
+        android:id="@+id/view">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/tv_top"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_alignParentTop="true"
+                android:background="#ffe85628"
+                android:gravity="center"
+                android:text="登陆"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_top"
+                android:layout_margin="10dp"
+                android:orientation="vertical" >
+
+                <EditText
+                    android:id="@+id/et_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+
+                    android:hint="请输入用户名"
+                    android:paddingLeft="20dip"
+                    android:paddingRight="10dip"
+                    android:singleLine="true"
+                    android:textColor="#ff444444"
+                    android:textColorHint="#ffcccccc"
+                    android:textSize="16sp" >
+
+                    <requestFocus />
+                </EditText>
+
+                <EditText
+                    android:id="@+id/et_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/et_account"
+                    android:layout_marginTop="10dp"
+
+                    android:hint="请输入密码"
+                    android:inputType="textPassword"
+                    android:paddingLeft="20dip"
+                    android:paddingRight="10dip"
+                    android:singleLine="true"
+                    android:textColor="#ff444444"
+                    android:textColorHint="#ffcccccc"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/et_pwd"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dip"
+                    android:paddingRight="10dip" >
+
+                    <Button
+                        android:id="@+id/btn_login"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1.0"
+
+                        android:text="登陆"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp" />
+
+                    <Button
+                        android:id="@+id/btn_register"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1.0"
+
+                        android:text="注册"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </RelativeLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_year"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scrollIndicators="bottom" />
+        </FrameLayout>
+
+    </com.ggccnu.tinynote.widget.DragViewGroup>
+
+</RelativeLayout>

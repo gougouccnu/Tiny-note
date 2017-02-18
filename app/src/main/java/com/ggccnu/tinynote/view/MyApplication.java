@@ -19,6 +19,7 @@ import java.util.List;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.DeleteListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
@@ -28,7 +29,7 @@ import cn.bmob.v3.update.BmobUpdateAgent;
  * Created by lishaowei on 2017/1/31.
  */
 
-public class SplashActivity extends Application {
+public class MyApplication extends Application {
 
     private String appID = "2882303761517476332";
     private String appKey = "5721747680332";
@@ -45,28 +46,32 @@ public class SplashActivity extends Application {
         BmobUpdateAgent.update(this);
 
         SqlDatabaseUpgrade();
-        SyncNoteTask();
+
+        BmobUser user = BmobUser.getCurrentUser(getApplicationContext());
+        if (user != null) {
+            SyncNoteTask(user);
+        }
     }
 
-    private void SyncNoteTask() {
+    private void SyncNoteTask(final BmobUser user) {
         final List<Note> localNoteList = mNoteDbInstance.QueryAllNote();
 
         BmobQuery<BmobNote> query = new BmobQuery<BmobNote>();
-        //query.addWhereExists("id");
+        query.addWhereEqualTo("user", user);
         query.findObjects(getApplicationContext(), new FindListener<BmobNote>() {
             @Override
             public void onSuccess(List<BmobNote> list) {
                 int localNoteCnt = localNoteList.size();
                 int bmobNoteCnt = list.size();
                 if (localNoteCnt > 0 && bmobNoteCnt == 0) {
-                    uploadNote2Bmob(localNoteList);
+                    uploadNote2Bmob(user, localNoteList);
                 }
                 if (localNoteCnt == 0 && bmobNoteCnt > 0) {
                     saveBmobNote2Local(list);
                 }
                 if (localNoteCnt != 0 && bmobNoteCnt != 0) {
                     if (localNoteCnt > bmobNoteCnt) {
-                        uploadSomeNote2Bmob(localNoteList, list);
+                        uploadSomeNote2Bmob(user,localNoteList, list);
                     }else if (localNoteCnt < bmobNoteCnt) {
                         deleteBmobNote(list, localNoteList);
                     } else {
@@ -145,10 +150,10 @@ public class SplashActivity extends Application {
         });
     }
 
-    private void uploadSomeNote2Bmob(List<Note> localNoteList, List<BmobNote> bmobNoteList) {
+    private void uploadSomeNote2Bmob(BmobUser user, List<Note> localNoteList, List<BmobNote> bmobNoteList) {
         // find diff id of note
         List<Note> needUploadLocalNoteList = searchNeedUploadLocalNote(localNoteList, bmobNoteList);
-        uploadNote2Bmob(needUploadLocalNoteList);
+        uploadNote2Bmob(user, needUploadLocalNoteList);
     }
 
     /**
@@ -195,11 +200,11 @@ public class SplashActivity extends Application {
         }
     }
 
-    private void uploadNote2Bmob(List<Note> localNoteList) {
+    private void uploadNote2Bmob(BmobUser user, List<Note> localNoteList) {
         List<BmobObject> bmobNoteList = new ArrayList<>();
         for (int i = 0; i < localNoteList.size() ; i++) {
             Note note = localNoteList.get(i);
-            bmobNoteList.add(new BmobNote(note.getContent(), note.getDate(),
+            bmobNoteList.add(new BmobNote(user, note.getContent(), note.getDate(),
                     note.getHasModified(), note.getCmpId(), note.getLocation(),
                     note.getMonth(), note.getTitle(), note.getYear()));
         }

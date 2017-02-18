@@ -3,9 +3,11 @@ package com.ggccnu.tinynote.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.blankj.utilcode.utils.NetworkUtils;
@@ -32,10 +34,13 @@ public class YearActivity extends Activity {
 
     private static int backPressedCnt = 0;
 
+    private DrawerLayout mDrawerLayout;
+    private Button btnLogin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_year);
+        setContentView(R.layout.activity_drawer);
 
         // 检查是否要更新APP。要初始化，否则得不到context
         Utils.init(this);
@@ -43,6 +48,15 @@ public class YearActivity extends Activity {
             UpdateChecker.checkForDialog(this);
         }
 
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.simple_navigation_drawer);
+        btnLogin = (Button) findViewById(R.id.btn_login);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(YearActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
         mNoteDbInstance = NoteDbInstance.getInstance(this);
         mYearList = mNoteDbInstance.QueryYears();
         // 笔记为空，显示当前年
