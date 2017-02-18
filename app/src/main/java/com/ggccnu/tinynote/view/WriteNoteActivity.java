@@ -139,7 +139,7 @@ public class WriteNoteActivity extends Activity {
         } else {
             mNote.setContent(content);
         }
-        mNote.setLoacation(etLocation.getText().toString());
+        mNote.setLocation(etLocation.getText().toString());
         mNote.setDate(year + month + day);
         mNoteDbInstance.InsertNote(mNote);
     }
@@ -299,7 +299,7 @@ public class WriteNoteActivity extends Activity {
         bmobNote.setYear(note.getYear());
         bmobNote.setMonth(note.getMonth());
         bmobNote.setDate(note.getDate());
-        bmobNote.setLocation(note.getLoacation());
+        bmobNote.setLocation(note.getLocation());
         bmobNote.setTitle(note.getTitle());
         bmobNote.setContent(note.getContent());
         bmobNote.setHasModified(0);

@@ -112,7 +112,7 @@ public class NoteDbInstance {
             note.setMonth(month);
             note.setTitle(title);
             note.setContent(content);
-            note.setLoacation(location);
+            note.setLocation(location);
             note.setDate(date);
             int hasModified = cursor.getInt(cursor.getColumnIndex("hasModified"));
             note.setHasModified(hasModified);
@@ -137,7 +137,7 @@ public class NoteDbInstance {
                     note.setMonth(cursor.getString(cursor.getColumnIndex("month")));
                     note.setTitle(cursor.getString(cursor.getColumnIndex("title")));
                     note.setContent(content);
-                    note.setLoacation(location);
+                    note.setLocation(location);
                     note.setDate(date);
                     int hasModified = cursor.getInt(cursor.getColumnIndex("hasModified"));
                     note.setHasModified(hasModified);
@@ -176,7 +176,7 @@ public class NoteDbInstance {
         values.put("content", note.getContent());
         values.put("year", note.getYear());
         values.put("month", note.getMonth());
-        values.put("location", note.getLoacation());
+        values.put("location", note.getLocation());
         values.put("date", note.getDate());
         //values.put("cmpId", note.getCmpId());
         mSQLiteDatabase.insert("Note", null, values);
@@ -209,7 +209,7 @@ public class NoteDbInstance {
         ContentValues values = new ContentValues();
         values.put("title", newNote.getTitle());
         values.put("content", newNote.getContent());
-        values.put("location", newNote.getLoacation());
+        values.put("location", newNote.getLocation());
         values.put("hasModified", newNote.getHasModified());
         mSQLiteDatabase.update("Note", values, "cmpId = " + oldNote.getCmpId(), null);
     }

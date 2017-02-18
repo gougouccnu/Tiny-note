@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.DeleteListener;
 import cn.bmob.v3.listener.FindListener;
@@ -99,7 +98,7 @@ public class EditNoteActivity extends Activity {
                 intent.putExtra("extra_modify_month", mNote.getMonth());
                 intent.putExtra("extra_modify_title", mNote.getTitle());
                 intent.putExtra("extra_modify_content", mNote.getContent());
-                intent.putExtra("extra_modify_location", mNote.getLoacation());
+                intent.putExtra("extra_modify_location", mNote.getLocation());
                 intent.putExtra("extra_modify_date", mNote.getDate());
                 intent.putExtra("extra_cmpId", mNote.getCmpId());
                 startActivity(intent);
@@ -208,7 +207,7 @@ public class EditNoteActivity extends Activity {
         } else {
             mNoteContentList.add(" ");
         }
-        mNoteContentList.add(mNote.getLoacation());
+        mNoteContentList.add(mNote.getLocation());
         mNoteContentList.add(mNote.getDate());
     }
 

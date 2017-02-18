@@ -189,7 +189,7 @@ public class SplashActivity extends Application {
             note.setDate(bmobNote.getDate());
             note.setTitle(bmobNote.getTitle());
             note.setContent(bmobNote.getContent());
-            note.setLoacation(bmobNote.getLocation());
+            note.setLocation(bmobNote.getLocation());
             note.setHasModified(1);
             mNoteDbInstance.InsertNote(note);
         }
@@ -200,7 +200,7 @@ public class SplashActivity extends Application {
         for (int i = 0; i < localNoteList.size() ; i++) {
             Note note = localNoteList.get(i);
             bmobNoteList.add(new BmobNote(note.getContent(), note.getDate(),
-                    note.getHasModified(), note.getCmpId(), note.getLoacation(),
+                    note.getHasModified(), note.getCmpId(), note.getLocation(),
                     note.getMonth(), note.getTitle(), note.getYear()));
         }
         new BmobObject().insertBatch(getApplicationContext(), bmobNoteList, new SaveListener() {

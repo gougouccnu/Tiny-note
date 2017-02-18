@@ -4,7 +4,7 @@ package com.ggccnu.tinynote.model;
  * Created by lishaowei on 16/1/7.
  */
 public class Note {
-    private String year,month,title,content,loacation,date;
+    private String year,month,title,content, location,date;
 
     // added in v1.4
     private int cmpId;
@@ -26,8 +26,8 @@ public class Note {
         return title;
     }
 
-    public String getLoacation() {
-        return loacation;
+    public String getLocation() {
+        return location;
     }
 
     public String getDate() {
@@ -50,15 +50,13 @@ public class Note {
         this.content = content;
     }
 
-    public void setLoacation(String loacation) {
-        this.loacation = loacation;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public void setDate(String date) {
         this.date = date;
     }
-    //TODO
-
 
     public int getHasModified() {
         return hasModified;

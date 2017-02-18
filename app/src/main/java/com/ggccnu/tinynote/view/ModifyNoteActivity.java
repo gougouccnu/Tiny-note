@@ -58,7 +58,7 @@ public class ModifyNoteActivity extends Activity {
         oldNote.setMonth(oldMonth);
         oldNote.setTitle(oldTitle);
         oldNote.setContent(oldContent);
-        oldNote.setLoacation(oldLocation);
+        oldNote.setLocation(oldLocation);
         oldNote.setDate(oldDate);
         oldNote.setCmpId(cmpId);
 
@@ -76,7 +76,7 @@ public class ModifyNoteActivity extends Activity {
 //                location = etLocation.getText().toString();
                 newNote.setTitle(etTitle.getText().toString());
                 newNote.setContent(etContent.getText().toString());
-                newNote.setLoacation(etLocation.getText().toString());
+                newNote.setLocation(etLocation.getText().toString());
                 newNote.setCmpId(oldNote.getCmpId());
                 newNote.setHasModified(1);
                 mNoteDbInstance.UpdateNote(oldNote, newNote);
@@ -102,7 +102,7 @@ public class ModifyNoteActivity extends Activity {
                     BmobNote bmobNote = new BmobNote();
                     bmobNote.setValue("title", note.getTitle());
                     bmobNote.setValue("content", note.getContent());
-                    bmobNote.setValue("location", note.getLoacation());
+                    bmobNote.setValue("location", note.getLocation());
                     bmobNote.setValue("cmpId", note.getCmpId());
                     bmobNote.update(ModifyNoteActivity.this, list.get(0).getObjectId(), new UpdateListener() {
                         @Override
