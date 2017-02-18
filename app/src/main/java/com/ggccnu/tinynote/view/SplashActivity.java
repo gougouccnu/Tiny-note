@@ -189,7 +189,7 @@ public class SplashActivity extends Application {
             note.setDate(bmobNote.getDate());
             note.setTitle(bmobNote.getTitle());
             note.setContent(bmobNote.getContent());
-            note.setLoacation(bmobNote.getLoacation());
+            note.setLoacation(bmobNote.getLocation());
             note.setHasModified(1);
             mNoteDbInstance.InsertNote(note);
         }

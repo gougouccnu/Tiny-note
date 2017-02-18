@@ -7,7 +7,7 @@ import cn.bmob.v3.BmobObject;
  */
 
 public class BmobNote extends BmobObject{
-    private String year,month,title,content,loacation,date;
+    private String year,month,title,content, location,date;
 
     // added in v1.4
     private int cmpId;
@@ -16,12 +16,12 @@ public class BmobNote extends BmobObject{
     public BmobNote() {
     }
 
-    public BmobNote(String content, String date, Integer hasModified, Integer cmpId, String loacation, String month, String title, String year) {
+    public BmobNote(String content, String date, Integer hasModified, Integer cmpId, String location, String month, String title, String year) {
         this.content = content;
         this.date = date;
         this.hasModified = hasModified;
         this.cmpId = cmpId;
-        this.loacation = loacation;
+        this.location = location;
         this.month = month;
         this.title = title;
         this.year = year;
@@ -43,8 +43,8 @@ public class BmobNote extends BmobObject{
         this.cmpId = id;
     }
 
-    public void setLoacation(String loacation) {
-        this.loacation = loacation;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public void setMonth(String month) {
@@ -75,8 +75,8 @@ public class BmobNote extends BmobObject{
         return cmpId;
     }
 
-    public String getLoacation() {
-        return loacation;
+    public String getLocation() {
+        return location;
     }
 
     public String getMonth() {

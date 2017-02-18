@@ -32,7 +32,7 @@ public class ModifyNoteActivity extends Activity {
 
     private Button btWriteDone;
     private EditText etTitle, etContent, etLocation;
-    private String title, content, location;
+    //private String title, content, location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,8 @@ public class ModifyNoteActivity extends Activity {
         etContent = (EditText) findViewById(R.id.note_content);
         btWriteDone = (Button) findViewById(R.id.write_done);
         etLocation = (EditText) findViewById(R.id.note_location);
+
+        mNoteDbInstance = NoteDbInstance.getInstance(this);
 
         Intent intent = getIntent();
         final String oldYear = intent.getStringExtra("extra_modify_year");
@@ -65,16 +67,16 @@ public class ModifyNoteActivity extends Activity {
             etContent.setText(oldContent);
             etLocation.setText(oldLocation);
         }
-        mNoteDbInstance = NoteDbInstance.getInstance(this);
+
         btWriteDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                title = etTitle.getText().toString();
-                content = etContent.getText().toString();
-                location = etLocation.getText().toString();
-                newNote.setTitle(title);
-                newNote.setContent(content);
-                newNote.setLoacation(location);
+//                title = etTitle.getText().toString();
+//                content = etContent.getText().toString();
+//                location = etLocation.getText().toString();
+                newNote.setTitle(etTitle.getText().toString());
+                newNote.setContent(etContent.getText().toString());
+                newNote.setLoacation(etLocation.getText().toString());
                 newNote.setCmpId(oldNote.getCmpId());
                 newNote.setHasModified(1);
                 mNoteDbInstance.UpdateNote(oldNote, newNote);
@@ -98,9 +100,6 @@ public class ModifyNoteActivity extends Activity {
             public void onSuccess(List<BmobNote> list) {
                 if (list.size() > 0) {
                     BmobNote bmobNote = new BmobNote();
-//                    bmobNote.setTitle(note.getTitle());
-//                    bmobNote.setContent(note.getContent());
-//                    bmobNote.setLoacation(note.getLoacation());
                     bmobNote.setValue("title", note.getTitle());
                     bmobNote.setValue("content", note.getContent());
                     bmobNote.setValue("location", note.getLoacation());
@@ -109,7 +108,7 @@ public class ModifyNoteActivity extends Activity {
                         @Override
                         public void onSuccess() {
                             note.setHasModified(0);
-                            mNoteDbInstance.UpdateNote(note, note);
+                            mNoteDbInstance.UpdateNoteIsModified(note);
                             LogUtils.i("update bmbo note success.");
                         }
 

@@ -213,6 +213,18 @@ public class NoteDbInstance {
         values.put("hasModified", newNote.getHasModified());
         mSQLiteDatabase.update("Note", values, "cmpId = " + oldNote.getCmpId(), null);
     }
+
+    /**
+     * 修改笔记是否被修改列
+     */
+    public void UpdateNoteIsModified(Note newNote) {
+        ContentValues values = new ContentValues();
+//        values.put("title", newNote.getTitle());
+//        values.put("content", newNote.getContent());
+//        values.put("location", newNote.getLocation());
+        values.put("hasModified", newNote.getHasModified());
+        mSQLiteDatabase.update("Note", values, "cmpId = " + newNote.getCmpId(), null);
+    }
     /**
      * 删除笔记
      */

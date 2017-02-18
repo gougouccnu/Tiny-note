@@ -299,7 +299,7 @@ public class WriteNoteActivity extends Activity {
         bmobNote.setYear(note.getYear());
         bmobNote.setMonth(note.getMonth());
         bmobNote.setDate(note.getDate());
-        bmobNote.setLoacation(note.getLoacation());
+        bmobNote.setLocation(note.getLoacation());
         bmobNote.setTitle(note.getTitle());
         bmobNote.setContent(note.getContent());
         bmobNote.setHasModified(0);
