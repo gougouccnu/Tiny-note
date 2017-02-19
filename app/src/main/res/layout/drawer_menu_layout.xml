@@ -2,17 +2,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
     tools:context=".view.YearActivity">
 
 
     <Button
-        android:text="Button"
+        android:text="点击登录"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:id="@+id/btn_login"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        style="@style/Widget.AppCompat.Button.Borderless" />
+
+    <TextView
+        android:text="登录可以云备份笔记，不登录也可以"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:id="@+id/tv_loginInf"
+        android:layout_below="@+id/btn_login"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="129dp"
-        android:layout_marginTop="70dp"
-        android:id="@+id/btn_login" />
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:text="关于云备份"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_loginInf"
+        android:layout_alignStart="@+id/tv_loginInf"
+        android:layout_marginTop="32dp"
+        android:id="@+id/tv_cloudAbout" />
+
+    <TextView
+        android:text="笔记加密存放在Bmob云端"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_cloudAbout"
+        android:layout_alignStart="@+id/tv_cloudAbout"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:id="@+id/tv_cloudInf" />
+
+    <TextView
+        android:text="Kevin zhou设计，gougouccnu开发"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_appAbout"
+        android:layout_alignStart="@+id/tv_cloudInf"
+        android:layout_marginTop="16dp"
+        android:id="@+id/tv_appInf" />
+
+    <TextView
+        android:text="关于小笔记"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_appAbout"
+        android:layout_below="@+id/tv_cloudInf"
+        android:layout_alignStart="@+id/tv_cloudAbout"
+        android:layout_marginTop="16dp" />
 
 </RelativeLayout>

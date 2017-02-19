@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.blankj.utilcode.utils.NetworkUtils;
@@ -21,6 +22,8 @@ import com.ggccnu.tinynote.util.DateConvertor;
 
 import java.util.Calendar;
 import java.util.List;
+
+import cn.bmob.v3.BmobUser;
 
 public class YearActivity extends Activity {
 
@@ -36,6 +39,7 @@ public class YearActivity extends Activity {
 
     private DrawerLayout mDrawerLayout;
     private Button btnLogin;
+    private TextView tvLoginInf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +52,8 @@ public class YearActivity extends Activity {
             UpdateChecker.checkForDialog(this);
         }
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.simple_navigation_drawer);
-        btnLogin = (Button) findViewById(R.id.btn_login);
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(YearActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
+        updateDrawerMenuInf();
+
         mNoteDbInstance = NoteDbInstance.getInstance(this);
         mYearList = mNoteDbInstance.QueryYears();
         // 笔记为空，显示当前年
@@ -132,6 +129,34 @@ public class YearActivity extends Activity {
         }
     */
 
+    }
+
+    private void updateDrawerMenuInf() {
+        btnLogin = (Button) findViewById(R.id.btn_login);
+        tvLoginInf = (TextView) findViewById(R.id.tv_loginInf);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.simple_navigation_drawer);
+        //mDrawerLayout.setScrimColor(0x00000000);
+
+        final BmobUser user = BmobUser.getCurrentUser(this);
+        if (user != null) {
+            btnLogin.setText("退出登录");
+            tvLoginInf.setText(user.getEmail());
+            btnLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BmobUser.logOut(YearActivity.this);
+                    mDrawerLayout.closeDrawers();
+                }
+            });
+        } else {
+            btnLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(YearActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
     /**

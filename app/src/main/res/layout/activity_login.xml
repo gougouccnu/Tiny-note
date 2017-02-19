@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentTop="true"
-        android:background="#ffe85628"
+        android:background="?attr/colorControlHighlight"
         android:gravity="center"
         android:text="登陆"
         android:textColor="@android:color/white"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
 
-            android:hint="请输入用户名"
+            android:hint="请输入邮箱地址"
             android:paddingLeft="20dip"
             android:paddingRight="10dip"
             android:singleLine="true"
@@ -73,8 +73,8 @@
                 android:layout_weight="1.0"
 
                 android:text="登陆"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                style="@style/Widget.AppCompat.Button.Borderless" />
 
             <Button
                 android:id="@+id/btn_register"
@@ -84,8 +84,8 @@
                 android:layout_weight="1.0"
 
                 android:text="注册"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                style="@style/Widget.AppCompat.Button.Borderless" />
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

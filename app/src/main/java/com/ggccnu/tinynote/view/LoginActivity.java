@@ -7,9 +7,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
+import com.blankj.utilcode.utils.ToastUtils;
 import com.ggccnu.tinynote.R;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.SaveListener;
@@ -17,7 +20,6 @@ import cn.bmob.v3.listener.SaveListener;
 public class LoginActivity extends Activity implements OnClickListener{
 
     EditText et_account,et_pwd;
-
     Button btn_login,btn_register;
 
     @Override
@@ -53,12 +55,15 @@ public class LoginActivity extends Activity implements OnClickListener{
                 account = et_account.getText().toString().trim();
                 pwd = et_pwd.getText().toString().trim();
                 if(account.equals("")){
-                    toast("填写你的用户名");
+                    ToastUtils.showShortToast("填写你的邮箱地址");
                     return;
                 }
-
                 if(pwd.equals("")){
-                    toast("填写你的密码");
+                    ToastUtils.showShortToast("填写你的密码");
+                    return;
+                }
+                if (!isAccountValid(account)) {
+                    ToastUtils.showShortToast("邮箱地址好像不对,请重新填写");
                     return;
                 }
 
@@ -77,7 +82,7 @@ public class LoginActivity extends Activity implements OnClickListener{
                     @Override
                     public void onFailure(int arg0, String arg1) {
                         // TODO Auto-generated method stub
-                        toast("登陆失败："+arg1);
+                        ToastUtils.showShortToast("登陆失败："+arg1);
                     }
                 });
                 break;
@@ -86,17 +91,21 @@ public class LoginActivity extends Activity implements OnClickListener{
                 account= et_account.getText().toString().trim();
                 pwd = et_pwd.getText().toString().trim();
                 if(account.equals("")){
-                    toast("填写你的用户名");
+                    ToastUtils.showShortToast("填写你的邮箱");
                     return;
                 }
                 if(pwd.equals("")){
-                    toast("填写你的密码");
+                    ToastUtils.showShortToast("填写你的密码");
+                    return;
+                }
+                if (!isAccountValid(account)) {
+                    ToastUtils.showShortToast("邮箱地址好像不对,请重新填写");
                     return;
                 }
                 BmobUser u = new BmobUser();
                 u.setUsername(account);
                 u.setPassword(pwd);
-                u.setEmail("78006456@qq.com");
+                u.setEmail(account);
                 u.signUp(this, new SaveListener() {
 
                     @Override
@@ -109,7 +118,7 @@ public class LoginActivity extends Activity implements OnClickListener{
                     @Override
                     public void onFailure(int arg0, String arg1) {
                         // TODO Auto-generated method stub
-                        toast("注册失败："+arg1);
+                        ToastUtils.showShortToast("注册失败："+arg1);
                     }
                 });
                 break;
@@ -118,8 +127,16 @@ public class LoginActivity extends Activity implements OnClickListener{
         }
     }
 
-    private void toast(String msg){
-        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+    /**
+     * TODO:无法检查邮箱的有效性
+     * @param email
+     * @return
+     */
+    private boolean isAccountValid(String email) {
+
+        Pattern p = Pattern.compile("\\w+@(\\w+.)+[a-z]{2,3}");
+        Matcher m = p.matcher(email);
+        return m.matches();
     }
 }
 
