@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,7 +10,6 @@
         android:id="@+id/tv_top"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_alignParentTop="true"
         android:background="?attr/colorControlHighlight"
         android:gravity="center"
         android:text="登陆"
@@ -20,7 +19,6 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_top"
         android:layout_margin="10dp"
         android:orientation="vertical" >
 
@@ -89,6 +87,7 @@
         </LinearLayout>
     </RelativeLayout>
 
+
     <Button
         android:id="@+id/btn_nologin"
         android:layout_width="match_parent"
@@ -96,6 +95,14 @@
         android:text="不想云备份"
         android:textSize="18sp"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-</RelativeLayout>
+        android:layout_centerVertical="true" />
+
+    <ProgressBar
+        android:id="@+id/progress_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:layout_gravity="center" />
+
+</LinearLayout>

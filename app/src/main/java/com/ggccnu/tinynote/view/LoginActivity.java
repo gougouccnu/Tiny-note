@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.blankj.utilcode.utils.ToastUtils;
 import com.ggccnu.tinynote.R;
@@ -21,6 +22,7 @@ public class LoginActivity extends Activity implements OnClickListener{
 
     EditText et_account,et_pwd;
     Button btn_login,btn_register, btn_nologin;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class LoginActivity extends Activity implements OnClickListener{
 
         btn_nologin = (Button)findViewById(R.id.btn_nologin);
         btn_nologin.setOnClickListener(this);
+
+        progressBar = (ProgressBar) findViewById(R.id.progress_login);
     }
 
     String account,pwd;
@@ -65,6 +69,8 @@ public class LoginActivity extends Activity implements OnClickListener{
                     return;
                 }
 
+                progressBar.setVisibility(View.VISIBLE);
+
                 BmobUser user = new BmobUser();
                 user.setUsername(account);
                 user.setPassword(pwd);
@@ -72,6 +78,7 @@ public class LoginActivity extends Activity implements OnClickListener{
 
                     @Override
                     public void onSuccess() {
+                        progressBar.setVisibility(View.INVISIBLE);
                         // TODO Auto-generated method stub
                         Intent intent = new Intent(LoginActivity.this, YearActivity.class);
                         startActivity(intent);
@@ -79,6 +86,7 @@ public class LoginActivity extends Activity implements OnClickListener{
 
                     @Override
                     public void onFailure(int arg0, String arg1) {
+                        progressBar.setVisibility(View.INVISIBLE);
                         // TODO Auto-generated method stub
                         ToastUtils.showShortToast("登陆失败："+arg1);
                     }
@@ -100,6 +108,9 @@ public class LoginActivity extends Activity implements OnClickListener{
                     ToastUtils.showShortToast("邮箱地址好像不对,请重新填写");
                     return;
                 }
+
+                progressBar.setVisibility(View.VISIBLE);
+
                 BmobUser u = new BmobUser();
                 u.setUsername(account);
                 u.setPassword(pwd);
@@ -108,6 +119,7 @@ public class LoginActivity extends Activity implements OnClickListener{
 
                     @Override
                     public void onSuccess() {
+                        progressBar.setVisibility(View.INVISIBLE);
                         // TODO Auto-generated method stub
                         Intent intent = new Intent(LoginActivity.this, YearActivity.class);
                         intent.putExtra("extra_user_email", BmobUser.getCurrentUser(LoginActivity.this).getEmail());
@@ -116,6 +128,7 @@ public class LoginActivity extends Activity implements OnClickListener{
 
                     @Override
                     public void onFailure(int arg0, String arg1) {
+                        progressBar.setVisibility(View.INVISIBLE);
                         // TODO Auto-generated method stub
                         ToastUtils.showShortToast("注册失败："+arg1);
                     }
