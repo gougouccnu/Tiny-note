@@ -1,61 +1,32 @@
-package com.ggccnu.tinynote.view;
+package com.ggccnu.tinynote.util;
 
-import android.app.Application;
 import android.content.Context;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.ggccnu.tinynote.db.NoteDbInstance;
 import com.ggccnu.tinynote.model.BmobNote;
 import com.ggccnu.tinynote.model.Note;
-import com.ggccnu.tinynote.util.SyncNoteUtil;
-import com.xiaomi.mistatistic.sdk.MiStatInterface;
-import com.xiaomi.mistatistic.sdk.URLStatsRecorder;
-import com.xiaomi.mistatistic.sdk.controller.HttpEventFilter;
-import com.xiaomi.mistatistic.sdk.data.HttpEvent;
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.DeleteListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.update.BmobUpdateAgent;
 
 /**
- * Created by lishaowei on 2017/1/31.
+ * Created by lishaowei on 2017/2/19.
  */
 
-public class MyApplication extends Application {
+public class SyncNoteUtil {
 
-    private String appID = "2882303761517476332";
-    private String appKey = "5721747680332";
+    public static void SyncNoteTask(final Context context, final BmobUser user) {
 
-    private NoteDbInstance mNoteDbInstance;
+        final NoteDbInstance mNoteDbInstance = NoteDbInstance.getInstance(context);
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        MistatInit();
-
-        Bmob.initialize(this, "28f7f6c4714b277721a96a64c7bf8204");
-        BmobUpdateAgent.update(this);
-
-        SqlDatabaseUpgrade();
-
-        BmobUser user = BmobUser.getCurrentUser(getApplicationContext());
-        if (user != null) {
-            SyncNoteUtil.SyncNoteTask(getApplicationContext(), user);
-        }
-    }
-
-    private void SyncNoteTask(Context context, final BmobUser user) {
         final List<Note> localNoteList = mNoteDbInstance.QueryAllNote();
 
         BmobQuery<BmobNote> query = new BmobQuery<BmobNote>();
@@ -66,15 +37,15 @@ public class MyApplication extends Application {
                 int localNoteCnt = localNoteList.size();
                 int bmobNoteCnt = list.size();
                 if (localNoteCnt > 0 && bmobNoteCnt == 0) {
-                    uploadNote2Bmob(getApplicationContext(), user, localNoteList);
+                    uploadNote2Bmob(context, user, localNoteList);
                 }
                 if (localNoteCnt == 2 && bmobNoteCnt > 2) { // 默认有2条笔记
                     saveBmobNote2Local(list, mNoteDbInstance);
                 } else if (localNoteCnt != 0 && bmobNoteCnt != 0) {
                     if (localNoteCnt > bmobNoteCnt) {
-                        uploadSomeNote2Bmob(getApplicationContext(), user,localNoteList, list);
+                        uploadSomeNote2Bmob(context, user,localNoteList, list);
                     }else if (localNoteCnt < bmobNoteCnt) {
-                        deleteBmobNote(getApplicationContext(), list, localNoteList);
+                        deleteBmobNote(context, list, localNoteList);
                     } else {
                         LogUtils.i("local and bmob note are same");
                     }
@@ -94,7 +65,7 @@ public class MyApplication extends Application {
      * @param bmobNoteList 云上笔记多
      * @param localNoteList 本地笔记少
      */
-    private void saveSomeNote2Local(List<BmobNote> bmobNoteList, List<Note> localNoteList) {
+    static void saveSomeNote2Local(List<BmobNote> bmobNoteList, List<Note> localNoteList) {
         List<BmobNote> needSave2LocalBmobNoteList = new ArrayList<>();
 
         // 遍历云上的笔记，看是否能在本地找到
@@ -112,7 +83,7 @@ public class MyApplication extends Application {
                 needSave2LocalBmobNoteList.add(bmobNoteList.get(bmobNoteIndex));
             }
         }
-        saveBmobNote2Local(needSave2LocalBmobNoteList, mNoteDbInstance);
+        //saveBmobNote2Local(needSave2LocalBmobNoteList, mNoteDbInstance);
     }
 
     /**
@@ -120,7 +91,7 @@ public class MyApplication extends Application {
      * @param bmobNoteList 云上笔记多
      * @param localNoteList 本地笔记少
      */
-    private void deleteBmobNote(Context context, List<BmobNote> bmobNoteList, List<Note> localNoteList) {
+    private static void deleteBmobNote(Context context, List<BmobNote> bmobNoteList, List<Note> localNoteList) {
         List<BmobObject> needDeleteBmobNoteList = new ArrayList<>();
 
         // 遍历云上的笔记，看是否能在本地找到
@@ -151,7 +122,7 @@ public class MyApplication extends Application {
         });
     }
 
-    private void uploadSomeNote2Bmob(Context context, BmobUser user, List<Note> localNoteList, List<BmobNote> bmobNoteList) {
+    private static void uploadSomeNote2Bmob(Context context, BmobUser user, List<Note> localNoteList, List<BmobNote> bmobNoteList) {
         // find diff id of note
         List<Note> needUploadLocalNoteList = searchNeedUploadLocalNote(localNoteList, bmobNoteList);
         uploadNote2Bmob(context, user, needUploadLocalNoteList);
@@ -163,7 +134,7 @@ public class MyApplication extends Application {
      * @param bmobNoteList  笔记数量少
      * @return 笔记差异
      */
-    private List<Note> searchNeedUploadLocalNote(List<Note> localNoteList, List<BmobNote> bmobNoteList) {
+    private static List<Note> searchNeedUploadLocalNote(List<Note> localNoteList, List<BmobNote> bmobNoteList) {
         List<Note> needUploadLocalNoteList = new ArrayList<>();
         // 遍历本地的所有笔记，看是否能在云上找到
         for (int localNoteIndex = 0; localNoteIndex < localNoteList.size(); localNoteIndex++) {
@@ -185,7 +156,7 @@ public class MyApplication extends Application {
         return needUploadLocalNoteList;
     }
 
-    private void saveBmobNote2Local(List<BmobNote> list, NoteDbInstance mNoteDbInstance) {
+    private static void saveBmobNote2Local(List<BmobNote> list, NoteDbInstance mNoteDbInstance) {
         for (int i = 0; i < list.size(); i++) {
             BmobNote bmobNote = list.get(i);
             Note note = new Note();
@@ -201,7 +172,7 @@ public class MyApplication extends Application {
         }
     }
 
-    private void uploadNote2Bmob(Context context, BmobUser user, List<Note> localNoteList) {
+    private static void uploadNote2Bmob(Context context, BmobUser user, List<Note> localNoteList) {
         List<BmobObject> bmobNoteList = new ArrayList<>();
         for (int i = 0; i < localNoteList.size() ; i++) {
             Note note = localNoteList.get(i);
@@ -221,41 +192,5 @@ public class MyApplication extends Application {
             }
         });
     }
-
-    private void SqlDatabaseUpgrade() {
-        mNoteDbInstance = NoteDbInstance.getInstance(this);
-        //mNoteDbInstance.addCmpId2NoteDb();
-    }
-
-    private void MistatInit() {
-        // regular stats.
-        MiStatInterface.initialize(this.getApplicationContext(), appID, appKey,
-                "mi");
-        MiStatInterface.setUploadPolicy(
-                MiStatInterface.UPLOAD_POLICY_REALTIME, 0);
-        MiStatInterface.enableLog();
-
-        // enable exception catcher.
-        MiStatInterface.enableExceptionCatcher(true);
-
-        // enable network monitor
-        URLStatsRecorder.enableAutoRecord();
-        URLStatsRecorder.setEventFilter(new HttpEventFilter() {
-
-            @Override
-            public HttpEvent onEvent(HttpEvent event) {
-                try {
-                    LogUtils.d("MI_STAT", event.getUrl() + " result =" + event.toJSON());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    LogUtils.e("MI_STAT", "event null");
-                }
-                // returns null if you want to drop this event.
-                // you can modify it here too.
-                return event;
-            }
-        });
-
-        LogUtils.d("MI_STAT", MiStatInterface.getDeviceID(this) + " is the device.");
-    }
 }
+

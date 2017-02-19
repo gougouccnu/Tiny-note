@@ -20,7 +20,7 @@ import cn.bmob.v3.listener.SaveListener;
 public class LoginActivity extends Activity implements OnClickListener{
 
     EditText et_account,et_pwd;
-    Button btn_login,btn_register;
+    Button btn_login,btn_register, btn_nologin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +28,6 @@ public class LoginActivity extends Activity implements OnClickListener{
         setContentView(R.layout.activity_login);
 
         initView();
-        BmobUser user = BmobUser.getCurrentUser(this);
-        if(user!=null){
-            Intent intent = new Intent(LoginActivity.this, YearActivity.class);
-            startActivity(intent);
-        }
     }
 
 
@@ -43,6 +38,9 @@ public class LoginActivity extends Activity implements OnClickListener{
         btn_register = (Button)findViewById(R.id.btn_register);
         btn_login.setOnClickListener(this);
         btn_register.setOnClickListener(this);
+
+        btn_nologin = (Button)findViewById(R.id.btn_nologin);
+        btn_nologin.setOnClickListener(this);
     }
 
     String account,pwd;
@@ -112,6 +110,7 @@ public class LoginActivity extends Activity implements OnClickListener{
                     public void onSuccess() {
                         // TODO Auto-generated method stub
                         Intent intent = new Intent(LoginActivity.this, YearActivity.class);
+                        intent.putExtra("extra_user_email", BmobUser.getCurrentUser(LoginActivity.this).getEmail());
                         startActivity(intent);
                     }
 
@@ -121,6 +120,10 @@ public class LoginActivity extends Activity implements OnClickListener{
                         ToastUtils.showShortToast("注册失败："+arg1);
                     }
                 });
+                break;
+            case R.id.btn_nologin:
+                Intent intent = new Intent(LoginActivity.this, YearActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;

@@ -3,9 +3,10 @@ package com.ggccnu.tinynote.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.ggccnu.tinynote.adapter.TitleAdapter;
 import com.ggccnu.tinynote.db.NoteDbInstance;
 import com.ggccnu.tinynote.update.UpdateChecker;
 import com.ggccnu.tinynote.util.DateConvertor;
+import com.ggccnu.tinynote.util.SyncNoteUtil;
 
 import java.util.Calendar;
 import java.util.List;
@@ -37,7 +39,6 @@ public class YearActivity extends Activity {
 
     private static int backPressedCnt = 0;
 
-    private DrawerLayout mDrawerLayout;
     private Button btnLogin;
     private TextView tvLoginInf;
 
@@ -46,13 +47,32 @@ public class YearActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
 
+        btnLogin = (Button) findViewById(R.id.btn_login);
+        tvLoginInf = (TextView) findViewById(R.id.tv_loginInf);
+
+        final BmobUser user = BmobUser.getCurrentUser(this);
+
         // 检查是否要更新APP。要初始化，否则得不到context
         Utils.init(this);
         if (NetworkUtils.getWifiEnabled()) {
             UpdateChecker.checkForDialog(this);
         }
 
-        updateDrawerMenuInf();
+        updateLoginText();
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (user != null) {
+                    BmobUser.logOut(YearActivity.this);
+                }
+                startActivity(new Intent(YearActivity.this, LoginActivity.class));
+            }
+        });
+
+        if (user != null) {
+            SyncNoteUtil.SyncNoteTask(this, user);
+        }
 
         mNoteDbInstance = NoteDbInstance.getInstance(this);
         mYearList = mNoteDbInstance.QueryYears();
@@ -92,70 +112,16 @@ public class YearActivity extends Activity {
 
             }
         });
-
-    /*  还是让用户点击进入月视图吧
-        final Handler handler = new Handler() {
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case GOTO_MONTH_ACTIVITY:
-                        // 启动日记查看编辑活动，同时将日记year传递过去
-                        Intent intent = new Intent(YearActivity.this, MonthActivity.class);
-                        intent.putExtra("extra_noteYear", mYearList.get(0));
-                        startActivity(intent);
-                    default:
-                        break;
-                }
-            }
-        };
-        //如果只有当年的笔记，直接进入月视图
-        if(mYearList.size() == 1) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(1500);
-                    }
-                    catch (InterruptedException e) {
-
-                    }
-                    finally {
-
-                    }
-                    Message message = new Message();
-                    message.what = GOTO_MONTH_ACTIVITY;
-                    handler.sendMessage(message);
-                }
-            }).start();
-        }
-    */
-
     }
 
-    private void updateDrawerMenuInf() {
-        btnLogin = (Button) findViewById(R.id.btn_login);
-        tvLoginInf = (TextView) findViewById(R.id.tv_loginInf);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.simple_navigation_drawer);
-        //mDrawerLayout.setScrimColor(0x00000000);
-
+    private void updateLoginText() {
         final BmobUser user = BmobUser.getCurrentUser(this);
         if (user != null) {
             btnLogin.setText("退出登录");
             tvLoginInf.setText(user.getEmail());
-            btnLogin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    BmobUser.logOut(YearActivity.this);
-                    mDrawerLayout.closeDrawers();
-                }
-            });
         } else {
-            btnLogin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(YearActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                }
-            });
+            btnLogin.setText("点击登录");
+            tvLoginInf.setText("登录可以云备份笔记，不登录也可以");
         }
     }
 
@@ -164,41 +130,42 @@ public class YearActivity extends Activity {
      * key.  The default implementation simply finishes the current activity,
      * but you can override this to do whatever you want.
      */
-    @Override
-    public void onBackPressed() {
-        //super.onBackPressed();
-        backPressedCnt++;
-        if (backPressedCnt < 2) {
-            ToastUtils.showLongToast("再按一次返回键退出APP");
-        } else {
-            this.finish();
-            //System.exit(0); system.exit 看起来不是好的退出方式
-        }
-    }
-//    这种方式也可以退出，注意要调用System.exit(0)
-//    private boolean mIsExit;
 //    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            if (mIsExit) {
-//                this.finish();
-//                System.exit(0); system.exit 看起来不是好的退出方式
-//            } else {
-//                ToastUtils.showLongToast("再按一次退出");
-//                mIsExit = true;
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mIsExit = false;
-//                    }
-//                }, 2000);
-//            }
-//            return true;
+//    public void onBackPressed() {
+//        //super.onBackPressed();
+//        backPressedCnt++;
+//        if (backPressedCnt < 2) {
+//            ToastUtils.showLongToast("再按一次返回键退出APP");
+//        } else {
+//            this.finish();
+//            //System.exit(0); system.exit 看起来不是好的退出方式
 //        }
-//
-//        return super.onKeyDown(keyCode, event);
 //    }
+//    这种方式也可以退出，注意要调用System.exit(0)
+    private boolean mIsExit;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (mIsExit) {
+                this.finish();
+                //System.exit(0); system.exit 看起来不是好的退出方式
+            } else {
+                ToastUtils.showShortToast("再按一次退出");
+                mIsExit = true;
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mIsExit = false;
+                    }
+                }, 2000);
+            }
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 
     /**
      * Perform any final cleanup before an activity is destroyed.  This can
@@ -232,5 +199,11 @@ public class YearActivity extends Activity {
     protected void onDestroy() {
         android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        updateLoginText();
     }
 }
